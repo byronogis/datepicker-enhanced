@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { ElIcon } from 'element-plus'
 import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
 import type { DatePickerPanelItem } from './types'
 
@@ -41,7 +42,7 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
           class="el-picker-panel__icon-btn el-icon-d-arrow-left"
           :class="[props.leftPanelArrowDisabled && ('is-disabled pointer-events-none')]"
           @click="emits('clickPrev')"
-        ><el-icon :class="[props.leftPanelArrowDisabled && ('is-disabled cursor-not-allowed')]"><DArrowLeft /></el-icon></span>
+        ><ElIcon :class="[props.leftPanelArrowDisabled && ('is-disabled cursor-not-allowed')]"><DArrowLeft /></ElIcon></span>
       </span>
       <span role="button" class="el-date-picker__header-label" @click="emits('clickTitle')">{{ props.title }}</span>
       <span
@@ -53,7 +54,7 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
           class="el-picker-panel__icon-btn el-icon-d-arrow-right"
           :class="[props.rightPanelArrowDisabled && ('is-disabled pointer-events-none')]"
           @click="emits('clickNext')"
-        ><el-icon :class="[props.rightPanelArrowDisabled && ('is-disabled cursor-not-allowed')]"><DArrowRight /></el-icon></span>
+        ><ElIcon :class="[props.rightPanelArrowDisabled && ('is-disabled cursor-not-allowed')]"><DArrowRight /></ElIcon></span>
       </span>
     </div>
     <!-- table -->
