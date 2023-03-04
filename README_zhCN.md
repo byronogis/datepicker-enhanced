@@ -1,15 +1,15 @@
 ## DatePickerEnhanced
 
-> A date picker enhanced component for [element-plus](https://github.com/element-plus/element-plus)
+> [element-plus](https://github.com/element-plus/element-plus) 的日期选择器组件增强版
 
-### Features
+### 功能
 
-- Compatible with element-plus DatePicker component
-- New support for halfyear, quarteryear time point and year, halfyear and quarteryear time range selection
+- 兼容 element-plus 的 DatePicker 组件
+- 新增支持 半年度、季度时间点和年度、半年度、季度时间范围选择
 
-### Props Support for New Date Type
+### 新日期类型的 Props 支持
 
-> up to now
+> 截止当前
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue:  string | number | Date
