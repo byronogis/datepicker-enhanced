@@ -105,9 +105,9 @@ const isArrowDisabled = computed(() => {
     return leftYearMax >= rightYearMin
   } else if (panelType.value !== 'year' && panelTypeSecond.value === 'year') {
     return leftYearMax >= rightYearMin
+  } else {
+    return leftYearMax >= rightYearMin
   }
-
-  return false
 })
 </script>
 
