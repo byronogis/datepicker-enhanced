@@ -77,9 +77,18 @@ export default function useDatePickerEnhanced(
     const { test, exec } = valiDate(type, val)
 
     if (test && exec) {
-      const dateParsed = dateUnifiedParse(generateDateStr(type, exec.slice(1, 3).map(Number)), type)
+      const dateParsed = dateUnifiedParse(generateDateStr(type, exec.slice(1, 3).map(Number)), type) as string
 
-      const newModelValue = props.modelValue.map(date => dateUnifiedParse(dateUnify(date, type), type))
+      const newModelValue = props.modelValue.map(date => dateUnifiedParse(dateUnify(date, type), type)) as string[]
+
+      if (range === 0 && new Date(dateParsed).getTime() > new Date(newModelValue[1]).getTime()) {
+        emits('update:modelValue', newModelValue)
+        return
+      } else if (range === 1 && new Date(dateParsed).getTime() < new Date(newModelValue[0]).getTime()) {
+        emits('update:modelValue', newModelValue)
+        return
+      }
+
       newModelValue[range] = dateParsed
 
       emits('update:modelValue', newModelValue)
