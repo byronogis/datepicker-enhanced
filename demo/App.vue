@@ -1,6 +1,6 @@
 <template>
   <div class="demo">
-    <MyComponent />
+    <DatePickerEnhanced />
   </div>
 </template>
 

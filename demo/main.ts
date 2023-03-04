@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
-import MyComponent from '../src/index'
+import DatePickerEnhanced from '../src/index'
 import App from './App.vue'
 
-createApp(App).use(MyComponent).mount('#app')
+const app = createApp(App)
+app.component('DatePickerEnhanced', DatePickerEnhanced)
+app.mount('#app')
