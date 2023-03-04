@@ -11,6 +11,7 @@ import type { DatePickerPanelItem } from './types'
 
 interface Props {
   modelValue: [DateModelType, DateModelType]
+  disabledDate: (date: Date) => boolean
   popperClass: string
   startPlaceholder: string
   endPlaceholder: string

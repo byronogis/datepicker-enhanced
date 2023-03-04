@@ -73,7 +73,7 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
                 disabled: item.isDisabled,
               }"
             >
-              <div>
+              <div :class="{ 'cursor-not-allowed': item.isDisabled }">
                 <span
                   class="cell"
                   @click="emits('clickItem', item)"

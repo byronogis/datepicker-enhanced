@@ -53,6 +53,7 @@ export interface DatePickerPanelItem {
 export interface DatePickerEnhancedProps {
   type: DateType
   modelValue: DateModelType | [DateModelType, DateModelType]
+  disabledDate?: (date: Date) => boolean
   popperClass?: string
   placeholder?: string
 
