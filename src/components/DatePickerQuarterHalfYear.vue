@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { inject, ref, watchEffect } from 'vue'
 import { ElPopover } from 'element-plus'
+import type { Component } from 'vue'
 import type { DateModelType } from 'element-plus'
 import DatePickerPanelWrapper from './DatePickerPanelWrapper.vue'
 import DatePickerPanel from './DatePickerPanel.vue'
@@ -12,6 +13,7 @@ interface Props {
   modelValue: DateModelType
   disabledDate: (date: Date) => boolean
   popperClass: string
+  prefixIcon: Component
   placeholder: string
   type:
   | 'quarteryear'
@@ -81,6 +83,7 @@ export default {
         ref="InputRef"
         :value="inputValue"
         :placeholder="inputPlaceholder"
+        :prefix-icon="props.prefixIcon"
         @update:value="inputValueUpdate"
       />
     </template>

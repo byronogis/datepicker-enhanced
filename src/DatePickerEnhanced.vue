@@ -2,7 +2,9 @@
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue'
 import { ElDatePicker } from 'element-plus'
+import { Calendar } from '@element-plus/icons-vue'
 // import type { DateModelType } from 'element-plus'
+import type { Component } from 'vue'
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { DateType, OriginDateType } from './components/types'
 // import { OriginDateType } from './types'
@@ -29,6 +31,8 @@ interface Props {
   startPlaceholder?: string
   endPlaceholder?: string
   rangeSeparator?: string
+
+  prefixIcon?: Component
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,6 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
   startPlaceholder: '开始日期',
   endPlaceholder: '结束日期',
   rangeSeparator: '至',
+  prefixIcon: Calendar,
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -89,6 +94,7 @@ export default {
         :start-placeholder="props.startPlaceholder"
         :end-placeholder="props.endPlaceholder"
         :range-separator="props.rangeSeparator"
+        :prefix-icon="props.prefixIcon"
         @update:modelValue="emits('update:modelValue', $event)"
       >
         <slot name="default" />
@@ -104,6 +110,7 @@ export default {
         :disabled-date="props.disabledDate"
         :popper-class="enhancedPopperClass"
         :placeholder="props.placeholder"
+        :prefix-icon="props.prefixIcon"
         @update:modelValue="emits('update:modelValue', $event)"
       />
     </template>
@@ -116,6 +123,7 @@ export default {
         :disabled-date="props.disabledDate"
         :popper-class="enhancedPopperClass"
         :placeholder="props.placeholder"
+        :prefix-icon="props.prefixIcon"
         @update:modelValue="emits('update:modelValue', $event)"
       />
     </template>
@@ -130,6 +138,7 @@ export default {
         :start-placeholder="props.startPlaceholder"
         :end-placeholder="props.endPlaceholder"
         :range-separator="props.rangeSeparator"
+        :prefix-icon="props.prefixIcon"
         @update:modelValue="emits('update:modelValue', $event)"
       />
     </template>
@@ -144,6 +153,7 @@ export default {
         :start-placeholder="props.startPlaceholder"
         :end-placeholder="props.endPlaceholder"
         :range-separator="props.rangeSeparator"
+        :prefix-icon="props.prefixIcon"
         @update:modelValue="emits('update:modelValue', $event)"
       />
     </template>
@@ -158,6 +168,7 @@ export default {
         :start-placeholder="props.startPlaceholder"
         :end-placeholder="props.endPlaceholder"
         :range-separator="props.rangeSeparator"
+        :prefix-icon="props.prefixIcon"
         @update:modelValue="emits('update:modelValue', $event)"
       />
     </template>

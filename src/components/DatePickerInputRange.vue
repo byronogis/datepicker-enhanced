@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { Component } from 'vue'
 
 const props = defineProps<{
   value: string | string[]
+  prefixIcon: Component
 
   startValue?: string
   startPlaceholder?: string
@@ -17,6 +19,8 @@ const emits = defineEmits([
   'update:startValue',
   'update:endValue',
 ])
+
+const PrefixIcon = props.prefixIcon
 
 const startInputFocus = ref(false)
 const endInputFocus = ref(false)
@@ -34,14 +38,11 @@ defineExpose({
   <div
     class="el-date-editor el-date-editor--monthrange el-input__wrapper el-range-editor el-tooltip__trigger el-tooltip__trigger"
   >
-    <i class="el-icon el-input__icon el-range__icon">
-      <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-        <path
-          fill="currentColor"
-          d="M128 384v512h768V192H768v32a32 32 0 1 1-64 0v-32H320v32a32 32 0 0 1-64 0v-32H128v128h768v64H128zm192-256h384V96a32 32 0 1 1 64 0v32h160a32 32 0 0 1 32 32v768a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h160V96a32 32 0 0 1 64 0v32zm-32 384h64a32 32 0 0 1 0 64h-64a32 32 0 0 1 0-64zm0 192h64a32 32 0 1 1 0 64h-64a32 32 0 1 1 0-64zm192-192h64a32 32 0 0 1 0 64h-64a32 32 0 0 1 0-64zm0 192h64a32 32 0 1 1 0 64h-64a32 32 0 1 1 0-64zm192-192h64a32 32 0 1 1 0 64h-64a32 32 0 1 1 0-64zm0 192h64a32 32 0 1 1 0 64h-64a32 32 0 1 1 0-64z"
-        />
-      </svg>
-    </i>
+    <template v-if="props.prefixIcon">
+      <i class="el-icon el-input__icon el-range__icon">
+        <PrefixIcon />
+      </i>
+    </template>
 
     <input
       autocomplete="off"
