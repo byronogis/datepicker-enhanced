@@ -56,7 +56,7 @@ const {
   panelType: panelTypeSecond,
 } = useDatePickerEnhancedRange(props, emits, 1, popover)
 
-const typeWithoutRange = props.type.replace('range', '')
+const typeWithoutRange = props.type.replace('range', '') as 'quarteryear' | 'halfyear' | 'year'
 const clickedStatus = ref([false, false])
 const clickItem = (item: DatePickerPanelItem, whichPanel: 1 | 2) => {
   typeWithoutRange in item && (clickedStatus.value[whichPanel - 1] = true)
@@ -156,6 +156,10 @@ export default {
             :title="panelTitle"
             :items="panelItems"
             :right-panel-arrow-disabled="isArrowDisabled"
+            :type="panelType"
+            :range="1"
+            :left-value="inputValue"
+            :right-value="inputValueSecond"
             @clickPrev="panelPrevClick"
             @clickNext="panelNextClick"
             @clickItem="clickItem($event, 1)"
@@ -170,6 +174,11 @@ export default {
             :title="panelTitleSecond"
             :items="panelItemsSecond"
             :left-panel-arrow-disabled="isArrowDisabled"
+            :type="panelType"
+            :type-second="panelTypeSecond"
+            :range="2"
+            :left-value="inputValue"
+            :right-value="inputValueSecond"
             @clickPrev="panelPrevClickSecond"
             @clickNext="panelNextClickSecond"
             @clickItem="clickItem($event, 2)"

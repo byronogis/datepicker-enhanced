@@ -220,7 +220,7 @@ export default function useDatePickerEnhanced(
   }
 }
 
-function generateDateStr(type: DatePickerPanelType, value: number[]) {
+export function generateDateStr(type: DatePickerPanelType, value: number[]) {
   if (type === 'year') {
     return `${value[0]}`
   }
