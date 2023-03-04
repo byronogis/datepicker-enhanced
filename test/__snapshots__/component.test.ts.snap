@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`my vue component > should render 1`] = `"<div> Hello, this is peterroe</div>"`;

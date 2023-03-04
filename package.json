@@ -1,0 +1,65 @@
+{
+  "name": "datepicker-enhanced",
+  "version": "1.0.0",
+  "packageManager": "pnpm@7.13.6",
+  "description": "component based on vue3.x",
+  "author": "peterroe",
+  "license": "MIT",
+  "keywords": [
+    "vue3",
+    "component",
+    "vite"
+  ],
+  "homepage": "https://github.com/peterroe/un#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterroe/un.git"
+  },
+  "bugs": "https://github.com/peterroe/un/issues",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.umd.js",
+      "import": "./dist/index.es.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:demo": "vite build --config demo/vite.config.ts",
+    "deploy:demo": "pnpm build:demo && gh-pages -d docs && rimraf docs",
+    "preview": "vite preview",
+    "lint": "eslint \"**/*.{vue,ts,js}\"",
+    "fix": "eslint --fix \"**/*.{vue,ts,js}\"",
+    "release": "pnpm build && bumpp && npm publish",
+    "test": "vitest",
+    "typecheck": "vue-tsc --noEmit",
+    "git-hook-init": "husky install && husky add .husky/pre-commit 'npm run lint && npm run typecheck'"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "0.29.4",
+    "@vitejs/plugin-vue": "3.1.2",
+    "@vue/test-utils": "2.1.0",
+    "bumpp": "8.2.1",
+    "eslint": "8.24.0",
+    "gh-pages": "4.0.0",
+    "happy-dom": "6.0.4",
+    "husky": "8.0.1",
+    "rimraf": "3.0.2",
+    "typescript": "4.8.4",
+    "vite": "3.1.4",
+    "vite-plugin-dts": "1.6.4",
+    "vitest": "0.23.4",
+    "vue-tsc": "0.40.13"
+  },
+  "dependencies": {
+    "vue": "3.2.40"
+  }
+}
