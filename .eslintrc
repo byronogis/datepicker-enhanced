@@ -1,3 +1,10 @@
 {
-  "extends": "@antfu"
+  "extends": "@antfu",
+  "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "brace-style": "off",
+    "@typescript-eslint/brace-style": ["error", "1tbs"],
+    "no-console": ["warn"],
+    "curly": ["error", "all"]
+  }
 }
