@@ -65,8 +65,8 @@ const clickItem = (item: DatePickerPanelItem, whichPanel: 1 | 2) => {
 
 watch(clickedStatus, () => {
   clickedStatus.value.every(Boolean) // 两块面板均点击过
-    && (popover.visible = false) // 关闭面板
     && (clickedStatus.value = [false, false]) // 重置面板点击状态
+    && (popover.visible = false) // 关闭面板
 }, { deep: true })
 
 const scopedId: any = inject('scopedId')
