@@ -1,5 +1,7 @@
 ## DatePickerEnhanced
 
+[![NPM version](https://img.shields.io/npm/v/datepicker-enhanced?color=a1b858&label=)](https://www.npmjs.com/package/datepicker-enhanced)
+
 > [element-plus](https://github.com/element-plus/element-plus) 的日期选择器组件增强版
 
 ### 功能
