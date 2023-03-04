@@ -6,12 +6,12 @@
   "description": "component based on vue3.x",
   "author": "liamrad",
   "license": "MIT",
-  "homepage": "https://github.com/liamrad/un#readme",
+  "homepage": "https://github.com/liamrad/datepicker-enhanced#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liamrad/un.git"
+    "url": "git+https://github.com/liamrad/datepicker-enhanced.git"
   },
-  "bugs": "https://github.com/liamrad/un/issues",
+  "bugs": "https://github.com/liamrad/datepicker-enhanced/issues",
   "keywords": [
     "vue3",
     "component",
