@@ -15,7 +15,11 @@
   "keywords": [
     "vue3",
     "component",
-    "vite"
+    "element-plus",
+    "datepicker",
+    "year",
+    "half",
+    "quarter"
   ],
   "exports": {
     ".": {
