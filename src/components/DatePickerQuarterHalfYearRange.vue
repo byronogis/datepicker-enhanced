@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, watch, watchEffect } from 'vue'
 import { ElPopover } from 'element-plus'
+import type { Component } from 'vue'
 import type { DateModelType } from 'element-plus'
 import DatePickerPanelWrapper from './DatePickerPanelWrapper.vue'
 import DatePickerPanel from './DatePickerPanel.vue'
@@ -13,6 +14,7 @@ interface Props {
   modelValue: [DateModelType, DateModelType]
   disabledDate: (date: Date) => boolean
   popperClass: string
+  prefixIcon: Component
   startPlaceholder: string
   endPlaceholder: string
   rangeSeparator: string
@@ -139,6 +141,7 @@ export default {
         :start-placeholder="inputStartPlaceholder"
         :end-placeholder="inputEndPlaceholder"
         :range-separator="props.rangeSeparator"
+        :prefix-icon="props.prefixIcon"
         @update:startValue="inputValueUpdate"
         @update:endValue="inputValueUpdateSecond"
       />
