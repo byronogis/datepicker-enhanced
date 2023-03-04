@@ -10,6 +10,7 @@ import useDatePickerEnhanced from './useDatePickerEnhanced'
 
 interface Props {
   modelValue: DateModelType
+  disabledDate: (date: Date) => boolean
   popperClass: string
   placeholder: string
   type:

@@ -21,6 +21,7 @@ type MyDateModelType = string | number | Date
 interface Props {
   type: DateType
   modelValue: MyDateModelType | [MyDateModelType, MyDateModelType]
+  disabledDate?: (date: Date) => boolean
   popperClass?: string
   placeholder?: string
 
@@ -31,6 +32,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  disabledDate: () => false,
   popperClass: '',
   placeholder: '选择日期',
   startPlaceholder: '开始日期',
@@ -81,6 +83,7 @@ export default {
         v-bind="$attrs"
         :type="props.type as OriginDateType"
         :model-value="props.modelValue"
+        :disabled-date="props.disabledDate"
         :popper-class="props.popperClass"
         :placeholder="props.placeholder"
         :start-placeholder="props.startPlaceholder"
@@ -98,6 +101,7 @@ export default {
       <DatePickerQuarterHalfYear
         type="halfyear"
         :model-value="Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue"
+        :disabled-date="props.disabledDate"
         :popper-class="enhancedPopperClass"
         :placeholder="props.placeholder"
         @update:modelValue="emits('update:modelValue', $event)"
@@ -109,6 +113,7 @@ export default {
       <DatePickerQuarterHalfYear
         type="quarteryear"
         :model-value="Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue"
+        :disabled-date="props.disabledDate"
         :popper-class="enhancedPopperClass"
         :placeholder="props.placeholder"
         @update:modelValue="emits('update:modelValue', $event)"
@@ -120,6 +125,7 @@ export default {
       <DatePickerQuarterHalfYearRange
         type="halfyearrange"
         :model-value="Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue, props.modelValue]"
+        :disabled-date="props.disabledDate"
         :popper-class="enhancedPopperClass"
         :start-placeholder="props.startPlaceholder"
         :end-placeholder="props.endPlaceholder"
@@ -133,6 +139,7 @@ export default {
       <DatePickerQuarterHalfYearRange
         type="quarteryearrange"
         :model-value="Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue, props.modelValue]"
+        :disabled-date="props.disabledDate"
         :popper-class="enhancedPopperClass"
         :start-placeholder="props.startPlaceholder"
         :end-placeholder="props.endPlaceholder"
@@ -146,6 +153,7 @@ export default {
       <DatePickerQuarterHalfYearRange
         type="yearrange"
         :model-value="Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue, props.modelValue]"
+        :disabled-date="props.disabledDate"
         :popper-class="enhancedPopperClass"
         :start-placeholder="props.startPlaceholder"
         :end-placeholder="props.endPlaceholder"

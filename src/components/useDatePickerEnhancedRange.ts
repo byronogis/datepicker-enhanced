@@ -11,8 +11,13 @@ import type {
   Range,
 } from './types'
 
-interface RangeDatePickerEnhancedProps extends Pick<DatePickerEnhancedProps, 'popperClass' | 'startPlaceholder' | 'endPlaceholder' | 'rangeSeparator' | 'type'> {
+interface RangeDatePickerEnhancedProps extends Pick<DatePickerEnhancedProps, 'type'> {
   modelValue: [DateModelType, DateModelType]
+  disabledDate: (date: Date) => boolean
+  popperClass: string
+  startPlaceholder: string
+  endPlaceholder: string
+  rangeSeparator: string
 }
 
 const quarteryearEnum = ['一', '二', '三', '四']
@@ -115,6 +120,7 @@ export default function useDatePickerEnhanced(
     console.log('点击了 ==> ', item)
 
     if (item.isDisabled) {
+      console.log('isDisabled')
       return
     }
 
@@ -174,6 +180,7 @@ export default function useDatePickerEnhanced(
       panelYear.value,
       panelStartYear.value,
       localModelValue.value[range],
+      props.disabledDate,
     )
   }
 
@@ -234,6 +241,7 @@ function initPanelItems(
   panelYear: number,
   panelStartYear: number,
   datepickerValue: number[],
+  disabledDate: (date: Date) => boolean,
 ) {
   let items: DatePickerPanelItem[]
 
@@ -254,6 +262,7 @@ function initPanelItems(
         quarteryear,
         isToday: (year === curYear) && (quarteryear === curQuarterYear),
         isCurrent: (year === datepickerValue[0]) && (quarteryear === datepickerValue[1]),
+        isDisabled: disabledDate(new Date(`${year}-${(quarteryear - 1) * 3 + 1}`)),
       }
     })
   } else if (panelType === 'halfyear') { // 半年度
@@ -267,6 +276,7 @@ function initPanelItems(
         halfyear,
         isToday: (year === curYear) && (halfyear === curHalfYear),
         isCurrent: (year === datepickerValue[0]) && (halfyear === datepickerValue[1]),
+        isDisabled: disabledDate(new Date(`${year}-${(halfyear - 1) * 6 + 1}`)),
       }
     })
   } else if (panelType === 'year') { // 年度
@@ -278,6 +288,7 @@ function initPanelItems(
         year,
         isToday: year === curYear,
         isCurrent: year === datepickerValue[0],
+        isDisabled: disabledDate(new Date(`${year}`)),
       }
     })
   } else {
