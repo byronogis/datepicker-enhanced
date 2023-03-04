@@ -56,10 +56,10 @@ const {
   panelType: panelTypeSecond,
 } = useDatePickerEnhancedRange(props, emits, 1, popover)
 
-const type = props.type.replace('range', '')
+const typeWithoutRange = props.type.replace('range', '')
 const clickedStatus = ref([false, false])
 const clickItem = (item: DatePickerPanelItem, whichPanel: 1 | 2) => {
-  type in item && (clickedStatus.value[whichPanel - 1] = true)
+  typeWithoutRange in item && (clickedStatus.value[whichPanel - 1] = true)
   whichPanel === 1 ? panelItemClick(item) : panelItemClickSecond(item)
 }
 

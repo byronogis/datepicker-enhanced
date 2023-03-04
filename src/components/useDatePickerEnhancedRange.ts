@@ -46,14 +46,14 @@ export default function useDatePickerEnhanced(
   range: Range,
   existPopover?: PopoverProps,
 ) {
-  const type = props.type.replace('range', '') as DatePickerPanelType
+  const typeWithoutRange = props.type.replace('range', '') as DatePickerPanelType
   const localModelValue = ref<number[][]>([])
 
   // 避免其中一个面板选择完成时另一个面板重新生成
   watchEffect(() => {
     const newLocalModelValue = props.modelValue.map(date => {
-      const { test, exec } = valiDate(type, dateUnify(date, type) as string)
-      const sliceEndIdx = type !== 'year' ? 3 : 2
+      const { test, exec } = valiDate(typeWithoutRange, dateUnify(date, typeWithoutRange) as string)
+      const sliceEndIdx = typeWithoutRange !== 'year' ? 3 : 2
       return (test && exec && exec.slice(1, sliceEndIdx).map(Number))
         || [new Date().getFullYear(), 1]
     })
@@ -68,18 +68,18 @@ export default function useDatePickerEnhanced(
   const popover = existPopover || usePopover(props)
 
   // input ref
-  const inputValue = computed(() => dateUnify(props.modelValue[range], type) as string)
+  const inputValue = computed(() => dateUnify(props.modelValue[range], typeWithoutRange) as string)
   const inputStartPlaceholder = computed(() => props.startPlaceholder)
   const inputEndPlaceholder = computed(() => props.endPlaceholder)
 
   // input method
   const inputValueUpdate = (val: string) => {
-    const { test, exec } = valiDate(type, val)
+    const { test, exec } = valiDate(typeWithoutRange, val)
 
     if (test && exec) {
-      const dateParsed = dateUnifiedParse(generateDateStr(type, exec.slice(1, 3).map(Number)), type) as string
+      const dateParsed = dateUnifiedParse(generateDateStr(typeWithoutRange, exec.slice(1, 3).map(Number)), typeWithoutRange) as string
 
-      const newModelValue = props.modelValue.map(date => dateUnifiedParse(dateUnify(date, type), type)) as string[]
+      const newModelValue = props.modelValue.map(date => dateUnifiedParse(dateUnify(date, typeWithoutRange), typeWithoutRange)) as string[]
 
       if (range === 0 && new Date(dateParsed).getTime() > new Date(newModelValue[1]).getTime()) {
         emits('update:modelValue', newModelValue)
@@ -97,7 +97,7 @@ export default function useDatePickerEnhanced(
 
   // panel ref
   const panelValue = ref<number[]>([...localModelValue.value[range]]) // 操作所用; 重点：解构; 侦听再赋值
-  const panelType = ref<DatePickerPanelType>(type)
+  const panelType = ref<DatePickerPanelType>(typeWithoutRange)
   const panelItems = ref<DatePickerPanelItem[]>([])
   const panelYear = computed(() => panelValue.value[0])
   const panelIsYear = computed(() => panelType.value === 'year')
@@ -141,17 +141,17 @@ export default function useDatePickerEnhanced(
       return
     }
 
-    if (panelIsYear.value && type !== 'year') {
+    if (panelIsYear.value && typeWithoutRange !== 'year') {
       panelValue.value[0] = item.year
-      panelType.value = type
+      panelType.value = typeWithoutRange
     } else {
       const value: number[] = []
 
       value[0] = item.year
-      type !== 'year' && (value[1] = item[type] as number)
+      typeWithoutRange !== 'year' && (value[1] = item[typeWithoutRange] as number)
 
-      const dateStr = generateDateStr(type, value)
-      valiDate(type, dateStr).test && (panelValue.value = value)
+      const dateStr = generateDateStr(typeWithoutRange, value)
+      valiDate(typeWithoutRange, dateStr).test && (panelValue.value = value)
     }
   }
   const panelTitleClick = () => {
@@ -171,9 +171,9 @@ export default function useDatePickerEnhanced(
   watch(() => panelValue.value, (newV, oldV) => {
     console.log('改变了日期 new old: ', newV, oldV)
 
-    const dateParsed = dateUnifiedParse(generateDateStr(type, panelValue.value), type)
+    const dateParsed = dateUnifiedParse(generateDateStr(typeWithoutRange, panelValue.value), typeWithoutRange)
 
-    const newModelValue = props.modelValue.map(date => dateUnifiedParse(dateUnify(date, type), type))
+    const newModelValue = props.modelValue.map(date => dateUnifiedParse(dateUnify(date, typeWithoutRange), typeWithoutRange))
     newModelValue[range] = dateParsed
 
     emits('update:modelValue', newModelValue)
@@ -186,7 +186,7 @@ export default function useDatePickerEnhanced(
   watch(() => localModelValue.value, () => {
     // 单独改变元素而非直接改变数组,阻止循环侦听
     panelValue.value[0] = localModelValue.value[range][0]
-    type !== 'year' && (panelValue.value[1] = localModelValue.value[range][1])
+    typeWithoutRange !== 'year' && (panelValue.value[1] = localModelValue.value[range][1])
     generateItems()
   })
 
