@@ -1,6 +1,6 @@
 /* eslint-disable prefer-regex-literals */
 /* eslint-disable import/order */
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, watchEffect } from 'vue'
 import { dateUnifiedParse, dateUnify } from './utils'
 import type { DateModelType } from 'element-plus'
 import type {
@@ -47,15 +47,23 @@ export default function useDatePickerEnhanced(
   existPopover?: PopoverProps,
 ) {
   const type = props.type.replace('range', '') as DatePickerPanelType
-  const localModelValue = computed(() => {
-    return props.modelValue.map(date => {
+  const localModelValue = ref<number[][]>([])
+
+  // 避免其中一个面板选择完成时另一个面板重新生成
+  watchEffect(() => {
+    const newLocalModelValue = props.modelValue.map(date => {
       const { test, exec } = valiDate(type, dateUnify(date, type) as string)
       const sliceEndIdx = type !== 'year' ? 3 : 2
       return (test && exec && exec.slice(1, sliceEndIdx).map(Number))
         || [new Date().getFullYear(), 1]
     })
+
+    if (newLocalModelValue[range]?.join('') === localModelValue.value[range]?.join('')) {
+      return
+    }
+
+    localModelValue.value = newLocalModelValue
   })
-  //
 
   const popover = existPopover || usePopover(props)
 
