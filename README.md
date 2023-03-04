@@ -20,7 +20,7 @@ You can create yourself component quickly with it.
 
 ### Github Template
 
-[Create repo from this template on Github](https://github.com/peterroe/vue-component-starter/generate)
+[Create repo from this template on Github](https://github.com/liamrad/vue-component-starter/generate)
 
 ### Try it now!
 
@@ -88,4 +88,4 @@ Just run:
 $ pnpm deploy:demo
 ```
 
-Then visit `https://[your-username].github.io/[your-component-name]/`, such as <https://peterroe.github.io/vue-component-starter/>
+Then visit `https://[your-username].github.io/[your-component-name]/`, such as <https://liamrad.github.io/vue-component-starter/>

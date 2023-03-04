@@ -6,7 +6,7 @@ describe('my vue component', () => {
   it('should render', () => {
     const wrapper = mount(MyComponent, {
       props: {
-        name: 'peterroe',
+        name: 'liamrad',
       },
     })
     expect(wrapper.html()).toMatchSnapshot()
