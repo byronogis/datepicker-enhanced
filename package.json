@@ -1,5 +1,6 @@
 {
   "name": "datepicker-enhanced",
+  "type": "module",
   "version": "0.0.1",
   "packageManager": "pnpm@7.13.6",
   "description": "component based on vue3.x",
@@ -27,6 +28,7 @@
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
