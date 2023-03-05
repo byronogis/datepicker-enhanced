@@ -44,25 +44,38 @@ export default function useDatePickerEnhanced(
   const typeWithoutRange = props.type.replace('range', '') as DatePickerPanelType
   const localModelValue = computed(() => {
     const { test, exec } = valiDate(typeWithoutRange, dateUnify(props.modelValue, typeWithoutRange) as string)
-    return (test && exec && exec.slice(1, 3).map(Number)) || [new Date().getFullYear(), 1]
+    return (test && exec && exec.slice(1, 3).map(Number)) || [0, 0]
   })
+  const isLocalModelValueEmpty = computed(() => localModelValue.value.every(i => i === 0))
   //
 
   // const popover = existPopover || usePopover(props)
   const popover = usePopover(props)
 
   // input ref
-  const inputValue = computed(() => dateUnify(props.modelValue, typeWithoutRange) as string)
+  const inputValue = computed(() => {
+    if (isLocalModelValueEmpty.value) {
+      return ''
+    }
+
+    return generateDateStr(typeWithoutRange, localModelValue.value) as string
+  })
+  // const inputValue = ref('')
   const inputPlaceholder = computed(() => props.placeholder)
 
   // input method
   const inputValueUpdate = (val: string) => {
+    if (val === '') {
+      emits('update:modelValue', '')
+      return
+    }
+
     const { test, exec } = valiDate(typeWithoutRange, val)
     test && exec && emits('update:modelValue', dateUnifiedParse(val, typeWithoutRange))
   }
 
   // panel ref
-  const panelValue = ref<number[]>([...localModelValue.value]) // 操作所用; 重点：解构; 侦听再赋值
+  const panelValue = ref<number[]>(isLocalModelValueEmpty.value ? [new Date().getFullYear(), 1] : [...localModelValue.value]) // 操作所用; 重点：解构; 侦听再赋值
   const panelType = ref<DatePickerPanelType>(typeWithoutRange)
   const panelItems = ref<DatePickerPanelItem[]>([])
   const panelYear = computed(() => panelValue.value[0])
@@ -143,6 +156,9 @@ export default function useDatePickerEnhanced(
 
   // 传入数据值变动时同步改变面板值, 以打开后最新状态
   watch(() => localModelValue.value, () => {
+    if (isLocalModelValueEmpty.value) {
+      return
+    }
     // 单独改变元素而非直接改变数组,阻止循环侦听
     panelValue.value[0] = localModelValue.value[0]
     panelValue.value[1] = localModelValue.value[1]
@@ -155,7 +171,7 @@ export default function useDatePickerEnhanced(
       panelType.value,
       panelYear.value,
       panelStartYear.value,
-      localModelValue.value,
+      isLocalModelValueEmpty.value ? panelValue.value : localModelValue.value,
       props.disabledDate,
     )
   }
