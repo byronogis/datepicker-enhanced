@@ -51,7 +51,7 @@ const leftPanelItemDisabled = (item: DatePickerPanelItem) => {
     return false
   }
 
-  if (new Date(parseItemStr) <= new Date(parseRightValue)) {
+  if (new Date(parseItemStr) < new Date(parseRightValue)) {
     return false
   } else {
     return true
@@ -69,7 +69,7 @@ const rightPanelItemDisabled = (item: DatePickerPanelItem) => {
     return false
   }
 
-  if (new Date(parseItemStr) >= new Date(parseLeftValue)) {
+  if (new Date(parseItemStr) > new Date(parseLeftValue)) {
     return false
   } else {
     return true

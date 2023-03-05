@@ -94,10 +94,10 @@ export default function useDatePickerEnhanced(
     if (test && exec) {
       const dateParsed = dateUnifiedParse(generateDateStr(typeWithoutRange, exec.slice(1, 3).map(Number)), typeWithoutRange) as string
 
-      if (range === 0 && new Date(dateParsed).getTime() > new Date(newModelValue[1]).getTime()) {
+      if (range === 0 && new Date(dateParsed).getTime() >= new Date(newModelValue[1]).getTime()) {
         emits('update:modelValue', newModelValue)
         return
-      } else if (range === 1 && new Date(dateParsed).getTime() < new Date(newModelValue[0]).getTime()) {
+      } else if (range === 1 && new Date(dateParsed).getTime() <= new Date(newModelValue[0]).getTime()) {
         emits('update:modelValue', newModelValue)
         return
       }
