@@ -1,7 +1,7 @@
 {
   "name": "datepicker-enhanced",
   "type": "module",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "packageManager": "pnpm@7.13.6",
   "description": "component based on vue3.x",
   "author": "liamrad",
