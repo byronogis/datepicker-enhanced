@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Component } from 'vue'
+import { inject, ref } from 'vue'
+import type { Component, StyleValue } from 'vue'
 
 const props = defineProps<{
   value: string | string[]
@@ -32,11 +32,14 @@ defineExpose({
   startFocus: startInputFocus,
   endFocus: endInputFocus,
 })
+
+const style = inject<StyleValue>('style')
 </script>
 
 <template>
   <div
     class="el-date-editor el-date-editor--monthrange el-input__wrapper el-range-editor el-tooltip__trigger el-tooltip__trigger"
+    :style="style"
   >
     <template v-if="props.prefixIcon">
       <i class="el-icon el-input__icon el-range__icon">

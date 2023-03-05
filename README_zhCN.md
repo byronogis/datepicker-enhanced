@@ -22,6 +22,7 @@
 - endPlaceholder?: string
 - rangeSeparator?: string
 - prefixIcon?: Component
+- style?: StyleValue
 
 ### 组件起手模板
 
