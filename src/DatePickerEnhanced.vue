@@ -85,7 +85,7 @@ export default {
 </script>
 
 <template>
-  <div ref="datePickerEnhancedRef" class="component-datepicker-enhanced">
+  <div ref="datePickerEnhancedRef" class="component-datepicker-enhanced" style="display: inline-block">
     <!-- 原始支持 -->
     <template v-if="originType.includes(props.type as OriginDateType)">
       <ElDatePicker
