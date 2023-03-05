@@ -17,7 +17,7 @@ function generateDateStr(date: DateModelType, type: DatePickerPanelType) {
   const dateArr = standerStr.split('-').map(Number)
 
   const year = dateArr[0]
-  const month = dateArr[1] + 1
+  const month = dateArr[1]
 
   const dict = {
     halfyear: Math.ceil(month / 6),
