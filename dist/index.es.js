@@ -229,10 +229,10 @@ function $e(r, n, e, t) {
     const { test: P, exec: S } = fe(a, _);
     if (P && S) {
       const M = z(te(a, S.slice(1, 3).map(Number)), a);
-      if (e === 0 && new Date(M).getTime() > new Date(k[1]).getTime()) {
+      if (e === 0 && new Date(M).getTime() >= new Date(k[1]).getTime()) {
         n("update:modelValue", k);
         return;
-      } else if (e === 1 && new Date(M).getTime() < new Date(k[0]).getTime()) {
+      } else if (e === 1 && new Date(M).getTime() <= new Date(k[0]).getTime()) {
         n("update:modelValue", k);
         return;
       }
@@ -375,10 +375,10 @@ const Ke = { class: "el-picker-panel__content" }, et = { class: "el-date-picker_
   setup(r, { emit: n }) {
     const e = r, t = T(() => Math.ceil(e.items.length / 4)), a = (i) => {
       const c = te(e.type, [i.year, i[e.type] || NaN]), l = z(c, e.type), d = z(e.rightValue, e.type);
-      return !(d === "" || new Date(l) <= new Date(d));
+      return !(d === "" || new Date(l) < new Date(d));
     }, u = (i) => {
       const c = te(e.typeSecond, [i.year, i[e.typeSecond] || NaN]), l = z(c, e.typeSecond), d = z(e.leftValue, e.typeSecond);
-      return !(d === "" || new Date(l) >= new Date(d));
+      return !(d === "" || new Date(l) > new Date(d));
     }, f = (i) => i.isDisabled ? !0 : e.range === 1 ? a(i) : e.range === 2 ? u(i) : !1;
     return (i, c) => (A(), B("div", Ke, [
       V("div", et, [
