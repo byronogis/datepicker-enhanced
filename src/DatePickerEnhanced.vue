@@ -4,7 +4,7 @@ import { computed, provide, ref } from 'vue'
 import { ElDatePicker } from 'element-plus'
 import { Calendar } from '@element-plus/icons-vue'
 // import type { DateModelType } from 'element-plus'
-import type { Component } from 'vue'
+import type { Component, StyleValue } from 'vue'
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { DateType, OriginDateType } from './components/types'
 // import { OriginDateType } from './types'
@@ -33,6 +33,8 @@ interface Props {
   rangeSeparator?: string
 
   prefixIcon?: Component
+
+  style?: StyleValue
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -43,6 +45,7 @@ const props = withDefaults(defineProps<Props>(), {
   endPlaceholder: '结束日期',
   rangeSeparator: '至',
   prefixIcon: Calendar,
+  style: '',
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -72,6 +75,7 @@ const scopedId = computed(() => {
   })?.name
 })
 provide('scopedId', scopedId)
+provide('style', props.style)
 </script>
 
 <script lang="ts">
@@ -95,6 +99,7 @@ export default {
         :end-placeholder="props.endPlaceholder"
         :range-separator="props.rangeSeparator"
         :prefix-icon="props.prefixIcon"
+        :style="props.style"
         @update:modelValue="emits('update:modelValue', $event)"
       >
         <slot name="default" />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { Component } from 'vue'
+import { inject, ref } from 'vue'
+import type { Component, StyleValue } from 'vue'
 
 const props = defineProps<{
   value: string
@@ -26,6 +26,8 @@ const inputFocusUpdate = (status: boolean) => inputFocus.value = status
 defineExpose({
   focus: inputFocus,
 })
+
+const style = inject<StyleValue>('style')
 </script>
 
 <script lang="ts">
@@ -35,7 +37,10 @@ export default {
 </script>
 
 <template>
-  <div class="el-input el-input--prefix el-input--suffix el-date-editor el-date-editor--month el-tooltip__trigger el-tooltip__trigger">
+  <div
+    class="el-input el-input--prefix el-input--suffix el-date-editor el-date-editor--month el-tooltip__trigger el-tooltip__trigger"
+    :style="style"
+  >
     <div
       class="el-input__wrapper"
     >
