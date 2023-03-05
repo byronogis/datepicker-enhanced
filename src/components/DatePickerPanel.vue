@@ -47,6 +47,10 @@ const leftPanelItemDisabled = (item: DatePickerPanelItem) => {
 
   const parseRightValue = dateUnifiedParse(props.rightValue, props.type) as string
 
+  if (parseRightValue === '') {
+    return false
+  }
+
   if (new Date(parseItemStr) <= new Date(parseRightValue)) {
     return false
   } else {
@@ -60,6 +64,10 @@ const rightPanelItemDisabled = (item: DatePickerPanelItem) => {
   const parseItemStr = dateUnifiedParse(itemStr, props.typeSecond) as string
 
   const parseLeftValue = dateUnifiedParse(props.leftValue, props.typeSecond) as string
+
+  if (parseLeftValue === '') {
+    return false
+  }
 
   if (new Date(parseItemStr) >= new Date(parseLeftValue)) {
     return false

@@ -39,7 +39,7 @@ function generateDateStr(date: DateModelType, type: DatePickerPanelType) {
 export function dateUnify(dateOrigin: DateModelType | [DateModelType, DateModelType], type: DatePickerPanelType) {
   const getDateStr = (date: DateModelType) => {
     const isValid = dayjs(date, dateFormat, true).isValid()
-    return generateDateStr(isValid ? date : new Date(), type)
+    return isValid ? generateDateStr(date, type) : ''
   }
 
   if (Array.isArray(dateOrigin)) {
@@ -68,8 +68,8 @@ export function dateUnifiedParse(dateUnified: string | string[], type: DatePicke
   }
 
   if (Array.isArray(dateUnified)) {
-    return dateUnified.map(str => parseDateStr(str))
+    return dateUnified.map(str => str !== '' ? parseDateStr(str) : '')
   } else {
-    return parseDateStr(dateUnified)
+    return dateUnified !== '' ? parseDateStr(dateUnified) : ''
   }
 }
