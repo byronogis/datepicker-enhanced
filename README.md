@@ -1,6 +1,6 @@
 ## DatePickerEnhanced
 
-[![NPM version](https://img.shields.io/npm/v/datepicker-enhanced?color=a1b858&label=)](https://www.npmjs.com/package/datepicker-enhanced)
+[![NPM version](https://img.shields.io/npm/v/datepicker-enhanced)](https://www.npmjs.com/package/datepicker-enhanced)
 
 > A date picker enhanced component for [element-plus](https://github.com/element-plus/element-plus)
 
