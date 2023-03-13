@@ -1,64 +1,48 @@
 <!-- eslint-disable import/order -->
 <script setup lang="ts">
-import { inject, ref, watchEffect } from 'vue'
+// import { inject, ref, watchEffect } from 'vue'
 import { ElPopover } from 'element-plus'
 import type { Component } from 'vue'
-import type { DateModelType } from 'element-plus'
 import DatePickerPanelWrapper from './DatePickerPanelWrapper.vue'
 import DatePickerPanel from './DatePickerPanel.vue'
 import DatePickerInput from './DatePickerInput.vue'
 import useDatePickerEnhanced from './useDatePickerEnhanced'
 
+type DateModelType = string | number | Date
+
 interface Props {
-  modelValue: DateModelType
-  disabledDate: (date: Date) => boolean
+  type: 'quarteryear' | 'halfyear'
+  modelValue: DateModelType[]
+  placeholder: string[]
   popperClass: string
-  prefixIcon: Component
-  placeholder: string
-  type:
-  | 'quarteryear'
-  | 'halfyear'
+  valueFormat: string
+  prefixIcon: Component | null
+  disabledDate: (date: Date) => boolean
+  wantEnd: boolean
 }
 
 const props = defineProps<Props>()
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits([
+  'update:modelValue',
+])
 
 const {
   popover,
   inputValue,
-  inputPlaceholder,
-  inputValueUpdate,
-  panelTitle,
   panelItems,
+  panelTitle,
   panelPrevClick,
   panelNextClick,
   panelItemClick,
   panelTitleClick,
-} = useDatePickerEnhanced(props, emits)
+} = useDatePickerEnhanced(props as any, emits)
 
-const scopedId: any = inject('scopedId')
-const datepickerHalfQuarterYearRef = ref<any>(null)
-watchEffect(() => {
-  const popper = datepickerHalfQuarterYearRef.value?.popperRef?.contentRef as HTMLDivElement
-  popper?.setAttribute?.(`${String(scopedId.value)}`, '')
-})
-
-const InputRef = ref<InstanceType<typeof DatePickerInput> | null>(null)
-const panelWrapperRef = ref<InstanceType<typeof DatePickerPanelWrapper> | null>(null)
-let wantClose = false
-
-watchEffect(() => {
-  if (InputRef.value?.focus || panelWrapperRef.value?.focus) {
-    wantClose = false
-    popover.visible = true
-  } else {
-    wantClose = true
-    setTimeout(() => {
-      wantClose && (popover.visible = false) && (wantClose = false)
-    }, 100)
-  }
-})
+const updateInputModelValue = (index: number, newVal: string) => {
+  const inputValueClone = [...inputValue.value]
+  inputValueClone[index] = newVal
+  inputValue.value = inputValueClone
+}
 </script>
 
 <script lang="ts">
@@ -69,37 +53,29 @@ export default {
 
 <template>
   <ElPopover
-    ref="datepickerHalfQuarterYearRef"
-    :visible="popover.visible"
-    :trigger="popover.trigger"
-    :placement="popover.placement"
-    :hide-after="popover.hideAfter"
-    :transition="popover.transition"
-    :popper-class="popover.popperClass"
     width="auto"
+    v-bind="popover"
+    @update:visible="popover.visible = $event"
   >
     <template #reference>
       <DatePickerInput
-        ref="InputRef"
-        :value="inputValue"
-        :placeholder="inputPlaceholder"
+        :model-value="inputValue[0]"
+        :placeholder="props.placeholder[0]"
         :prefix-icon="props.prefixIcon"
-        @update:value="inputValueUpdate"
+        @update:model-value="updateInputModelValue"
       />
     </template>
 
     <template #default>
-      <DatePickerPanelWrapper
-        ref="panelWrapperRef"
-      >
+      <DatePickerPanelWrapper>
         <template #default>
           <DatePickerPanel
-            :title="panelTitle"
-            :items="panelItems"
-            @clickPrev="panelPrevClick"
-            @clickNext="panelNextClick"
-            @clickItem="panelItemClick"
-            @clickTitle="panelTitleClick"
+            :title="panelTitle[0]"
+            :items="panelItems[0]"
+            @clickPrev="panelPrevClick(0)"
+            @clickNext="panelNextClick(0)"
+            @clickItem="panelItemClick(0, $event)"
+            @clickTitle="panelTitleClick(0)"
           />
         </template>
       </DatePickerPanelWrapper>
