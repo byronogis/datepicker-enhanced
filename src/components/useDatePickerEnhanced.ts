@@ -1,118 +1,149 @@
-/* eslint-disable import/order */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { computed, reactive, ref, watch } from 'vue'
-import { dateUnifiedParse, dateUnify } from './utils'
-import type { DateModelType } from 'element-plus'
+import generateItems from '../utils/generateItems'
+import {
+  getDate,
+  getDateAbbrStr,
+  getDateArray,
+  getDateWithFormat,
+  valiDateAbbrStr,
+} from '../utils/dateStr'
 import type {
-  DatePickerEnhancedProps,
   DatePickerPanelItem,
-  DatePickerPanelType,
-  PopoverProps,
-} from './types'
+  DateTypeClear,
+  InnerDatePickerEnhancedProps,
+} from '../types'
 
-interface PointDatePickerEnhancedProps extends Pick<DatePickerEnhancedProps, 'type'> {
-  modelValue: DateModelType
-  disabledDate: (date: Date) => boolean
-  popperClass: string
-  placeholder: string
-}
+// type LocalModelValue = number[]
 
-const quarteryearEnum = ['一', '二', '三', '四']
-const halfyearEnum = ['上', '下']
-const dateSymbol = {
-  quarteryear: 'Q',
-  halfyear: 'H',
-  year: 'Y',
-}
-
-export function usePopover(props: PopoverProps): Required<PopoverProps> {
-  const popover = reactive({
+function usePopover(props: InnerDatePickerEnhancedProps): any {
+  return reactive({
     trigger: 'click',
     placement: 'bottom',
     hideAfter: 0,
     transition: 'el-zoom-in-top',
     visible: false,
     popperClass: props.popperClass,
+    teleported: false,
   })
-  return popover as Required<PopoverProps>
+}
+
+function updateModelValue(emits: any, newValue: (string | Date)[]) {
+  emits('update:modelValue', newValue)
+}
+
+function getPanelValue(type: DateTypeClear, modelValue: number[][]) {
+  const result = modelValue
+    .map(i => {
+      if (i.every(j => j === 0)) {
+        return getDateArray(type, new Date())
+      } else {
+        return [...i]
+      }
+    })
+    .sort((a, b) => Number(getDate(type, a, 'array')) - Number(getDate(type, b, 'array')))
+
+  // 处理范围面板边界
+  // 年份时右侧面板年份不能小于左侧面板年份+10
+  // 非年份时右侧面板年份不能小于左侧面板年份+1
+  if (result.length === 2) {
+    const leftYear = result[0][0]
+    const rightYear = result[1][0]
+    const rightYearMin = type === 'year'
+      ? leftYear + 10
+      : leftYear + 1
+
+    if (rightYear < rightYearMin) {
+      result[1][0] = rightYearMin
+    }
+  }
+
+  return result
 }
 
 export default function useDatePickerEnhanced(
-  props: Required<PointDatePickerEnhancedProps>,
+  props: InnerDatePickerEnhancedProps,
   emits: any,
-  // existPopover?: PopoverProps,
 ) {
-  const typeWithoutRange = props.type.replace('range', '') as DatePickerPanelType
-  const localModelValue = computed(() => {
-    const { test, exec } = valiDate(typeWithoutRange, dateUnify(props.modelValue, typeWithoutRange) as string)
-    return (test && exec && exec.slice(1, 3).map(Number)) || [0, 0]
-  })
-  const isLocalModelValueEmpty = computed(() => localModelValue.value.every(i => i === 0))
-  //
+  let itemClickTimes = 0
+  let lastClickIndex = -1
+  const isArrowDisabledForRange = ref(false)
 
-  // const popover = existPopover || usePopover(props)
+  // [origin_date] --> [[2020, 1], ~]
+  const localModelValue = computed(() => {
+    return props.modelValue
+      .sort((a, b) => +new Date(a) - +new Date(b))
+      .map(date => getDateArray(props.type, date))
+  })
+  // [boolean, ~]
+  const isLocalModelValueEmpty = computed(() => localModelValue.value.map(item => item.every(i => i === 0)))
+
+  // popover prop
   const popover = usePopover(props)
 
-  // input ref
-  const inputValue = computed(() => {
-    if (isLocalModelValueEmpty.value) {
-      return ''
-    }
+  // input prop
+  const inputValue = computed({
+    get() {
+      return isLocalModelValueEmpty.value.map((item, index) => {
+        if (item) {
+          return ''
+        } else {
+          return getDateAbbrStr(props.type, props.modelValue[index])
+        }
+      })
+    },
+    set(valArr) {
+      const newModelValue = valArr
+        .map((val, index) => {
+          if (val === '') {
+            return ''
+          }
 
-    return generateDateStr(typeWithoutRange, localModelValue.value) as string
+          if (valiDateAbbrStr(props.type, val).test) {
+            return props.valueFormat
+              ? getDateWithFormat(props.type, val, 'abbr', props.wantEnd, props.valueFormat)
+              : getDate(props.type, val, 'abbr', props.wantEnd)
+          } else {
+            return props.valueFormat
+              ? getDateWithFormat(props.type, localModelValue.value[index], 'array', props.wantEnd, props.valueFormat)
+              : getDate(props.type, localModelValue.value[index], 'array', props.wantEnd)
+          }
+        })
+        .sort((a, b) => +new Date(a) - +new Date(b))
+
+      updateModelValue(emits, newModelValue)
+    },
   })
-  // const inputValue = ref('')
-  const inputPlaceholder = computed(() => props.placeholder)
 
-  // input method
-  const inputValueUpdate = (val: string) => {
-    if (val === '') {
-      emits('update:modelValue', '')
-      return
-    }
-
-    const { test, exec } = valiDate(typeWithoutRange, val)
-    test && exec && emits('update:modelValue', dateUnifiedParse(val, typeWithoutRange))
-  }
-
-  // panel ref
-  const panelValue = ref<number[]>(isLocalModelValueEmpty.value ? [new Date().getFullYear(), 1] : [...localModelValue.value]) // 操作所用; 重点：解构; 侦听再赋值
-  const panelType = ref<DatePickerPanelType>(typeWithoutRange)
-  const panelItems = ref<DatePickerPanelItem[]>([])
-  const panelYear = computed(() => panelValue.value[0])
-  const panelIsYear = computed(() => panelType.value === 'year')
-  const panelStartYear = computed(() => Math.floor(panelYear.value / 10) * 10)
-  const panelTitle = computed(() => {
-    let title
-
-    switch (panelType.value) {
-      case 'year':
-        title = `${panelStartYear.value} - ${panelStartYear.value + 9}`
-        break
-
-      default:
-        title = `${panelYear.value}`
-        break
-    }
-
-    return title
+  // panel prop
+  const panelValue = ref<number[][]>(getPanelValue(props.type, localModelValue.value)) // 操作所用; 重点：解构; 侦听再赋值
+  const panelItems = ref<DatePickerPanelItem[][]>([])
+  const panelType = ref<DateTypeClear[]>([props.type, props.type])
+  const isYearPanel = computed<boolean[]>(() => panelType.value.map(i => i === 'year'))
+  const panelStartYear = computed<number[]>(() => panelValue.value.map(i => i[0] - i[0] % 10))
+  const panelStopYear = computed<number[]>(() => panelStartYear.value.map(i => i + 9))
+  const panelTitle = computed<string[]>(() => {
+    return panelValue.value.map((item, index) => {
+      if (isYearPanel.value[index]) {
+        return `${panelStartYear.value[index]} - ${panelStopYear.value[index]}`
+      } else {
+        return `${item[0]}`
+      }
+    })
   })
 
   // panel method
-  const panelPrevClick = () => {
-    panelIsYear.value
-      ? panelValue.value[0] -= 10
-      : panelValue.value[0] -= 1
-
-    generateItems()
+  const panelPrevClick = (index: number) => {
+    isYearPanel.value[index]
+      ? panelValue.value[index][0] -= 10
+      : panelValue.value[index][0] -= 1
   }
-  const panelNextClick = () => {
-    panelIsYear.value
-      ? panelValue.value[0] += 10
-      : panelValue.value[0] += 1
-
-    generateItems()
+  const panelNextClick = (index: number) => {
+    isYearPanel.value[index]
+      ? panelValue.value[index][0] += 10
+      : panelValue.value[index][0] += 1
   }
-  const panelItemClick = (item: DatePickerPanelItem) => {
+  const panelItemClick = (index: number, item: DatePickerPanelItem) => {
     console.log('点击了 ==> ', item)
 
     if (item.isDisabled) {
@@ -120,164 +151,124 @@ export default function useDatePickerEnhanced(
       return
     }
 
-    if (panelIsYear.value && typeWithoutRange !== 'year') {
-      panelValue.value[0] = item.year
-      panelType.value = typeWithoutRange
+    // 点击期望类型项时, (有效)点击次数 + 1
+    if (item.type === props.type) {
+      itemClickTimes += 1
+    }
+
+    if (item.type === 'year' && props.type !== 'year') {
+      panelValue.value[index][0] = item.year
+      panelType.value[index] = props.type
     } else {
-      const value = [item.year, item[typeWithoutRange]] as number[]
-      const dateStr = generateDateStr(typeWithoutRange, value)
-      valiDate(typeWithoutRange, dateStr).test && (panelValue.value = value)
+      const target = lastClickIndex === -1
+        ? index
+        : lastClickIndex === 1
+          ? 0
+          : 1
+      lastClickIndex = index
+      panelValue.value[target] = [item.year, item[props.type] || 0]
     }
   }
-  const panelTitleClick = () => {
-    if (panelIsYear.value) {
+  const panelTitleClick = (index: number) => {
+    if (isYearPanel.value[index]) {
       return
     }
 
-    panelType.value = 'year'
+    // 范围面板不切换面板类型
+    // TODO: 范围面板支持切换面板类型
+    if (props.modelValue.length === 2 || props.type.includes('range')) {
+      return
+    }
+
+    panelType.value[index] = 'year'
   }
 
-  // 面板类型改变
-  watch(() => panelType.value, () => {
-    generateItems()
-  })
+  // 面板类型改变生成面板项目
+  watch([panelType, panelTitle], () => {
+    generatePanelItems()
+  }, { deep: true })
 
   // 面板值改变时同步改变传入数据值
-  watch(() => panelValue.value, (newV, oldV) => {
-    console.log('改变了日期 new old: ', newV, oldV)
+  watch(panelValue, newV => {
+    // 更新范围面板左右箭头禁用状态
+    if (panelValue.value.length === 2) {
+      // 优先正则匹配title中的年份, 面板值的第一项兜底
+      const leftYear = Number(panelTitle.value[0].match(/\d{4}/g)?.[0] ?? panelValue.value[0][0])
+      const rightYear = Number(panelTitle.value[1].match(/\d{4}/g)?.[0] ?? panelValue.value[1][0])
+      // 允许的差值
+      const diff = panelType.value[0] === 'year'
+        ? 10
+        : 1
 
-    const dateParsed = dateUnifiedParse(generateDateStr(typeWithoutRange, panelValue.value), typeWithoutRange)
+      isArrowDisabledForRange.value = rightYear - leftYear <= diff
+    }
 
-    emits('update:modelValue', dateParsed)
-    popover.visible = false
-
-    generateItems()
-  })
-
-  // 传入数据值变动时同步改变面板值, 以打开后最新状态
-  watch(() => localModelValue.value, () => {
-    if (isLocalModelValueEmpty.value) {
+    // 未选择完成时不改变传入数据值
+    if (itemClickTimes < props.modelValue.length) {
       return
     }
-    // 单独改变元素而非直接改变数组,阻止循环侦听
-    panelValue.value[0] = localModelValue.value[0]
-    panelValue.value[1] = localModelValue.value[1]
-    generateItems()
+
+    console.log('改变了日期 new old: ', [...newV], localModelValue.value)
+
+    const newModelValue = panelValue.value
+      .map((item, index) => {
+        return props.valueFormat
+          ? getDateWithFormat(props.type, item, 'array', props.wantEnd, props.valueFormat)
+          : getDate(props.type, item, 'array', props.wantEnd)
+      })
+      .sort((a, b) => +new Date(a) - +new Date(b))
+
+    // 更新 modelValue
+    updateModelValue(emits, newModelValue)
+    // 关闭弹窗
+    popover.visible = false
+  }, { deep: true })
+
+  // 传入数据值变动时同步改变面板值, 以打开后最新状态
+  watch(localModelValue, () => {
+    if (isLocalModelValueEmpty.value.every(Boolean)) {
+      return
+    }
+
+    panelValue.value = localModelValue.value.map(i => [...i])
+    generatePanelItems()
+  })
+
+  watch(() => popover.visible, (newVal: boolean) => {
+    if (newVal) {
+      panelValue.value = getPanelValue(props.type, localModelValue.value)
+      generatePanelItems()
+    } else {
+      // 状态重置
+      itemClickTimes = 0
+      lastClickIndex = -1
+    }
   })
 
   // 生成面板项目
-  function generateItems() {
-    panelItems.value = initPanelItems(
-      panelType.value,
-      panelYear.value,
-      panelStartYear.value,
-      isLocalModelValueEmpty.value ? panelValue.value : localModelValue.value,
+  function generatePanelItems() {
+    panelItems.value = props.modelValue.map((_i, index) => generateItems(
+      panelType.value[index],
+      panelValue.value[index],
+      panelStartYear.value[index],
+      localModelValue.value,
       props.disabledDate,
-    )
+      props.wantEnd,
+    ))
   }
 
-  // 立即生成
-  generateItems()
+  // 立即生成面板项目
+  generatePanelItems()
 
   return {
     popover,
     inputValue,
-    inputPlaceholder,
-    inputValueUpdate,
-    panelTitle,
     panelItems,
+    panelTitle,
     panelPrevClick,
     panelNextClick,
     panelItemClick,
     panelTitleClick,
+    isArrowDisabledForRange,
   }
-}
-
-function generateDateStr(type: DatePickerPanelType, value: number[]) {
-  return `${value[0]}-${dateSymbol[type]}${value[1]}`
-}
-
-// 验证日期格式是否符合预期
-function valiDate(dateType: DatePickerPanelType, dateStr: string) {
-  const dateReg = new RegExp(`^(\\d{4})-${dateSymbol[dateType]}(\\d)$`)
-  let test = dateReg.test(dateStr)
-  const exec = dateReg.exec(dateStr)
-
-  // 判断季度/半年度范围是否符合
-  if (test && exec) {
-    if (dateType === 'halfyear' && ![1, 2].includes(Number(exec[2]))) {
-      test = false
-    } else if (dateType === 'quarteryear' && ![1, 2, 3, 4].includes(Number(exec[2]))) {
-      test = false
-    }
-  }
-
-  return {
-    test,
-    exec,
-  }
-}
-
-// 生成视图数据
-function initPanelItems(
-  panelType: DatePickerPanelType,
-  panelYear: number,
-  panelStartYear: number,
-  datepickerValue: number[],
-  disabledDate: (date: Date) => boolean,
-) {
-  let items: DatePickerPanelItem[]
-
-  const curDate = new Date()
-  const curYear = curDate.getFullYear()
-  const curMonth = curDate.getMonth() + 1
-  const curQuarterYear = Math.ceil(curMonth / 3)
-  const curHalfYear = Math.ceil(curMonth / 6)
-
-  if (panelType === 'quarteryear') { // 季度
-    items = quarteryearEnum.map((cur, idx): DatePickerPanelItem => {
-      const year = panelYear
-      const quarteryear = idx + 1
-
-      return {
-        label: `第${cur}季度`,
-        year,
-        quarteryear,
-        isToday: (year === curYear) && (quarteryear === curQuarterYear),
-        isCurrent: (year === datepickerValue[0]) && (quarteryear === datepickerValue[1]),
-        isDisabled: disabledDate(new Date(`${year}-${(quarteryear - 1) * 3 + 1}`)),
-      }
-    })
-  } else if (panelType === 'halfyear') { // 半年度
-    items = halfyearEnum.map((cur, idx): DatePickerPanelItem => {
-      const year = panelYear
-      const halfyear = idx + 1
-
-      return {
-        label: `${cur}半年`,
-        year,
-        halfyear,
-        isToday: (year === curYear) && (halfyear === curHalfYear),
-        isCurrent: (year === datepickerValue[0]) && (halfyear === datepickerValue[1]),
-        isDisabled: disabledDate(new Date(`${year}-${(halfyear - 1) * 6 + 1}`)),
-      }
-    })
-  } else if (panelType === 'year') { // 年度
-    items = Array(10).fill(1).map((_cur, idx): DatePickerPanelItem => {
-      const year = panelStartYear + idx
-
-      return {
-        label: `${year}`,
-        year,
-        isToday: year === curYear,
-        isCurrent: year === datepickerValue[0],
-        isDisabled: disabledDate(new Date(`${year}`)),
-      }
-    })
-  } else {
-    items = []
-  }
-
-  // datepicker.viewItems = list
-  return items
 }
