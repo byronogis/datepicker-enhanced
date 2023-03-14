@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import dayjs from 'dayjs'
+import { name, version } from '../package.json'
 
 const disabledDateList = ['2020-01-01', '2020-04-01', '2021-10-01']
 const disableDateListButEnd = ['2020-03-31', '2020-06-30', '2021-12-31']
@@ -75,6 +76,10 @@ const extraTypes = {
       </li>
     </template>
   </ul>
+
+  <footer class="footer">
+    <a :href="`https://www.npmjs.com/package/${name}`" target="_blank">{{ name }}@{{ version }}</a>
+  </footer>
 </template>
 
 <style scoped>
@@ -95,5 +100,18 @@ const extraTypes = {
   min-width: 400px;
   min-height: 100px;
   box-shadow: 1px 1px 5px #333;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 4rem;
+  line-height: 4rem;
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: #f5f5f5;
 }
 </style>
