@@ -6,7 +6,6 @@
 
 ### Features
 
-- Compatible with element-plus DatePicker component
 - New support for halfyear, quarteryear time point and year, halfyear and quarteryear time range selection
 
 ### Props Support for New Date Type
@@ -14,15 +13,41 @@
 > up to now
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
-- modelValue:  string | number | Date
-- disabledDate: (date: Date) => boolean
-- popperClass: string
-- placeholder: string
-- startPlaceholder?: string
-- endPlaceholder?: string
-- rangeSeparator?: string
+- modelValue / v-model:  string | number | Date | (string | number | Date)[]
+- placeholder?: string = '选择日期'
+- startPlaceholder?: string = '开始日期'
+- endPlaceholder?: string = '结束日期'
+- popperClass?: string = ''
+- rangeSeparator?: string = '至'
+- valueFormat?: string = ''
 - prefixIcon?: Component
-- style?: StyleValue
+- disabledDate?: (date: Date) => boolean = () => false
+- style?: StyleValue = ''
+- wantEnd?: boolean = false
+
+### Usage Example
+
+```vue
+<script setup lang="ts">
+import DatePickerEnhanced from 'datepicker-enhanced'
+import 'datepicker-enhanced/dist/style.css'
+
+import { ElDatePicker } from 'element-plus'
+
+const extraType = ['halfyear', 'quarteryear', 'yearrange', 'halfyearrange', 'quarteryearrange']
+const type = ref('halfyear')
+</script>
+
+<template>
+  <template v-if="extraType.includes(type)">
+    <DatePickerEnhanced v-model="value" :type="type" />
+  </template>
+
+  <template v-else>
+    <ElDatePicker v-model="value" :type="type" />
+  </template>
+</template>
+```
 
 ### Beginning with
 
