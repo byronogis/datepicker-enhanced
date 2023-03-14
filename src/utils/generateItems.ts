@@ -11,12 +11,12 @@ export default function generateItems(
   panelValue: number[],
   panelStartYear: number,
   // 用于判断当前项的isCurrent, 考虑到范围面板, 因此下面使用some遍历判断,以使得单面板可容纳多个isCurrent
-  localModelValue: number[][],
+  sourceModelValue: number[][],
   disabledDate: (date: Date) => boolean,
   wantEnd = false,
 ) {
-  const isRange = localModelValue.length === 2
-  const isValidRange = localModelValue.every(item => item.every(i => i !== 0))
+  const isRange = sourceModelValue.length === 2
+  const isValidRange = sourceModelValue.every(item => item.every(i => i !== 0))
 
   let items: DatePickerPanelItem[] = []
 
@@ -38,12 +38,12 @@ export default function generateItems(
         label: `${year}`,
         year,
         isToday: year === current.year,
-        isCurrent: localModelValue.some(item => item[0] === year),
+        isCurrent: sourceModelValue.some(item => item[0] === year),
         isDisabled: disabledDate(dateObj),
-        isStartDate: year === localModelValue[0][0],
-        isEndDate: isRange && year === localModelValue[1][0],
-        isInRange: isRange && localModelValue.every(item => item[0] !== 0)
-            && year >= localModelValue[0][0] && year <= localModelValue[1][0],
+        isStartDate: year === sourceModelValue[0][0],
+        isEndDate: isRange && year === sourceModelValue[1][0],
+        isInRange: isRange && sourceModelValue.every(item => item[0] !== 0)
+            && year >= sourceModelValue[0][0] && year <= sourceModelValue[1][0],
       }
     })
   } else if (panelType === 'halfyear') { // 半年
@@ -58,13 +58,13 @@ export default function generateItems(
         year,
         halfyear,
         isToday: year === current.year && halfyear === current.halfyear,
-        isCurrent: localModelValue.some(item => item[0] === year && item[1] === halfyear),
+        isCurrent: sourceModelValue.some(item => item[0] === year && item[1] === halfyear),
         isDisabled: disabledDate(dateObj),
-        isStartDate: year === localModelValue[0][0] && halfyear === localModelValue[0][1],
-        isEndDate: isRange && year === localModelValue[1][0] && halfyear === localModelValue[1][1],
+        isStartDate: year === sourceModelValue[0][0] && halfyear === sourceModelValue[0][1],
+        isEndDate: isRange && year === sourceModelValue[1][0] && halfyear === sourceModelValue[1][1],
         isInRange: isRange && isValidRange
-          && Number([year, halfyear].join('')) >= Number([localModelValue[0][0], localModelValue[0][1]].join(''))
-          && Number([year, halfyear].join('')) <= Number([localModelValue[1][0], localModelValue[1][1]].join('')),
+          && Number([year, halfyear].join('')) >= Number([sourceModelValue[0][0], sourceModelValue[0][1]].join(''))
+          && Number([year, halfyear].join('')) <= Number([sourceModelValue[1][0], sourceModelValue[1][1]].join('')),
       }
     })
   } else if (panelType === 'quarteryear') { // 季度
@@ -79,13 +79,13 @@ export default function generateItems(
         year,
         quarteryear,
         isToday: year === current.year && quarteryear === current.quarteryear,
-        isCurrent: localModelValue.some(item => item[0] === year && item[1] === quarteryear),
+        isCurrent: sourceModelValue.some(item => item[0] === year && item[1] === quarteryear),
         isDisabled: disabledDate(dateObj),
-        isStartDate: year === localModelValue[0][0] && quarteryear === localModelValue[0][1],
-        isEndDate: isRange && year === localModelValue[1][0] && quarteryear === localModelValue[1][1],
+        isStartDate: year === sourceModelValue[0][0] && quarteryear === sourceModelValue[0][1],
+        isEndDate: isRange && year === sourceModelValue[1][0] && quarteryear === sourceModelValue[1][1],
         isInRange: isRange && isValidRange
-          && Number([year, quarteryear].join('')) >= Number([localModelValue[0][0], localModelValue[0][1]].join(''))
-          && Number([year, quarteryear].join('')) <= Number([localModelValue[1][0], localModelValue[1][1]].join('')),
+          && Number([year, quarteryear].join('')) >= Number([sourceModelValue[0][0], sourceModelValue[0][1]].join(''))
+          && Number([year, quarteryear].join('')) <= Number([sourceModelValue[1][0], sourceModelValue[1][1]].join('')),
       }
     })
   }
