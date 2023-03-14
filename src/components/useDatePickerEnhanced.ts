@@ -67,7 +67,7 @@ export default function useDatePickerEnhanced(
 ) {
   let itemClickTimes = 0
   let lastClickIndex = -1
-  let preUpdateModelValue = [[0, 0], [0, 0]]
+  let preUpdateModelValue = Array(props.modelValue.length).fill([0, 0])
   const isArrowDisabledForRange = ref(false)
 
   // [origin_date] --> [[2020, 1], ~]
@@ -217,7 +217,7 @@ export default function useDatePickerEnhanced(
 
     console.log('改变了日期 new old: ', [...newV], localModelValue.value)
 
-    const newModelValue = preUpdateModelValue.slice(0, itemClickTimes)
+    const newModelValue = preUpdateModelValue
       .map((item, index) => {
         return props.valueFormat
           ? getDateWithFormat(props.type, item, 'array', props.wantEnd, props.valueFormat)
@@ -249,7 +249,7 @@ export default function useDatePickerEnhanced(
       // 状态重置
       itemClickTimes = 0
       lastClickIndex = -1
-      preUpdateModelValue = [[0, 0], [0, 0]]
+      preUpdateModelValue = Array(props.modelValue.length).fill([0, 0])
     }
   })
 
