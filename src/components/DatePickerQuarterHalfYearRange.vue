@@ -74,6 +74,7 @@ export default {
           <!-- left -->
           <DatePickerPanel
             class="el-date-range-picker__content is-left"
+            style="padding-top: 0;"
             :title="panelTitle[0]"
             :items="panelItems[0]"
             :is-arrow-disabled-for-range="isArrowDisabledForRange ? 'right' : false"
@@ -88,6 +89,7 @@ export default {
           <!-- right -->
           <DatePickerPanel
             class="el-date-range-picker__content is-right"
+            style="padding-top: 0;"
             :title="panelTitle[1]"
             :items="panelItems[1]"
             :is-arrow-disabled-for-range="isArrowDisabledForRange ? 'left' : false"
