@@ -203,8 +203,13 @@ export default function useDatePickerEnhanced(
       isArrowDisabledForRange.value = rightYear - leftYear <= diff
     }
 
-    // 未选择完成时不改变传入数据值
+    // 未选择完成时不改变传入数据值, 仅重新生成面板项本次选择状态
     if (itemClickTimes < props.modelValue.length) {
+      if (itemClickTimes === 0) {
+        return
+      }
+
+      generatePanelItems([panelValue.value[lastClickIndex]])
       return
     }
 
@@ -246,12 +251,12 @@ export default function useDatePickerEnhanced(
   })
 
   // 生成面板项目
-  function generatePanelItems() {
+  function generatePanelItems(sourceModelValue: number[][] = localModelValue.value) {
     panelItems.value = props.modelValue.map((_i, index) => generateItems(
       panelType.value[index],
       panelValue.value[index],
       panelStartYear.value[index],
-      localModelValue.value,
+      sourceModelValue,
       props.disabledDate,
       props.wantEnd,
     ))
