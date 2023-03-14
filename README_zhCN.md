@@ -6,7 +6,6 @@
 
 ### 功能
 
-- 兼容 element-plus 的 DatePicker 组件
 - 新增支持 半年度、季度时间点和年度、半年度、季度时间范围选择
 
 ### 新日期类型的 Props 支持
@@ -14,15 +13,41 @@
 > 截止当前
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
-- modelValue:  string | number | Date
-- disabledDate: (date: Date) => boolean
-- popperClass: string
-- placeholder: string
-- startPlaceholder?: string
-- endPlaceholder?: string
-- rangeSeparator?: string
+- modelValue / v-model:  string | number | Date | (string | number | Date)[]
+- placeholder?: string = '选择日期'
+- startPlaceholder?: string = '开始日期'
+- endPlaceholder?: string = '结束日期'
+- popperClass?: string = ''
+- rangeSeparator?: string = '至'
+- valueFormat?: string = ''
 - prefixIcon?: Component
-- style?: StyleValue
+- disabledDate?: (date: Date) => boolean = () => false
+- style?: StyleValue = ''
+- wantEnd?: boolean = false
+
+### 使用示例
+
+```vue
+<script setup lang="ts">
+import DatePickerEnhanced from 'datepicker-enhanced'
+import 'datepicker-enhanced/dist/style.css'
+
+import { ElDatePicker } from 'element-plus'
+
+const extraType = ['halfyear', 'quarteryear', 'yearrange', 'halfyearrange', 'quarteryearrange']
+const type = ref('halfyear')
+</script>
+
+<template>
+  <template v-if="extraType.includes(type)">
+    <DatePickerEnhanced v-model="value" :type="type" />
+  </template>
+
+  <template v-else>
+    <ElDatePicker v-model="value" :type="type" />
+  </template>
+</template>
+```
 
 ### 组件起手模板
 
