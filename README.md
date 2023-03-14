@@ -2,6 +2,8 @@
 
 [![NPM version](https://img.shields.io/npm/v/datepicker-enhanced)](https://www.npmjs.com/package/datepicker-enhanced)
 
+[简体中文](./README_zhCN.md) | [English](./README.md)
+
 > A date picker enhanced component for [element-plus](https://github.com/element-plus/element-plus)
 
 ### Features
