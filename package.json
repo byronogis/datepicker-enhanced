@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.2.2",
   "packageManager": "pnpm@7.13.6",
-  "description": "component based on vue3.x",
+  "description": "A date picker enhanced component for element-plus, expand the date type.",
   "author": "liamrad",
   "license": "MIT",
   "homepage": "https://github.com/liamrad/datepicker-enhanced#readme",
