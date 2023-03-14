@@ -230,7 +230,7 @@ export default function useDatePickerEnhanced(
       return
     }
 
-    panelValue.value = localModelValue.value.map(i => [...i])
+    panelValue.value = getPanelValue(props.type, localModelValue.value)
     generatePanelItems()
   })
 
