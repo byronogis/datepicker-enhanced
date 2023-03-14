@@ -166,9 +166,19 @@ export default function useDatePickerEnhanced(
         : lastClickIndex === 1
           ? 0
           : 1
+
+      const currentSelectValue = [item.year, item[props.type] || 0]
+
+      // 第二次点击和第一次点击的值相同时, 不做后续处理
+      if (itemClickTimes === 2 && (Number(preUpdateModelValue[lastClickIndex].join('')) === Number(currentSelectValue.join('')))) {
+        // 有效点击次数 - 1
+        itemClickTimes -= 1
+        return
+      }
+
       lastClickIndex = index
-      panelValue.value[target] = [item.year, item[props.type] || 0]
-      preUpdateModelValue[target] = [item.year, item[props.type] || 0]
+      panelValue.value[target] = currentSelectValue
+      preUpdateModelValue[target] = currentSelectValue
     }
   }
   const panelTitleClick = (index: number) => {
