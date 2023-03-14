@@ -217,7 +217,7 @@ export default function useDatePickerEnhanced(
 
     console.log('改变了日期 new old: ', [...newV], localModelValue.value)
 
-    const newModelValue = preUpdateModelValue
+    const newModelValue = preUpdateModelValue.slice(0, itemClickTimes)
       .map((item, index) => {
         return props.valueFormat
           ? getDateWithFormat(props.type, item, 'array', props.wantEnd, props.valueFormat)
