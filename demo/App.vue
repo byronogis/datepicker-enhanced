@@ -62,30 +62,38 @@ const extraTypes = {
 </script>
 
 <template>
-  <template v-for="(item, key) in extraTypes" :key="key">
-    <div class="item-wrapper">
-      <h4>{{ item.type }}</h4>
-      <DatePickerEnhanced
-        v-bind="item"
-        @update:modelValue="item.modelValue = $event"
-      />
-      <div>props: </div>
-      <pre>{{ item }}</pre>
-    </div>
-  </template>
+  <ul class="item-wrapper">
+    <template v-for="(item, key) in extraTypes" :key="key">
+      <li class="item">
+        <h4>{{ item.type }}</h4>
+        <DatePickerEnhanced
+          v-bind="item"
+          @update:modelValue="item.modelValue = $event"
+        />
+        <div>props: </div>
+        <pre>{{ item }}</pre>
+      </li>
+    </template>
+  </ul>
 </template>
 
 <style scoped>
 .item-wrapper {
+  margin: 0;
+  padding: 2em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  list-style: none;
+}
+
+.item {
+  padding: 2em;
+  margin-bottom: 2em;
   display: inline-block;
   min-width: 400px;
   min-height: 100px;
-  margin: 2em 4em;
-  padding: 2em;
   box-shadow: 1px 1px 5px #333;
-}
-
-.item-wrapper > * {
-  padding: .5em 0;
 }
 </style>
