@@ -27,6 +27,10 @@
 - style?: StyleValue = ''
 - wantEnd?: boolean = false
 
+#### `wantEnd`
+
+当修改数值时默认情况下传递的数值是区间的起始值，可以通过传入 `wantEnd` 已得到结束值。
+
 ### 使用示例
 
 ```vue
