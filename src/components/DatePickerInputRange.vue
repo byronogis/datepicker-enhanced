@@ -5,7 +5,7 @@ import type { Component, StyleValue } from 'vue'
 const props = defineProps<{
   modelValue: string[]
   placeholder: string[]
-  prefixIcon: Component
+  prefixIcon: Component | null
   rangeSeparator: string
 }>()
 
