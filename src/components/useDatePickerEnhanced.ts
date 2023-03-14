@@ -67,6 +67,7 @@ export default function useDatePickerEnhanced(
 ) {
   let itemClickTimes = 0
   let lastClickIndex = -1
+  let preUpdateModelValue = [[0, 0], [0, 0]]
   const isArrowDisabledForRange = ref(false)
 
   // [origin_date] --> [[2020, 1], ~]
@@ -167,6 +168,7 @@ export default function useDatePickerEnhanced(
           : 1
       lastClickIndex = index
       panelValue.value[target] = [item.year, item[props.type] || 0]
+      preUpdateModelValue[target] = [item.year, item[props.type] || 0]
     }
   }
   const panelTitleClick = (index: number) => {
@@ -209,13 +211,13 @@ export default function useDatePickerEnhanced(
         return
       }
 
-      generatePanelItems([panelValue.value[lastClickIndex]])
+      generatePanelItems([preUpdateModelValue[lastClickIndex]])
       return
     }
 
     console.log('改变了日期 new old: ', [...newV], localModelValue.value)
 
-    const newModelValue = panelValue.value
+    const newModelValue = preUpdateModelValue
       .map((item, index) => {
         return props.valueFormat
           ? getDateWithFormat(props.type, item, 'array', props.wantEnd, props.valueFormat)
@@ -247,6 +249,7 @@ export default function useDatePickerEnhanced(
       // 状态重置
       itemClickTimes = 0
       lastClickIndex = -1
+      preUpdateModelValue = [[0, 0], [0, 0]]
     }
   })
 
