@@ -1,84 +1,91 @@
-<!-- eslint-disable unused-imports/no-unused-imports -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
+import dayjs from 'dayjs'
 
-const halfyear = ref('2021-05-01')
-const quarteryear = ref('2023-10-01')
+const disabledDateList = ['2020-01-01', '2020-04-01', '2021-10-01']
+const disableDateListButEnd = ['2020-03-31', '2020-06-30', '2021-12-31']
 
-const halfyearrange = ref<[string, string]>(['2016-05-01', '2018-10-01'])
-const quarteryearrange = ref<[string, string]>(['2018-05-01', '2020-10-01'])
-const yearrange = ref<[string, string]>(['2022-05-01', '2024-10-01'])
+const disabledDateFn = (date: Date) => {
+  const target = dayjs(date).format('YYYY-MM-DD')
+  return disabledDateList.includes(target)
+}
 
-const month = ref('2021-06-01')
-const monthrange = ref(['2021-07-01', '2021-09-01'])
+const disabledDateFnBunEnd = (date: Date) => {
+  const target = dayjs(date).format('YYYY-MM-DD')
+  return disableDateListButEnd.includes(target)
+}
 
-const disableData = (date: Date) => {
-  // console.log(date)
-  return false
-  // return date && (date.getMonth() + 1 === 7)
+const quarteryearProps = reactive({
+  type: 'quarteryear',
+  modelValue: '2021-05-01',
+  disabledDate: disabledDateFnBunEnd,
+  valueFormat: 'YYYY-MM-DD',
+  wantEnd: true,
+})
+
+const halfyearProps = reactive({
+  type: 'halfyear',
+  modelValue: '2021-05-01',
+  disabledDate: disabledDateFnBunEnd,
+  wantEnd: true,
+})
+
+const quarteryearrangeProps = reactive({
+  type: 'quarteryearrange',
+  modelValue: ['2020-05-01', '2023-08-01'],
+  disabledDate: disabledDateFn,
+  valueFormat: 'YYYY-MM-DD',
+  wantEnd: true,
+})
+
+const halfyearrangeProps = reactive({
+  type: 'halfyearrange',
+  modelValue: ['2020-01-01', '2030-07-01'],
+  disabledDate: disabledDateFn,
+})
+
+const yearrangeProps = reactive({
+  type: 'yearrange',
+  modelValue: ['2020', '2025'],
+  disabledDate: disabledDateFn,
+  valueFormat: 'YYYY-MM-DD',
+  wantEnd: true,
+})
+
+const extraTypes = {
+  quarteryear: quarteryearProps,
+  halfyear: halfyearProps,
+  quaretryearrange: quarteryearrangeProps,
+  halfyearrange: halfyearrangeProps,
+  yearrange: yearrangeProps,
 }
 </script>
 
 <template>
-  <div>半年度选择器:</div>
-  <DatePickerEnhanced
-    v-model="halfyear"
-    type="halfyear"
-    placeholder="选择半年度"
-    :disabled-date="disableData"
-  />
-
-  <div>季度选择器:</div>
-  <DatePickerEnhanced
-    v-model="quarteryear"
-    type="quarteryear"
-    placeholder="选择季度"
-    :disabled-date="disableData"
-  />
-
-  <div>半年度范围</div>
-  <DatePickerEnhanced
-    v-model="halfyearrange"
-    type="halfyearrange"
-    start-placeholder="半年度开始"
-    end-placeholder="半年度结束"
-    :disabled-date="disableData"
-  />
-
-  <div>季度范围</div>
-  <DatePickerEnhanced
-    v-model="quarteryearrange"
-    type="quarteryearrange"
-    start-placeholder="季度开始"
-    end-placeholder="季度结束"
-    range-separator="To"
-    :disabled-date="disableData"
-  />
-
-  <div>年度范围</div>
-  <DatePickerEnhanced
-    v-model="yearrange"
-    type="yearrange"
-    start-placeholder="年度开始"
-    end-placeholder="年度结束"
-    range-separator="To"
-    :disabled-date="disableData"
-  />
-
-  <div>月度选择器:</div>
-  <DatePickerEnhanced
-    v-model="month"
-    type="month"
-    :disabled-date="disableData"
-  />
-
-  <div>月度范围选择</div>
-  <DatePickerEnhanced
-    v-model="monthrange"
-    type="monthrange"
-    range-separator="To"
-    start-placeholder="Start month"
-    end-placeholder="End month"
-    :disabled-date="disableData"
-  />
+  <template v-for="(item, key) in extraTypes" :key="key">
+    <div class="item-wrapper">
+      <h4>{{ item.type }}</h4>
+      <DatePickerEnhanced
+        v-bind="item"
+        @update:modelValue="item.modelValue = $event"
+      />
+      <div>props: </div>
+      <pre>{{ item }}</pre>
+    </div>
+  </template>
 </template>
+
+<style scoped>
+.item-wrapper {
+  display: inline-block;
+  min-width: 400px;
+  min-height: 100px;
+  margin: 2em 4em;
+  padding: 2em;
+  box-shadow: 1px 1px 5px #333;
+}
+
+.item-wrapper > * {
+  padding: .5em 0;
+}
+</style>
