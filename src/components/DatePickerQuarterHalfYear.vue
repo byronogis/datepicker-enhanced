@@ -43,6 +43,13 @@ const updateInputModelValue = (index: number, newVal: string) => {
   inputValueClone[index] = newVal
   inputValue.value = inputValueClone
 }
+
+// 向外暴露的属性方法
+defineExpose({
+  updateVisible: (val: boolean) => {
+    popover.visible = val
+  },
+})
 </script>
 
 <script lang="ts">

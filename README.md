@@ -10,11 +10,15 @@
 
 - New support for halfyear, quarteryear time point and year, halfyear and quarteryear time range selection
 
-### Props Support for New Date Type
+### API Support for New Date Type
 
 > up to now
 >
+> You can refer to [DatePicker | Element Plus](https://element-plus.org/zh-CN/component/date-picker.html)
+>
 > `*`: extra support
+
+#### Attributes
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue / v-model:  string | number | Date | (string | number | Date)[]
@@ -29,9 +33,14 @@
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false
 
-#### `wantEnd`
+##### `wantEnd`
 
 By default, when a value is modified, the value passed is the starting value of the range，and you can get the end value by props of 'wantEnd'.
+
+#### Methods
+
+- handleOpen
+- handleClose
 
 ### Usage Example
 
