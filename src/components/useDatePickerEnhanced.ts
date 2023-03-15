@@ -252,6 +252,7 @@ export default function useDatePickerEnhanced(
   watch(() => popover.visible, (newVal: boolean) => {
     if (newVal) {
       panelValue.value = getPanelValue(props.type, localModelValue.value)
+      panelType.value = Array(props.modelValue.length).fill(props.type)
       generatePanelItems()
     } else {
       // 状态重置
