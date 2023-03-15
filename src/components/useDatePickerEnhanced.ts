@@ -118,8 +118,8 @@ export default function useDatePickerEnhanced(
 
   // panel prop
   const panelValue = ref<number[][]>(getPanelValue(props.type, localModelValue.value)) // 操作所用; 重点：解构; 侦听再赋值
-  const panelItems = ref<DatePickerPanelItem[][]>([])
-  const panelType = ref<DateTypeClear[]>([props.type, props.type])
+  const panelItems = ref<DatePickerPanelItem[][]>(Array(props.modelValue.length).fill([]))
+  const panelType = ref<DateTypeClear[]>(Array(props.modelValue.length).fill(props.type))
   const isYearPanel = computed<boolean[]>(() => panelType.value.map(i => i === 'year'))
   const panelStartYear = computed<number[]>(() => panelValue.value.map(i => i[0] - i[0] % 10))
   const panelStopYear = computed<number[]>(() => panelStartYear.value.map(i => i + 9))
@@ -252,6 +252,7 @@ export default function useDatePickerEnhanced(
   watch(() => popover.visible, (newVal: boolean) => {
     if (newVal) {
       panelValue.value = getPanelValue(props.type, localModelValue.value)
+      panelItems.value = Array(props.modelValue.length).fill([])
       panelType.value = Array(props.modelValue.length).fill(props.type)
       generatePanelItems()
     } else {
@@ -273,9 +274,6 @@ export default function useDatePickerEnhanced(
       props.wantEnd,
     ))
   }
-
-  // 立即生成面板项目
-  generatePanelItems()
 
   return {
     popover,
