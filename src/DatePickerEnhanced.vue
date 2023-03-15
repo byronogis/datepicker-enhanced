@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide } from 'vue'
+import { computed, provide, ref } from 'vue'
 import { Calendar } from '@element-plus/icons-vue'
 import type { Component, StyleValue } from 'vue'
 
@@ -88,6 +88,19 @@ const innerPlaceholder = computed(() => {
 
 // 向下提供给输入框
 provide('style', props.style)
+
+type DatePickerRef = InstanceType<typeof DatePickerQuarterHalfYear> | InstanceType<typeof DatePickerQuarterHalfYearRange>
+const datepickerRef = ref<DatePickerRef | null>(null)
+
+// 向外暴露的属性方法
+defineExpose({
+  handleOpen() {
+    datepickerRef.value?.updateVisible(true)
+  },
+  handleClose() {
+    datepickerRef.value?.updateVisible(false)
+  },
+})
 </script>
 
 <script lang="ts">
@@ -101,6 +114,7 @@ export default {
     <!-- 季度/半年度 -->
     <template v-if="['quarteryear', 'halfyear'].includes(props.type)">
       <DatePickerQuarterHalfYear
+        ref="datepickerRef"
         :type="innerEnhancedType"
         :model-value="[innerEnhancedModelValue[0]]"
         :placeholder="innerPlaceholder"
@@ -116,6 +130,7 @@ export default {
     <!-- 季度/半年度/年度范围 -->
     <template v-else-if="['quarteryearrange', 'halfyearrange', 'yearrange'].includes(props.type)">
       <DatePickerQuarterHalfYearRange
+        ref="datepickerRef"
         :type="innerEnhancedType"
         :model-value="innerEnhancedModelValue"
         :placeholder="innerPlaceholder"

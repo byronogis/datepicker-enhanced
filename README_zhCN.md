@@ -10,11 +10,15 @@
 
 - 新增支持 半年度、季度时间点和年度、半年度、季度时间范围选择
 
-### 新日期类型的 Props 支持
+### 新日期类型 API 支持
 
 > 截止当前
 >
+> 使用可参考 [DatePicker | Element Plus](https://element-plus.org/zh-CN/component/date-picker.html)
+>
 > `*`: 额外支持
+
+#### Attributes
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue / v-model:  string | number | Date | (string | number | Date)[]
@@ -29,9 +33,14 @@
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false
 
-#### `wantEnd`
+##### `wantEnd`
 
 当修改数值时默认情况下传递的数值是区间的起始值，可以通过传入 `wantEnd` 已得到结束值。
+
+#### Methods
+
+- handleOpen
+- handleClose
 
 ### 使用示例
 
