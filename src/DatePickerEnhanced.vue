@@ -62,7 +62,10 @@ const innerEnhancedModelValue = computed<DateModelType[]>(() => {
   let enhancedModelValue: DateModelType[]
 
   if (Array.isArray(props.modelValue)) {
-    enhancedModelValue = props.modelValue
+    enhancedModelValue = [...props.modelValue]
+    Array(2 - enhancedModelValue.length).fill(null).forEach(() => {
+      enhancedModelValue.push('')
+    })
   } else {
     enhancedModelValue = [props.modelValue]
   }
