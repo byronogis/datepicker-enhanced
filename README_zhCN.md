@@ -13,6 +13,8 @@
 ### 新日期类型的 Props 支持
 
 > 截止当前
+>
+> `*`: 额外支持
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue / v-model:  string | number | Date | (string | number | Date)[]
@@ -25,7 +27,7 @@
 - prefixIcon?: Component
 - disabledDate?: (date: Date) => boolean = () => false
 - style?: StyleValue = ''
-- wantEnd?: boolean = false
+- *wantEnd?: boolean = false
 
 #### `wantEnd`
 

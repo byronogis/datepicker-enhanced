@@ -13,6 +13,8 @@
 ### Props Support for New Date Type
 
 > up to now
+>
+> `*`: extra support
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue / v-model:  string | number | Date | (string | number | Date)[]
@@ -25,7 +27,7 @@
 - prefixIcon?: Component
 - disabledDate?: (date: Date) => boolean = () => false
 - style?: StyleValue = ''
-- wantEnd?: boolean = false
+- *wantEnd?: boolean = false
 
 #### `wantEnd`
 
