@@ -5,6 +5,8 @@
 [简体中文](./README_zhCN.md) | [English](./README.md)
 
 > [element-plus](https://github.com/element-plus/element-plus) 的日期选择器组件增强版
+>
+> [Demo](https://liamrad.github.io/datepicker-enhanced/)
 
 ### 功能
 
