@@ -19,8 +19,8 @@ const style = inject<StyleValue>('style')
 
 const value = computed(() => props.modelValue)
 
-const updateValue = (e: any, index: number) => {
-  emits('update:modelValue', index, e?.target?.value ?? '')
+const updateValue = (e: any, index?: number) => {
+  emits('update:modelValue', e?.target?.value ?? '', index ?? -1)
 }
 
 const isMouseIn = ref(false)
@@ -69,7 +69,7 @@ export default {
           <i
             class="el-icon el-input__icon el-range__close-icon"
             :class="{ 'el-range__close-icon--hidden': !(isMouseIn && value.length) }"
-            @click="updateValue('', 0)"
+            @click="updateValue('')"
           >
             <ClearIcon />
           </i>

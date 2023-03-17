@@ -40,9 +40,17 @@ const {
   isArrowDisabledForRange,
 } = useDatePickerEnhanced(props as any, emits)
 
-const updateInputModelValue = (index: number, newVal: string) => {
+const updateInputModelValue = (newVal: string, index: number) => {
   const inputValueClone = [...inputValue.value]
-  inputValueClone[index] = newVal
+
+  if (index !== -1) {
+    inputValueClone[index] = newVal
+  } else {
+    inputValueClone.forEach((_, i) => {
+      inputValueClone[i] = newVal
+    })
+  }
+
   inputValue.value = inputValueClone
 }
 
