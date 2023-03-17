@@ -13,10 +13,12 @@ type DateModelType = string | number | Date
 interface Props {
   type: 'quarteryear' | 'halfyear'
   modelValue: DateModelType[]
+  clearable: boolean
   placeholder: string[]
   popperClass: string
   valueFormat: string
   prefixIcon: Component | null
+  clearIcon: Component | null
   disabledDate: (date: Date) => boolean
   wantEnd: boolean
 }
@@ -67,8 +69,10 @@ export default {
     <template #reference>
       <DatePickerInput
         :model-value="inputValue[0]"
+        :clearable="props.clearable"
         :placeholder="props.placeholder[0]"
         :prefix-icon="props.prefixIcon"
+        :clear-icon="props.clearIcon"
         @update:model-value="updateInputModelValue"
       />
     </template>

@@ -4,13 +4,16 @@ import type { Component, StyleValue } from 'vue'
 
 const props = defineProps<{
   modelValue: string
+  clearable: boolean
   placeholder: string
   prefixIcon: Component | null
+  clearIcon: Component | null
 }>()
 
 const emits = defineEmits(['update:modelValue'])
 
 const PrefixIcon = props.prefixIcon
+const ClearIcon = props.clearIcon
 
 const style = inject<StyleValue>('style')
 
@@ -19,6 +22,8 @@ const value = computed(() => props.modelValue)
 const updateValue = (e: any, index: number) => {
   emits('update:modelValue', index, e?.target?.value ?? '')
 }
+
+const isMouseIn = ref(false)
 </script>
 
 <script lang="ts">
@@ -31,6 +36,8 @@ export default {
   <div
     class="el-input el-input--prefix el-input--suffix el-date-editor el-date-editor--month el-tooltip__trigger el-tooltip__trigger"
     :style="style"
+    @mouseenter="isMouseIn = true"
+    @mouseleave="isMouseIn = false"
   >
     <div
       class="el-input__wrapper"
@@ -55,11 +62,18 @@ export default {
         @change="updateValue($event, 0)"
       >
       <span
+        v-if="props.clearable && props.clearIcon"
         class="el-input__suffix"
       >
-        <span
-          class="el-input__suffix-inner"
-        />
+        <span class="el-input__suffix-inner">
+          <i
+            class="el-icon el-input__icon el-range__close-icon"
+            :class="{ 'el-range__close-icon--hidden': !(isMouseIn && value.length) }"
+            @click="updateValue('', 0)"
+          >
+            <ClearIcon />
+          </i>
+        </span>
       </span>
     </div>
   </div>
