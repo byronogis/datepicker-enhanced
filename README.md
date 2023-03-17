@@ -24,13 +24,15 @@
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue / v-model:  string | number | Date | (string | number | Date)[]
+- clearable?: boolean = true
 - placeholder?: string = '选择日期'
 - startPlaceholder?: string = '开始日期'
 - endPlaceholder?: string = '结束日期'
 - popperClass?: string = ''
 - rangeSeparator?: string = '至'
 - valueFormat?: string = ''
-- prefixIcon?: Component
+- prefixIcon?: Component | null
+- clearIcon?: Component | null
 - disabledDate?: (date: Date) => boolean = () => false
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false

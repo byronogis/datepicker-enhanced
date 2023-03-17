@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue'
-import { Calendar } from '@element-plus/icons-vue'
+import { Calendar, CircleClose } from '@element-plus/icons-vue'
 import type { Component, StyleValue } from 'vue'
 
 import DatePickerQuarterHalfYear from './components/DatePickerQuarterHalfYear.vue'
@@ -22,6 +22,7 @@ interface Props {
   type: DateType
   modelValue: DateModelType | [DateModelType, DateModelType]
 
+  clearable?: boolean
   placeholder?: string
   startPlaceholder?: string
   endPlaceholder?: string
@@ -29,7 +30,7 @@ interface Props {
   rangeSeparator?: string
   valueFormat?: string
   prefixIcon?: Component | null
-  clearIcon?: Component
+  clearIcon?: Component | null
   disabledDate?: (date: Date) => boolean
   cellClassName?: (date: Date) => string
 
@@ -39,6 +40,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  clearable: true,
   placeholder: '选择日期',
   startPlaceholder: '开始日期',
   endPlaceholder: '结束日期',
@@ -46,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
   rangeSeparator: '至',
   valueFormat: '',
   prefixIcon: Calendar,
+  clearIcon: CircleClose,
   disabledDate: () => false,
   style: '',
   wantEnd: false,
@@ -117,10 +120,12 @@ export default {
         ref="datepickerRef"
         :type="innerEnhancedType"
         :model-value="[innerEnhancedModelValue[0]]"
+        :clearable="props.clearable"
         :placeholder="innerPlaceholder"
         :popper-class="innerEnhancedPopperClass"
         :value-format="props.valueFormat"
         :prefix-icon="props.prefixIcon"
+        :clear-icon="props.clearIcon"
         :disabled-date="props.disabledDate"
         :want-end="props.wantEnd"
         @update:modelValue="emits('update:modelValue', $event?.[0])"
@@ -133,11 +138,13 @@ export default {
         ref="datepickerRef"
         :type="innerEnhancedType"
         :model-value="innerEnhancedModelValue"
+        :clearable="props.clearable"
         :placeholder="innerPlaceholder"
         :popper-class="innerEnhancedPopperClass"
         :range-separator="props.rangeSeparator"
         :value-format="props.valueFormat"
         :prefix-icon="props.prefixIcon"
+        :clear-icon="props.clearIcon"
         :disabled-date="props.disabledDate"
         :want-end="props.wantEnd"
         @update:modelValue="emits('update:modelValue', $event)"
