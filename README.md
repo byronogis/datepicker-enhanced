@@ -31,8 +31,8 @@
 - popperClass?: string = ''
 - rangeSeparator?: string = '至'
 - valueFormat?: string = ''
-- prefixIcon?: Component | null
-- clearIcon?: Component | null
+- prefixIcon?: Component | null = Calendar
+- clearIcon?: Component | null = CircleClose
 - disabledDate?: (date: Date) => boolean = () => false
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false
