@@ -41,11 +41,11 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   clearable: true,
-  placeholder: '选择日期',
-  startPlaceholder: '开始日期',
-  endPlaceholder: '结束日期',
+  placeholder: '',
+  startPlaceholder: '',
+  endPlaceholder: '',
   popperClass: '',
-  rangeSeparator: '至',
+  rangeSeparator: '-',
   valueFormat: '',
   prefixIcon: Calendar,
   clearIcon: CircleClose,

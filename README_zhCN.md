@@ -25,11 +25,11 @@
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue / v-model:  string | number | Date | (string | number | Date)[]
 - clearable?: boolean = true
-- placeholder?: string = '选择日期'
-- startPlaceholder?: string = '开始日期'
-- endPlaceholder?: string = '结束日期'
+- placeholder?: string = ''
+- startPlaceholder?: string = ''
+- endPlaceholder?: string = ''
 - popperClass?: string = ''
-- rangeSeparator?: string = '至'
+- rangeSeparator?: string = '-'
 - valueFormat?: string = ''
 - prefixIcon?: Component | null = Calendar
 - clearIcon?: Component | null = CircleClose
