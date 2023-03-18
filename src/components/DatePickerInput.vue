@@ -67,8 +67,8 @@ export default {
       >
         <span class="el-input__suffix-inner">
           <i
+            v-if="(isMouseIn && value.length)"
             class="el-icon el-input__icon el-range__close-icon"
-            :class="{ 'el-range__close-icon--hidden': !(isMouseIn && value.length) }"
             @click="updateValue('')"
           >
             <ClearIcon />
