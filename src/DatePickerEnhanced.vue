@@ -22,6 +22,7 @@ interface Props {
   type: DateType
   modelValue: DateModelType | [DateModelType, DateModelType]
 
+  editable?: boolean
   clearable?: boolean
   placeholder?: string
   startPlaceholder?: string
@@ -40,6 +41,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  editable: true,
   clearable: true,
   placeholder: '',
   startPlaceholder: '',
@@ -91,6 +93,7 @@ const innerPlaceholder = computed(() => {
 
 // 向下提供给输入框
 provide('style', props.style)
+provide('editable', props.editable)
 
 type DatePickerRef = InstanceType<typeof DatePickerQuarterHalfYear> | InstanceType<typeof DatePickerQuarterHalfYearRange>
 const datepickerRef = ref<DatePickerRef | null>(null)
