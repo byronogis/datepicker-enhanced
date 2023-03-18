@@ -17,6 +17,7 @@ const PrefixIcon = props.prefixIcon
 const ClearIcon = props.clearIcon
 
 const style = inject<StyleValue>('style')
+const editable = inject<boolean>('editable')
 
 const startValue = computed(() => props.modelValue[0])
 const endValue = computed(() => props.modelValue[1])
@@ -44,6 +45,7 @@ const isMouseIn = ref(false)
     <input
       :value="startValue"
       :placeholder="props.placeholder[0]"
+      :readonly="!editable"
       class="el-range-input"
       autocomplete="off"
       tabindex="0"
@@ -55,6 +57,7 @@ const isMouseIn = ref(false)
     <input
       :value="endValue"
       :placeholder="props.placeholder[1]"
+      :readonly="!editable"
       class="el-range-input"
       autocomplete="off"
       tabindex="0"

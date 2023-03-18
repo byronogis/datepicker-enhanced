@@ -16,6 +16,7 @@ const PrefixIcon = props.prefixIcon
 const ClearIcon = props.clearIcon
 
 const style = inject<StyleValue>('style')
+const editable = inject<boolean>('editable')
 
 const value = computed(() => props.modelValue)
 
@@ -55,6 +56,7 @@ export default {
       <input
         :value="value"
         :placeholder="props.placeholder"
+        :readonly="!editable"
         class="el-input__inner"
         autocomplete="off"
         tabindex="0"
