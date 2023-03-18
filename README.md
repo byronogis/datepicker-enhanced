@@ -44,6 +44,10 @@
 
 By default, when a value is modified, the value passed is the starting value of the range，and you can get the end value by props of 'wantEnd'.
 
+#### Events
+
+- visibleChange: (visible: boolean)
+
 #### Methods
 
 - handleOpen

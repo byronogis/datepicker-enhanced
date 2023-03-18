@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue'
+import { computed, provide, ref, watch } from 'vue'
 import { Calendar, CircleClose } from '@element-plus/icons-vue'
 import type { Component, StyleValue } from 'vue'
 
@@ -62,6 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits([
   'update:modelValue',
+  'visibleChange',
 ])
 
 const innerEnhancedType = computed<any>(() => props.type.replace('range', ''))
@@ -103,6 +104,14 @@ provide('disabled', props.disabled) // 以及面板容器
 
 type DatePickerRef = InstanceType<typeof DatePickerQuarterHalfYear> | InstanceType<typeof DatePickerQuarterHalfYearRange>
 const datepickerRef = ref<DatePickerRef | null>(null)
+
+// 面板状态改变时触发事件
+watch(() => datepickerRef.value?.visible, (visible: boolean, oldVal: undefined | boolean) => {
+  if (typeof oldVal !== 'boolean') {
+    return
+  }
+  emits('visibleChange', visible)
+})
 
 // 向外暴露的属性方法
 defineExpose({

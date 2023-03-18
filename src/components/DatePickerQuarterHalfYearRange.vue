@@ -1,6 +1,6 @@
 <!-- eslint-disable import/order -->
 <script setup lang="ts">
-import { computed, inject, ref, watch, watchEffect } from 'vue'
+import { computed, inject, ref, toRef, watch, watchEffect } from 'vue'
 import { ElPopover } from 'element-plus'
 import type { Component } from 'vue'
 import DatePickerPanelWrapper from './DatePickerPanelWrapper.vue'
@@ -56,6 +56,7 @@ const updateInputModelValue = (newVal: string, index: number) => {
 
 // 向外暴露的属性方法
 defineExpose({
+  visible: toRef(popover, 'visible'),
   updateVisible: (val: boolean) => {
     popover.visible = val
   },
