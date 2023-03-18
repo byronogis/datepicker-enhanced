@@ -22,6 +22,7 @@ interface Props {
   clearIcon: Component | null
   disabledDate: (date: Date) => boolean
   wantEnd: boolean
+  allowSame: boolean
 }
 
 const props = defineProps<Props>()
