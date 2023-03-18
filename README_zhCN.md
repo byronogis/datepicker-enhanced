@@ -50,6 +50,7 @@
 
 #### Methods
 
+- focus
 - handleOpen
 - handleClose
 

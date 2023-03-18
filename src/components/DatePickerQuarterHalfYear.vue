@@ -54,11 +54,16 @@ const updateInputModelValue = (newVal: string, index: number) => {
   inputValue.value = inputValueClone
 }
 
+const datepickerInputRef = ref<InstanceType<typeof DatePickerInput> | null>(null)
+
 // 向外暴露的属性方法
 defineExpose({
   visible: toRef(popover, 'visible'),
   updateVisible: (val: boolean) => {
     popover.visible = val
+  },
+  focus: () => {
+    datepickerInputRef.value?.input.focus()
   },
 })
 </script>
@@ -77,6 +82,7 @@ export default {
   >
     <template #reference>
       <DatePickerInput
+        ref="datepickerInputRef"
         :model-value="inputValue[0]"
         :clearable="props.clearable"
         :placeholder="props.placeholder[0]"
