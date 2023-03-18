@@ -17,6 +17,7 @@ const ClearIcon = props.clearIcon
 
 const style = inject<StyleValue>('style')
 const editable = inject<boolean>('editable')
+const readonly = inject<boolean>('readonly')
 
 const value = computed(() => props.modelValue)
 
@@ -56,7 +57,7 @@ export default {
       <input
         :value="value"
         :placeholder="props.placeholder"
-        :readonly="!editable"
+        :readonly="!editable || readonly"
         class="el-input__inner"
         autocomplete="off"
         tabindex="0"
@@ -69,7 +70,7 @@ export default {
       >
         <span class="el-input__suffix-inner">
           <i
-            v-if="(isMouseIn && value.length)"
+            v-if="(isMouseIn && value.length && !readonly)"
             class="el-icon el-input__icon el-range__close-icon"
             @click="updateValue('')"
           >
