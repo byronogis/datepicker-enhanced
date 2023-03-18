@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import dayjs from 'dayjs'
 import { name, version } from '../package.json'
 
@@ -16,7 +16,21 @@ const disabledDateFnBunEnd = (date: Date) => {
   return disableDateListButEnd.includes(target)
 }
 
+const visibleChangeFn = (val: boolean, type: string) => {
+  console.log(type, ' - visibleChange --> ', val)
+}
+
 const quarteryearProps = reactive({
+  _title: '季度-区间开始值-YYYY-MM-DD',
+  type: 'quarteryear',
+  modelValue: '2021-05-01',
+  disabledDate: disabledDateFnBunEnd,
+  valueFormat: 'YYYY-MM-DD',
+  wantEnd: false,
+})
+
+const quarteryearProps2 = reactive({
+  _title: '季度-区间结束值-YYYY-MM-DD',
   type: 'quarteryear',
   modelValue: '2021-05-01',
   disabledDate: disabledDateFnBunEnd,
@@ -24,11 +38,41 @@ const quarteryearProps = reactive({
   wantEnd: true,
 })
 
+const quarteryearProps3 = reactive({
+  _title: '季度-禁止输入',
+  type: 'quarteryear',
+  modelValue: '2021-05-01',
+  disabledDate: disabledDateFnBunEnd,
+  editable: false,
+})
+
+const quarteryearProps4 = reactive({
+  _title: '季度-禁用',
+  type: 'quarteryear',
+  modelValue: '2021-05-01',
+  disabledDate: disabledDateFnBunEnd,
+  disabled: true,
+})
+
+const quarteryearProps5 = reactive({
+  _title: '季度-无清理',
+  type: 'quarteryear',
+  modelValue: '2021-05-01',
+  disabledDate: disabledDateFnBunEnd,
+  clearable: false,
+})
+
 const halfyearProps = reactive({
   type: 'halfyear',
   modelValue: '2021-05-01',
   disabledDate: disabledDateFnBunEnd,
   wantEnd: true,
+})
+
+const halfyearProps2 = reactive({
+  type: 'halfyear',
+  modelValue: '2021-05-01',
+  disabledDate: disabledDateFnBunEnd,
 })
 
 const quarteryearrangeProps = reactive({
@@ -45,6 +89,22 @@ const halfyearrangeProps = reactive({
   disabledDate: disabledDateFn,
 })
 
+const halfyearrangeProps2 = reactive({
+  _title: '半年范围-分隔符(至)',
+  type: 'halfyearrange',
+  modelValue: ['2020-01-01', '2030-07-01'],
+  disabledDate: disabledDateFn,
+  rangeSeparator: '至',
+})
+
+const halfyearrangeProps3 = reactive({
+  _title: '半年范围-起止不允许相同',
+  type: 'halfyearrange',
+  modelValue: ['2020-01-01', '2030-07-01'],
+  disabledDate: disabledDateFn,
+  allowSame: false,
+})
+
 const yearrangeProps = reactive({
   type: 'yearrange',
   modelValue: ['2020', '2025'],
@@ -53,26 +113,73 @@ const yearrangeProps = reactive({
   wantEnd: true,
 })
 
-const extraTypes = {
-  quarteryear: quarteryearProps,
-  halfyear: halfyearProps,
-  quaretryearrange: quarteryearrangeProps,
-  halfyearrange: halfyearrangeProps,
-  yearrange: yearrangeProps,
+const items: any[] = [
+  quarteryearProps,
+  quarteryearProps2,
+  quarteryearProps3,
+  quarteryearProps4,
+  quarteryearProps5,
+  halfyearProps,
+  halfyearProps2,
+  quarteryearrangeProps,
+  halfyearrangeProps,
+  halfyearrangeProps2,
+  halfyearrangeProps3,
+  yearrangeProps,
+]
+
+const DatePickerEnhancedRef = ref(null)
+
+const focusFn = (index = 0) => {
+  DatePickerEnhancedRef.value[index].focus()
 }
+
+const handleOpenFn = (index = 0) => {
+  DatePickerEnhancedRef.value[index].handleOpen()
+}
+
+const handleCloseFn = (index = 0) => {
+  DatePickerEnhancedRef.value[index].handleClose()
+}
+
+const btnList = [
+  {
+    value: 'focus',
+    fn: focusFn,
+  },
+  {
+    value: 'handleOpen',
+    fn: handleOpenFn,
+  },
+  {
+    value: 'handleClose',
+    fn: handleCloseFn,
+  },
+]
 </script>
 
 <template>
   <ul class="item-wrapper">
-    <template v-for="(item, key) in extraTypes" :key="key">
-      <li class="item">
-        <h4>{{ item.type }}</h4>
+    <template v-for="(item, index) in items" :key="index">
+      <li class="item" style="position: relative;">
+        <h4>{{ index + 1 }}: {{ item._title || item.type }}</h4>
         <DatePickerEnhanced
+          ref="DatePickerEnhancedRef"
           v-bind="item"
           @update:modelValue="item.modelValue = $event"
+          @visibleChange="visibleChangeFn($event, item.type)"
         />
         <div>props: </div>
         <pre>{{ item }}</pre>
+        <div class="btn-wrapper" style="position: absolute; bottom: 1em; right: 1em;">
+          <input
+            v-for="(btn) in btnList"
+            :key="btn.value"
+            :value="btn.value"
+            type="button"
+            @click="btn.fn(index)"
+          >
+        </div>
       </li>
     </template>
   </ul>
