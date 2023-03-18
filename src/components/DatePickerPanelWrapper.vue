@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { ref, toRef } from 'vue'
+import { inject, ref, toRef } from 'vue'
 
 const props = defineProps<{
   isRange?: boolean
 }>()
+
+const readonly = inject<boolean>('readonly')
 </script>
 
 <template>
   <div
+    v-if="!readonly"
     tabindex="0"
     class="el-picker-panel"
     :class="!props.isRange ? 'el-date-picker' : 'el-date-range-picker'"

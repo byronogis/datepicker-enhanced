@@ -24,6 +24,7 @@
 
 - type: `halfyear` `quarteryear` `yearrange` `halfyearrange` `quarteryearrange`
 - modelValue / v-model:  string | number | Date | (string | number | Date)[]
+- readonly?: boolean = false
 - editable?: boolean = true
 - clearable?: boolean = true
 - placeholder?: string = ''
