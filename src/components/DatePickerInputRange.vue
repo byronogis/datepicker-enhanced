@@ -29,6 +29,12 @@ const updateValue = (e: any, index?: number) => {
 }
 
 const isMouseIn = ref(false)
+
+const inputRef = ref<HTMLInputElement | null>(null)
+
+defineExpose({
+  input: inputRef,
+})
 </script>
 
 <template>
@@ -48,6 +54,7 @@ const isMouseIn = ref(false)
     </template>
 
     <input
+      ref="inputRef"
       :value="startValue"
       :placeholder="props.placeholder[0]"
       :readonly="!editable || readonly || disabled"

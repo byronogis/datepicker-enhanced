@@ -115,6 +115,9 @@ watch(() => datepickerRef.value?.visible, (visible: boolean, oldVal: undefined |
 
 // 向外暴露的属性方法
 defineExpose({
+  focus() {
+    datepickerRef.value?.focus()
+  },
   handleOpen() {
     datepickerRef.value?.updateVisible(true)
   },

@@ -50,6 +50,7 @@ By default, when a value is modified, the value passed is the starting value of 
 
 #### Methods
 
+- focus
 - handleOpen
 - handleClose
 
