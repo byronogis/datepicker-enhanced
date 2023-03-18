@@ -6,11 +6,12 @@ const props = defineProps<{
 }>()
 
 const readonly = inject<boolean>('readonly')
+const disabled = inject<boolean>('disabled')
 </script>
 
 <template>
   <div
-    v-if="!readonly"
+    v-if="!readonly && !disabled"
     tabindex="0"
     class="el-picker-panel"
     :class="!props.isRange ? 'el-date-picker' : 'el-date-range-picker'"

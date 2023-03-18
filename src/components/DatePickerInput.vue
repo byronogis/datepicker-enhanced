@@ -18,6 +18,7 @@ const ClearIcon = props.clearIcon
 const style = inject<StyleValue>('style')
 const editable = inject<boolean>('editable')
 const readonly = inject<boolean>('readonly')
+const disabled = inject<boolean>('disabled')
 
 const value = computed(() => props.modelValue)
 
@@ -37,6 +38,9 @@ export default {
 <template>
   <div
     class="el-input el-input--prefix el-input--suffix el-date-editor el-date-editor--month el-tooltip__trigger el-tooltip__trigger"
+    :class="{
+      'is-disabled': disabled,
+    }"
     :style="style"
     @mouseenter="isMouseIn = true"
     @mouseleave="isMouseIn = false"
@@ -57,7 +61,7 @@ export default {
       <input
         :value="value"
         :placeholder="props.placeholder"
-        :readonly="!editable || readonly"
+        :readonly="!editable || readonly || disabled"
         class="el-input__inner"
         autocomplete="off"
         tabindex="0"
@@ -70,7 +74,7 @@ export default {
       >
         <span class="el-input__suffix-inner">
           <i
-            v-if="(isMouseIn && value.length && !readonly)"
+            v-if="(isMouseIn && value.length && !readonly && !disabled)"
             class="el-icon el-input__icon el-range__close-icon"
             @click="updateValue('')"
           >
