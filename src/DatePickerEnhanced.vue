@@ -40,6 +40,7 @@ interface Props {
   style?: StyleValue
 
   wantEnd?: boolean
+  allowSame?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -58,6 +59,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabledDate: () => false,
   style: '',
   wantEnd: false,
+  allowSame: true,
 })
 
 const emits = defineEmits([
@@ -168,6 +170,7 @@ export default {
         :clear-icon="props.clearIcon"
         :disabled-date="props.disabledDate"
         :want-end="props.wantEnd"
+        :allow-same="props.allowSame"
         @update:modelValue="emits('update:modelValue', $event)"
       />
     </template>

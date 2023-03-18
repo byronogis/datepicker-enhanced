@@ -39,10 +39,15 @@
 - disabledDate?: (date: Date) => boolean = () => false
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false
+- *allowSame?: boolean = true
 
 ##### `wantEnd`
 
 当修改数值时默认情况下传递的数值是区间的起始值，可以通过传入 `wantEnd` 已得到结束值。
+
+##### `allowSame`
+
+默认情况下区间的起始值和结束值可以相同，可以将值设置为 `false` 不允许相同值。
 
 #### Events
 

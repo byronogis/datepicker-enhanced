@@ -168,7 +168,7 @@ export default function useDatePickerEnhanced(
           : 1
 
       // 第二次点击和第一次点击的值相同时, 不做后续处理
-      if (itemClickTimes === 2 && (Number(preUpdateModelValue[lastClickIndex].join('')) === Number([item.year, item[props.type] || 0].join('')))) {
+      if (!props.allowSame && itemClickTimes === 2 && (Number(preUpdateModelValue[lastClickIndex].join('')) === Number([item.year, item[props.type] || 0].join('')))) {
         // 有效点击次数 - 1
         itemClickTimes -= 1
         return

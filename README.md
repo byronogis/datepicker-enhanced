@@ -39,10 +39,15 @@
 - disabledDate?: (date: Date) => boolean = () => false
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false
+- *allowSame?: boolean = true
 
 ##### `wantEnd`
 
 By default, when a value is modified, the value passed is the starting value of the range，and you can get the end value by props of 'wantEnd'.
+
+##### `allowSame`
+
+By default, the start and end values of the range can be the same, and you can set the value to `false` to not allow the same value.
 
 #### Events
 

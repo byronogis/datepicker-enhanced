@@ -45,6 +45,7 @@ export interface InnerDatePickerEnhancedProps {
   style: StyleValue
 
   wantEnd: boolean
+  allowSame: boolean
 }
 
 export type OriginDateButSimple = string | number | Date
