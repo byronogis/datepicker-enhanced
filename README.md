@@ -6,7 +6,7 @@
 
 > A date picker enhanced component for [element-plus](https://github.com/element-plus/element-plus)
 >
-> [Demo](https://liamrad.github.io/datepicker-enhanced/)
+> [Demo](https://byronogis.github.io/datepicker-enhanced/)
 
 ### Features
 
