@@ -51,17 +51,20 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
+  "peerDependencies": {
+    "element-plus": "^2.2.33",
+    "vue": "^3.2.40"
+  },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
-    "dayjs": "^1.11.7",
-    "element-plus": "^2.2.33",
-    "vue": "3.2.40"
+    "dayjs": "^1.11.7"
   },
   "devDependencies": {
     "@antfu/eslint-config": "0.29.4",
     "@vitejs/plugin-vue": "3.1.2",
     "@vue/test-utils": "2.1.0",
     "bumpp": "8.2.1",
+    "element-plus": "^2.2.33",
     "eslint": "8.24.0",
     "gh-pages": "4.0.0",
     "happy-dom": "6.0.4",
@@ -71,6 +74,7 @@
     "vite": "3.1.4",
     "vite-plugin-dts": "1.6.4",
     "vitest": "0.23.4",
+    "vue": "^3.2.40",
     "vue-tsc": "0.40.13"
   }
 }
