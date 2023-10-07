@@ -37,6 +37,7 @@
 - prefixIcon?: Component | null = Calendar
 - clearIcon?: Component | null = CircleClose
 - disabledDate?: (date: Date) => boolean = () => false
+- teleported?: boolean = false
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false
 - *allowSame?: boolean = true

@@ -24,7 +24,7 @@ function usePopover(props: InnerDatePickerEnhancedProps): any {
     transition: 'el-zoom-in-top',
     visible: false,
     popperClass: props.popperClass,
-    teleported: false,
+    teleported: props.teleported,
   })
 }
 

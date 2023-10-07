@@ -21,6 +21,7 @@ interface Props {
   prefixIcon: Component | null
   clearIcon: Component | null
   disabledDate: (date: Date) => boolean
+  teleported: boolean
   wantEnd: boolean
   allowSame: boolean
 }

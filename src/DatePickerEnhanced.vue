@@ -36,6 +36,7 @@ interface Props {
   clearIcon?: Component | null
   disabledDate?: (date: Date) => boolean
   cellClassName?: (date: Date) => string
+  teleported?: boolean
 
   style?: StyleValue
 
@@ -57,6 +58,7 @@ const props = withDefaults(defineProps<Props>(), {
   prefixIcon: Calendar,
   clearIcon: CircleClose,
   disabledDate: () => false,
+  teleported: false,
   style: '',
   wantEnd: false,
   allowSame: true,
@@ -150,6 +152,7 @@ export default {
         :prefix-icon="props.prefixIcon"
         :clear-icon="props.clearIcon"
         :disabled-date="props.disabledDate"
+        :teleported="props.teleported"
         :want-end="props.wantEnd"
         @update:modelValue="emits('update:modelValue', $event?.[0])"
       />
@@ -169,6 +172,7 @@ export default {
         :prefix-icon="props.prefixIcon"
         :clear-icon="props.clearIcon"
         :disabled-date="props.disabledDate"
+        :teleported="props.teleported"
         :want-end="props.wantEnd"
         :allow-same="props.allowSame"
         @update:modelValue="emits('update:modelValue', $event)"

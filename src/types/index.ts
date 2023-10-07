@@ -41,6 +41,7 @@ export interface InnerDatePickerEnhancedProps {
   clearIcon: Component
   disabledDate: (date: Date) => boolean
   cellClassName: (date: Date) => string
+  teleported: boolean
 
   style: StyleValue
 
