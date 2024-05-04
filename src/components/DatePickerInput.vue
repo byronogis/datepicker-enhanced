@@ -19,6 +19,7 @@ const style = inject<StyleValue>('style')
 const editable = inject<boolean>('editable')
 const readonly = inject<boolean>('readonly')
 const disabled = inject<boolean>('disabled')
+const size = inject<boolean>('size')
 
 const value = computed(() => props.modelValue)
 
@@ -46,6 +47,7 @@ export default {
     class="el-input el-input--prefix el-input--suffix el-date-editor el-date-editor--month el-tooltip__trigger el-tooltip__trigger"
     :class="{
       'is-disabled': disabled,
+      [`el-input--${size}`]: true,
     }"
     :style="style"
     @mouseenter="isMouseIn = true"

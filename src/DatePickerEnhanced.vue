@@ -18,6 +18,8 @@ type DateType =
 
 type DateModelType = string | number | Date
 
+type Size = 'large' | 'default' | 'small'
+
 interface Props {
   type: DateType
   modelValue: DateModelType | [DateModelType, DateModelType]
@@ -37,6 +39,7 @@ interface Props {
   disabledDate?: (date: Date) => boolean
   cellClassName?: (date: Date) => string
   teleported?: boolean
+  size?: Size
 
   style?: StyleValue
 
@@ -59,6 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
   clearIcon: CircleClose,
   disabledDate: () => false,
   teleported: false,
+  size: 'default',
   style: '',
   wantEnd: false,
   allowSame: true,
@@ -105,6 +109,7 @@ provide('style', props.style)
 provide('editable', props.editable)
 provide('readonly', props.readonly) // 以及面板容器
 provide('disabled', props.disabled) // 以及面板容器
+provide('size', props.size)
 
 type DatePickerRef = InstanceType<typeof DatePickerQuarterHalfYear> | InstanceType<typeof DatePickerQuarterHalfYearRange>
 const datepickerRef = ref<DatePickerRef | null>(null)

@@ -20,6 +20,7 @@ const style = inject<StyleValue>('style')
 const editable = inject<boolean>('editable')
 const readonly = inject<boolean>('readonly')
 const disabled = inject<boolean>('disabled')
+const size = inject<boolean>('size')
 
 const startValue = computed(() => props.modelValue[0])
 const endValue = computed(() => props.modelValue[1])
@@ -42,6 +43,7 @@ defineExpose({
     class="el-date-editor el-date-editor--monthrange el-input__wrapper el-range-editor el-tooltip__trigger el-tooltip__trigger"
     :class="{
       'is-disabled': disabled,
+      [`el-input--${size}`]: true,
     }"
     :style="style"
     @mouseenter="isMouseIn = true"

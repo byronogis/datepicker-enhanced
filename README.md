@@ -38,6 +38,7 @@
 - clearIcon?: Component | null = CircleClose
 - disabledDate?: (date: Date) => boolean = () => false
 - teleported?: boolean = false
+- size?: 'large' | 'default' | 'small' = 'default'
 - style?: StyleValue = ''
 - *wantEnd?: boolean = false
 - *allowSame?: boolean = true

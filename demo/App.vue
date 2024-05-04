@@ -113,6 +113,27 @@ const yearrangeProps = reactive({
   wantEnd: true,
 })
 
+const yearrangeProps2 = reactive({
+  _title: 'yearrange-input-small',
+  type: 'yearrange',
+  modelValue: ['2020', '2025'],
+  disabledDate: disabledDateFn,
+  valueFormat: 'YYYY-MM-DD',
+  wantEnd: true,
+  size: 'small',
+})
+
+const yearrangeProps3 = reactive({
+  _title: 'yearrange-input-large',
+  type: 'yearrange',
+  modelValue: ['2020', '2025'],
+  disabledDate: disabledDateFn,
+  valueFormat: 'YYYY-MM-DD',
+  wantEnd: true,
+  size: 'large',
+})
+
+
 const items: any[] = [
   quarteryearProps,
   quarteryearProps2,
@@ -126,6 +147,8 @@ const items: any[] = [
   halfyearrangeProps2,
   halfyearrangeProps3,
   yearrangeProps,
+  yearrangeProps2,
+  yearrangeProps3,
 ]
 
 const DatePickerEnhancedRef = ref(null)
