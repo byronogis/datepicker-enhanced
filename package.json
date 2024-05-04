@@ -1,8 +1,7 @@
 {
   "name": "datepicker-enhanced",
   "type": "module",
-  "version": "2.2.0",
-  "packageManager": "pnpm@7.13.6",
+  "version": "2.2.1",
   "description": "A date picker enhanced component for element-plus, expand the date type.",
   "author": "byronogis",
   "license": "MIT",
