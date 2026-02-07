@@ -9,7 +9,9 @@ import type {
  * TODO support more props
  * @see https://element-plus.org/en-US/component/date-picker#attributes
  */
-export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Pick<DatePickerProps, | 'readonly'
+export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Pick<
+  DatePickerProps,
+  | 'readonly'
   | 'disabled'
   | 'editable'
   | 'clearable'
@@ -21,11 +23,8 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
   | 'valueFormat'
   | 'prefixIcon'
   | 'clearIcon'
-  // | 'disabledDate'
   | 'cellClassName'
-  // | 'teleported'
   | 'size'
-  // | 'style'
 >> {
   type: Type
   modelValue: Value
