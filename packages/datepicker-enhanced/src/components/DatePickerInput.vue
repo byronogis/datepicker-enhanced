@@ -54,7 +54,7 @@ defineExpose({
     <template v-if="enhIsRange">
       <template v-if="enhProps.prefixIcon">
         <i class="el-icon el-input__icon el-range__icon">
-          <enhProps.prefixIcon />
+          <component :is="enhProps.prefixIcon" />
         </i>
       </template>
 
@@ -88,7 +88,7 @@ defineExpose({
           :class="{ 'el-range__close-icon--hidden': !(isMouseIn && (value[0].length || value[1].length) && !enhProps.readonly && !enhProps.disabled) }"
           @click="value = ([''] as any)"
         >
-          <enhProps.clearIcon />
+          <component :is="enhProps.clearIcon" />
         </i>
       </template>
     </template>
@@ -103,7 +103,7 @@ defineExpose({
         >
           <span class="el-input__prefix-inner">
             <i class="el-icon el-input__icon el-range__icon">
-              <enhProps.prefixIcon />
+              <component :is="enhProps.prefixIcon" />
             </i>
           </span>
         </span>
@@ -128,7 +128,7 @@ defineExpose({
               class="el-icon el-input__icon el-range__close-icon"
               @click="value = ([''] as any)"
             >
-              <enhProps.clearIcon />
+              <component :is="enhProps.clearIcon" />
             </i>
           </span>
         </span>
