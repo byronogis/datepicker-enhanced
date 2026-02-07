@@ -1,0 +1,18 @@
+name: Deploy Playground
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # allow manual triggers
+
+jobs:
+  deploy:
+    uses: byronogis/workflows/.github/workflows/deploy.yml@v1
+    with:
+      dist: playground/dist
+      build: nr build
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
