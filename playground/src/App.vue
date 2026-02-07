@@ -193,6 +193,7 @@ const btnList = [
           v-bind="item"
           @update:model-value="item.modelValue = $event"
           @visible-change="visibleChangeFn($event, item.type)"
+          @clear="() => console.log(item.type, 'clear')"
         />
         <div>props: </div>
         <pre>{{ item }}</pre>

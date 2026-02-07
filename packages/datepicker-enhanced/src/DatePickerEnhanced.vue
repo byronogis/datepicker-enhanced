@@ -11,6 +11,7 @@ import { computed, provide, ref, useAttrs, watch } from 'vue'
 import DatePickerQuarterHalfYear from './components/DatePickerQuarterHalfYear.vue'
 import {
   enhAttrsInjectionKey,
+  enhEmitsInjectionKey,
   enhIsRangeInjectionKey,
   enhPropsInjectionKey,
 } from './utils/constant.ts'
@@ -43,6 +44,7 @@ const props = withDefaults(defineProps<EnhDatePickerProps>(), {
 const emits = defineEmits<EnhDatePickerEmits>()
 
 provide(enhPropsInjectionKey, props)
+provide(enhEmitsInjectionKey, emits)
 
 const attrs = useAttrs()
 provide(enhAttrsInjectionKey, attrs)

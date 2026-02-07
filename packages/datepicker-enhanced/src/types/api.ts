@@ -61,7 +61,7 @@ export interface EnhDatePickerEmits {
   // 'change': [],
   // 'blur': [],
   // 'focus': [],
-  // 'clear': [],
+  'clear': []
   // 'calendar-change': [],
   // 'panel-change': [],
   'visibleChange': [visible: boolean]

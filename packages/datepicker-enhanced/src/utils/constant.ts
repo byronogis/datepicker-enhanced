@@ -1,5 +1,5 @@
-import type { InjectionKey } from 'vue'
-import type { EnhDateTypeClear } from '../types'
+import type { EmitFn, InjectionKey, ShortEmitsToObject } from 'vue'
+import type { EnhDatePickerEmits, EnhDateTypeClear } from '../types'
 import type {
   EnhDatePickerProps,
 } from '../types/index.ts'
@@ -23,5 +23,6 @@ export const DATE_TYPE: EnhDateTypeClear[] = [
 ]
 
 export const enhPropsInjectionKey = Symbol('enhPropsKey') as InjectionKey<EnhDatePickerProps>
+export const enhEmitsInjectionKey = Symbol('enhEmitsKey') as InjectionKey<EmitFn<ShortEmitsToObject<EnhDatePickerEmits>>>
 export const enhAttrsInjectionKey = Symbol('enhAttrsKey') as InjectionKey<Record<string, unknown>>
 export const enhIsRangeInjectionKey = Symbol('enhIsRangeKey') as InjectionKey<boolean>

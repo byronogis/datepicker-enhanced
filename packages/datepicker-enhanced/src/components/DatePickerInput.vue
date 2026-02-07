@@ -2,6 +2,7 @@
 import { computed, inject, ref } from 'vue'
 import {
   enhAttrsInjectionKey,
+  enhEmitsInjectionKey,
   enhIsRangeInjectionKey,
   enhPropsInjectionKey,
 } from '../utils/constant.ts'
@@ -11,6 +12,7 @@ defineOptions({
 })
 
 const enhAttrs = inject(enhAttrsInjectionKey)!
+const enhEmits = inject(enhEmitsInjectionKey)!
 const enhProps = inject(enhPropsInjectionKey)!
 const enhIsRange = inject(enhIsRangeInjectionKey)!
 
@@ -126,7 +128,7 @@ defineExpose({
             <i
               v-if="(isMouseIn && value.length && !enhProps.readonly && !enhProps.disabled)"
               class="el-icon el-input__icon el-range__close-icon"
-              @click="value = ([''] as any)"
+              @click="value = ([''] as any), enhEmits('clear')"
             >
               <component :is="enhProps.clearIcon" />
             </i>
