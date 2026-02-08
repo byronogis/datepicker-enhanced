@@ -14,6 +14,21 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
   DatePickerProps,
   | 'type'
   | 'modelValue'
+
+  // 以下未支持
+  | 'defaultValue'
+  | 'defaultTimee'
+  | 'unlinkPanels'
+  | 'shortcuts'
+  | 'cellClassName'
+  | 'valueOnClear'
+  | 'showFooter'
+  | 'showConfirm'
+  | 'showWeekNumber'
+
+  // 以下未验证
+  | 'validateEvent'
+  | 'emptyValues'
 >> {
   type: Type
   modelValue: Value

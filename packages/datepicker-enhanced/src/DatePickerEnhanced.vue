@@ -7,7 +7,7 @@ import type {
   EnhDateTypeClear,
 } from './types/index.ts'
 import { Calendar, CircleClose } from '@element-plus/icons-vue'
-import { CommonPicker } from 'element-plus'
+import { CommonPicker, PICKER_POPPER_OPTIONS_INJECTION_KEY } from 'element-plus'
 import { computed, provide, useTemplateRef } from 'vue'
 import DatePickerQuarterHalfYear from './components/DatePickerQuarterHalfYear.vue'
 import {
@@ -17,8 +17,8 @@ import {
   enhPropsInjectionKey,
 } from './utils/constant.ts'
 
-// import 'element-plus/es/components/date-picker/style/css'
-// import 'element-plus/es/components/calendar/style/css'
+import 'element-plus/es/components/date-picker/style/css'
+import 'element-plus/es/components/calendar/style/css'
 
 const props = withDefaults(defineProps<EnhDatePickerProps>(), {
   readonly: false,
@@ -33,15 +33,18 @@ const props = withDefaults(defineProps<EnhDatePickerProps>(), {
   prefixIcon: Calendar,
   clearIcon: CircleClose,
   disabledDate: () => false,
-  teleported: false,
+  teleported: true,
+  placement: 'bottom',
   enhWantEnd: false,
   enhAllowSame: true,
+  automaticDropdown: true,
 })
 
 const emits = defineEmits<EnhDatePickerEmits>()
 
 provide(enhPropsInjectionKey, props)
 provide(enhEmitsInjectionKey, emits)
+provide(PICKER_POPPER_OPTIONS_INJECTION_KEY, props.popperOptions)
 
 const innerType = computed(() => props.type.replace('range', '') as EnhDateTypeClear)
 const innerFormat = computed(() => props.format ?? DATE_FORMAT[innerType.value])

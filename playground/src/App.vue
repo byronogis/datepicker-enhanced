@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { EnhDatePickerProps } from 'datepicker-enhanced'
+import { Minus, Plus } from '@element-plus/icons-vue'
 import { DatePickerEnhanced } from 'datepicker-enhanced'
 import dayjs from 'dayjs'
 import { reactive, ref } from 'vue'
@@ -17,17 +18,36 @@ function disabledDateFnBunEnd(date: Date) {
   return disableDateListButEnd.includes(target)
 }
 
-function visibleChangeFn(val: boolean, type: string) {
-  console.log(type, ' - visibleChange --> ', val)
+function handleEvent(type: string, name: string, e: any) {
+  console.log(type, name, e)
 }
 
 const quarteryearProps = reactive({
   _title: '季度-区间开始值-YYYY-MM-DD',
   type: 'quarteryear' as const,
   modelValue: '2021-05-01',
-  disabledDate: disabledDateFnBunEnd,
+  disabledDate: disabledDateFn,
   valueFormat: 'YYYY-MM-DD',
   enhWantEnd: false,
+  // readonly: true,
+  // disabled: true,
+  // size: 'large' as const,
+  // editable: false,
+  // clearable: false,
+  // placeholder: '请选择季度',
+  // format: 'YYYY-QY[季度]',
+  // popperClass: 'custom-popper-class',
+  // popperStyle: { opacity: '0.9' },
+  // popperOptions: {
+  //   'placement': 'left',
+  //   'offset': 1200,
+  //   'show-arrow': false,
+  // },
+  // id: 'custom-id',
+  // name: 'custom-name',
+  // placement: 'top',
+  // fallbackPlacements: ['bottom'],
+  // automaticDropdown: true,
 })
 
 const quarteryearProps2 = reactive({
@@ -82,6 +102,10 @@ const quarteryearrangeProps = reactive({
   disabledDate: disabledDateFn,
   valueFormat: 'YYYY-MM-DD',
   enhWantEnd: true,
+  startPlaceholder: '开始季度',
+  endPlaceholder: '结束季度',
+  prefixIcon: Plus,
+  clearIcon: Minus,
 })
 
 const halfyearrangeProps = reactive({
@@ -110,7 +134,7 @@ const yearrangeProps = reactive({
   type: 'yearrange' as const,
   modelValue: ['2020', '2025'],
   disabledDate: disabledDateFn,
-  valueFormat: 'YYYY-MM-DD',
+  valueFormat: 'YYYY',
   enhWantEnd: true,
 })
 
@@ -119,7 +143,7 @@ const yearrangeProps2 = reactive({
   type: 'yearrange' as const,
   modelValue: ['2020', '2025'],
   disabledDate: disabledDateFn,
-  valueFormat: 'YYYY-MM-DD',
+  valueFormat: 'YYYY',
   enhWantEnd: true,
   size: 'small',
 })
@@ -127,7 +151,7 @@ const yearrangeProps2 = reactive({
 const yearrangeProps3 = reactive({
   _title: 'yearrange-input-large',
   type: 'yearrange' as const,
-  modelValue: ['2020', '2025'],
+  modelValue: ['2020-10-10', '2025-10-10'],
   disabledDate: disabledDateFn,
   valueFormat: 'YYYY-MM-DD',
   enhWantEnd: true,
@@ -155,45 +179,35 @@ const items: (EnhDatePickerProps & {
 
 const DatePickerEnhancedRef = ref<Array<InstanceType<typeof DatePickerEnhanced>>>()
 
-function focusFn(index = 0) {
-  DatePickerEnhancedRef.value?.[index].focus()
-}
-
-function handleOpenFn(index = 0) {
-  DatePickerEnhancedRef.value?.[index].handleOpen()
-}
-
-function handleCloseFn(index = 0) {
-  DatePickerEnhancedRef.value?.[index].handleClose()
-}
-
-const btnList = [
-  {
-    value: 'focus',
-    fn: focusFn,
-  },
-  {
-    value: 'handleOpen',
-    fn: handleOpenFn,
-  },
-  {
-    value: 'handleClose',
-    fn: handleCloseFn,
-  },
-]
+const btnList = (['focus', 'blur', 'handleOpen', 'handleClose'] as const).map((value) => {
+  return {
+    value,
+    fn(index = 0) {
+      DatePickerEnhancedRef.value?.[index][value]()
+    },
+  }
+})
 </script>
 
 <template>
-  <ul class="item-wrapper">
+  <ul class="item-wrapper" style="padding-top: 200px">
     <template v-for="(item, index) in items" :key="index">
       <li class="item" style="position: relative;">
         <h4>{{ index + 1 }}: {{ item._title || item.type }}</h4>
         <DatePickerEnhanced
           ref="DatePickerEnhancedRef"
           v-bind="item"
-          @update:model-value="item.modelValue = $event"
-          @visible-change="visibleChangeFn($event, item.type)"
-          @clear="() => console.log(item.type, 'clear')"
+          @update:model-value="($event) => {
+            console.log(item.type, 'update:model-value', $event)
+            item.modelValue = $event
+          }"
+          @visible-change="handleEvent(item.type, 'visible-change', $event)"
+          @calendar-change="handleEvent(item.type, 'calendar-change', $event)"
+          @panel-change="(...$event) => handleEvent(item.type, 'panel-change', $event)"
+          @change="handleEvent(item.type, 'change', $event)"
+          @clear="handleEvent(item.type, 'clear', $event)"
+          @focus="handleEvent(item.type, 'focus', $event)"
+          @blur="handleEvent(item.type, 'blur', $event)"
         />
         <div>props: </div>
         <pre>{{ item }}</pre>

@@ -253,7 +253,7 @@ export function useDatePickerEnhanced() {
 
   // 生成面板项目
   function generatePanelItems(sourceModelValue: number[][] = localModelValue.value) {
-    panelItems.value = Array.from<EnhDatePickerPanelItem[]>({ length: innerIsRange.value ? 2 : 1 }).map((_i, index) => generateItems(
+    panelItems.value = Array.from({ length: innerIsRange.value ? 2 : 1 }, (_i, index) => generateItems(
       panelType.value[index],
       panelValue.value[index],
       panelStartYear.value[index],
