@@ -7,21 +7,18 @@ import type {
   EnhDateTypeClear,
 } from './types/index.ts'
 import { Calendar, CircleClose } from '@element-plus/icons-vue'
-import { computed, provide, ref, useAttrs, watch } from 'vue'
+import { CommonPicker } from 'element-plus'
+import { computed, provide, useTemplateRef } from 'vue'
 import DatePickerQuarterHalfYear from './components/DatePickerQuarterHalfYear.vue'
 import {
-  enhAttrsInjectionKey,
+  DATE_FORMAT,
   enhEmitsInjectionKey,
-  enhIsRangeInjectionKey,
+  enhInnerInjectionKey,
   enhPropsInjectionKey,
 } from './utils/constant.ts'
 
 import 'element-plus/es/components/date-picker/style/css'
 import 'element-plus/es/components/calendar/style/css'
-
-defineOptions({
-  inheritAttrs: false,
-})
 
 const props = withDefaults(defineProps<EnhDatePickerProps>(), {
   readonly: false,
@@ -46,15 +43,9 @@ const emits = defineEmits<EnhDatePickerEmits>()
 provide(enhPropsInjectionKey, props)
 provide(enhEmitsInjectionKey, emits)
 
-const attrs = useAttrs()
-provide(enhAttrsInjectionKey, attrs)
-
-const isRange = computed(() => props.type.includes('range'))
-provide(enhIsRangeInjectionKey, isRange.value)
-
 const innerType = computed(() => props.type.replace('range', '') as EnhDateTypeClear)
-
-/** 以数组的形式向下提供 */
+const innerFormat = computed(() => props.format ?? DATE_FORMAT[innerType.value])
+const innerIsRange = computed(() => props.type.includes('range'))
 const innerModelValue = computed<EnhDatePrimitive[]>(() => {
   let enhancedModelValue: EnhDatePrimitive[]
 
@@ -71,45 +62,45 @@ const innerModelValue = computed<EnhDatePrimitive[]>(() => {
   return enhancedModelValue
 })
 
-// handle style
-const innerPopperClass = computed(() => {
-  return `${props.popperClass} el-picker__popper`
-})
+provide(enhInnerInjectionKey, computed(() => ({
+  innerType: innerType.value,
+  innerFormat: innerFormat.value,
+  innerIsRange: innerIsRange.value,
+  innerModelValue: innerModelValue.value,
+})))
 
-const datepickerRef = ref<InstanceType<typeof DatePickerQuarterHalfYear>>()
-
-/** 面板状态改变时触发事件 */
-watch(() => datepickerRef.value?.visible, (visible: boolean, oldVal: undefined | boolean) => {
-  if (typeof oldVal !== 'boolean') {
-    return
-  }
-  emits('visibleChange', visible)
-})
+const commonPickerRef = useTemplateRef('commonPicker')
 
 defineExpose<EnhDatePickerExposed>({
   focus() {
-    datepickerRef.value?.focus()
+    commonPickerRef.value?.focus()
   },
   handleOpen() {
-    datepickerRef.value?.updateVisible(true)
+    commonPickerRef.value?.handleOpen()
   },
   handleClose() {
-    datepickerRef.value?.updateVisible(false)
+    commonPickerRef.value?.handleClose()
   },
 })
 </script>
 
 <template>
-  <div class="component-datepicker-enhanced" style="display: inline-block">
-    <DatePickerQuarterHalfYear
-      ref="datepickerRef"
-      v-bind="{
-        ...props,
-        type: innerType,
-        modelValue: innerModelValue,
-        popperClass: innerPopperClass,
-      }"
-      @update:model-value="emits('update:modelValue', isRange ? $event : $event?.[0])"
-    />
-  </div>
+  <!-- @vue-expect-error moduleValue number -->
+  <CommonPicker
+    ref="commonPicker"
+    v-bind="{
+      ...props,
+      format: innerFormat,
+    }"
+    @update:model-value="($event) => {
+      console.log('onUpdate', $event)
+      emits('update:modelValue', $event)
+    }"
+  >
+    <template #default="scopedProps">
+      <DatePickerQuarterHalfYear
+        v-bind="scopedProps"
+      />
+    </template>
+  </CommonPicker>
 </template>

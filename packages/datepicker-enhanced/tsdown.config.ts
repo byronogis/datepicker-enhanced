@@ -6,9 +6,7 @@ export default defineConfig({
     index: 'src/index.ts',
   },
   dts: { vue: true },
-  exports: {
-    devExports: true,
-  },
+  exports: true,
   outputOptions: {
     name: 'DatePickerEnhanced',
     globals: {

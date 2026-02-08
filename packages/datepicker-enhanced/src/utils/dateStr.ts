@@ -89,7 +89,7 @@ export function getDateWithFormat(
   date: EnhDatePrimitive | number[],
   origin: 'origin' | 'abbr' | 'array' = 'origin',
   enhWantEnd = false,
-  valueFormat: string = DATE_FORMAT,
+  valueFormat: string = DATE_FORMAT[type],
 ) {
   if (origin === 'array' && Array.isArray(date)) {
     const dateObj = translateArrayToDate(type, date as [number, number], enhWantEnd)
@@ -212,19 +212,19 @@ function translateDateAbbrStrToDate(type: EnhDateTypeClear, date: string, enhWan
     case 'year':
       dateObj = new Date(
         dayjs(`${year}`)[enhWantEnd ? 'endOf' : 'startOf']('year')
-          .format(DATE_FORMAT),
+          .toDate(),
       )
       break
     case 'halfyear':
       dateObj = new Date(
         dayjs(`${year}-${(halfyear - 1) * 6 + (enhWantEnd ? 6 : 1)}`)[enhWantEnd ? 'endOf' : 'startOf']('month')
-          .format(DATE_FORMAT),
+          .toDate(),
       )
       break
     case 'quarteryear':
       dateObj = new Date(
         dayjs(`${year}-${(quarteryear - 1) * 3 + (enhWantEnd ? 3 : 1)}`)[enhWantEnd ? 'endOf' : 'startOf']('month')
-          .format(DATE_FORMAT),
+          .toDate(),
       )
       break
     default:

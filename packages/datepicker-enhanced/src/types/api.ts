@@ -1,4 +1,4 @@
-import type { DatePickerProps/* , PopoverProps */ } from 'element-plus'
+import type { DatePickerProps } from 'element-plus'
 import type {
   EnhDate,
   EnhDatePrimitive,
@@ -9,22 +9,10 @@ import type {
  * TODO support more props
  * @see https://element-plus.org/en-US/component/date-picker#attributes
  */
-export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Pick<
+export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Omit<
   DatePickerProps,
-  | 'readonly'
-  | 'disabled'
-  | 'editable'
-  | 'clearable'
-  | 'placeholder'
-  | 'startPlaceholder'
-  | 'endPlaceholder'
-  | 'popperClass'
-  | 'rangeSeparator'
-  | 'valueFormat'
-  | 'prefixIcon'
-  | 'clearIcon'
-  | 'cellClassName'
-  | 'size'
+  | 'type'
+  | 'modelValue'
 >> {
   type: Type
   modelValue: Value
@@ -41,10 +29,6 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
    * @default true
    */
   enhAllowSame?: boolean
-  // enhPopover?: Partial<PopoverProps>
-  // enhStyles?: {
-  //   //
-  // }
 
   /** ep类型优化 */
   teleported?: boolean

@@ -21,7 +21,7 @@
     "quarter"
   ],
   "exports": {
-    ".": "./src/index.ts",
+    ".": "./dist/index.js",
     "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
