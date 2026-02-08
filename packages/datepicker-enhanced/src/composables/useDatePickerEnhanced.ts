@@ -49,8 +49,8 @@ export function useDatePickerEnhanced() {
   const {
     // parsedValue,
     pickerVisible,
-    // onCalendarChange,
-    // onPanelChange,
+    onCalendarChange,
+    onPanelChange,
     // onSetPickerOption,
     onPick,
   } = inject(ROOT_COMMON_PICKER_INJECTION_KEY)!
@@ -94,16 +94,30 @@ export function useDatePickerEnhanced() {
     })
   })
 
+  function handlePanelChange(index: number) {
+    const newModelValue = panelValue.value
+      .map((item, _index) => {
+        return getDate(innerType.value, item, 'array', enhProps.enhWantEnd)
+      })
+
+    // @ts-expect-error TODO type
+    onPanelChange(newModelValue, panelType.value[index], undefined)
+  }
+
   // panel method
   const panelPrevClick = (index: number) => {
     isYearPanel.value[index]
       ? panelValue.value[index][0] -= 10
       : panelValue.value[index][0] -= 1
+
+    handlePanelChange(index)
   }
   const panelNextClick = (index: number) => {
     isYearPanel.value[index]
       ? panelValue.value[index][0] += 10
       : panelValue.value[index][0] += 1
+
+    handlePanelChange(index)
   }
   const panelItemClick = (index: number, item: EnhDatePickerPanelItem) => {
     console.log('点击了 ==> ', item)
@@ -139,6 +153,17 @@ export function useDatePickerEnhanced() {
       lastClickIndex = index
       panelValue.value[target] = [item.year, item[innerType.value] || 0]
       preUpdateModelValue[target] = [item.year, item[innerType.value] || 0]
+
+      const newModelValue = preUpdateModelValue
+        .filter(i => !(i[0] === 0 && i[1] === 0))
+        .map((item, _index) => {
+          return getDate(innerType.value, item, 'array', enhProps.enhWantEnd)
+        })
+        .sort((a, b) => +new Date(a) - +new Date(b))
+        .map(i => dayjs(i))
+
+      // @ts-expect-error TODO type
+      innerIsRange.value && onCalendarChange(newModelValue.map(i => i.toDate()))
     }
   }
   const panelTitleClick = (index: number) => {

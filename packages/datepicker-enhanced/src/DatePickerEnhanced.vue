@@ -17,8 +17,8 @@ import {
   enhPropsInjectionKey,
 } from './utils/constant.ts'
 
-import 'element-plus/es/components/date-picker/style/css'
-import 'element-plus/es/components/calendar/style/css'
+// import 'element-plus/es/components/date-picker/style/css'
+// import 'element-plus/es/components/calendar/style/css'
 
 const props = withDefaults(defineProps<EnhDatePickerProps>(), {
   readonly: false,
@@ -92,10 +92,14 @@ defineExpose<EnhDatePickerExposed>({
       ...props,
       format: innerFormat,
     }"
-    @update:model-value="($event) => {
-      console.log('onUpdate', $event)
-      emits('update:modelValue', $event)
-    }"
+    @update:model-value="emits('update:modelValue', $event)"
+    @change="emits('change', $event)"
+    @blur="emits('blur', $event)"
+    @focus="emits('focus', $event)"
+    @clear="emits('clear', $event)"
+    @calendar-change="emits('calendarChange', $event)"
+    @panel-change="(...$event) => emits('panelChange', ...$event)"
+    @visible-change="emits('visibleChange', $event)"
   >
     <template #default="scopedProps">
       <DatePickerQuarterHalfYear

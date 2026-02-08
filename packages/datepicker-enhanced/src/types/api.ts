@@ -3,6 +3,7 @@ import type {
   EnhDate,
   EnhDatePrimitive,
   EnhDateType,
+  EnhDateTypeClear,
 } from './index.ts'
 
 /**
@@ -36,18 +37,16 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
 }
 
 /**
- * TODO support more events
  * @see https://element-plus.org/en-US/component/date-picker#events
  */
 export interface EnhDatePickerEmits {
   'update:modelValue': [value: EnhDatePrimitive | EnhDatePrimitive[]]
-  // 'change': [],
-  // 'change': [],
-  // 'blur': [],
-  // 'focus': [],
+  'change': [value: EnhDatePrimitive | EnhDatePrimitive[]]
+  'blur': []
+  'focus': []
   'clear': []
-  // 'calendar-change': [],
-  // 'panel-change': [],
+  'calendar-change': [[Date, Date?]]
+  'panel-change': [[Date, Date?], EnhDateTypeClear, unknown]
   'visibleChange': [visible: boolean]
 }
 
