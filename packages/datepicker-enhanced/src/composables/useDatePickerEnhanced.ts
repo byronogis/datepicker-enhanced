@@ -64,7 +64,7 @@ export function useDatePickerEnhanced() {
 
   let itemClickTimes = 0
   let lastClickIndex = -1
-  let preUpdateModelValue = Array.from<[number, number]>({ length: innerModelValue.value.length }).fill([0, 0])
+  let preUpdateModelValue = Array.from({ length: innerModelValue.value.length }, () => [0, 0])
   const isArrowDisabledForRange = ref(false)
 
   // [origin_date] --> [[2020, 1], ~]
@@ -78,8 +78,8 @@ export function useDatePickerEnhanced() {
 
   // panel prop
   const panelValue = ref<number[][]>(getPanelValue(innerType.value, localModelValue.value)) // 操作所用; 重点：解构; 侦听再赋值
-  const panelItems = ref<EnhDatePickerPanelItem[][]>(Array.from<EnhDatePickerPanelItem[]>({ length: innerIsRange.value ? 2 : 1 }).fill([]))
-  const panelType = ref<EnhDateTypeClear[]>(Array.from<EnhDateTypeClear>({ length: innerModelValue.value.length }).fill(innerType.value))
+  const panelItems = ref<EnhDatePickerPanelItem[][]>(Array.from({ length: innerIsRange.value ? 2 : 1 }, () => []))
+  const panelType = ref<EnhDateTypeClear[]>(Array.from({ length: innerModelValue.value.length }, () => innerType.value))
   const isYearPanel = computed<boolean[]>(() => panelType.value.map(i => i === 'year'))
   const panelStartYear = computed<number[]>(() => panelValue.value.map(i => i[0] - i[0] % 10))
   const panelStopYear = computed<number[]>(() => panelStartYear.value.map(i => i + 9))
@@ -239,15 +239,15 @@ export function useDatePickerEnhanced() {
     console.log('pickerVisible changed: ', newVal)
     if (newVal) {
       panelValue.value = getPanelValue(innerType.value, localModelValue.value)
-      panelItems.value = Array.from<EnhDatePickerPanelItem[]>({ length: innerIsRange.value ? 2 : 1 }).fill([])
-      panelType.value = Array.from<EnhDateTypeClear>({ length: innerModelValue.value.length }).fill(innerType.value)
+      panelItems.value = Array.from({ length: innerIsRange.value ? 2 : 1 }, () => [])
+      panelType.value = Array.from({ length: innerModelValue.value.length }, () => innerType.value)
       generatePanelItems()
     }
     else {
       // 状态重置
       itemClickTimes = 0
       lastClickIndex = -1
-      preUpdateModelValue = Array.from<[number, number]>({ length: innerIsRange.value ? 2 : 1 }).fill([0, 0])
+      preUpdateModelValue = Array.from({ length: innerIsRange.value ? 2 : 1 }, () => [0, 0])
     }
   })
 

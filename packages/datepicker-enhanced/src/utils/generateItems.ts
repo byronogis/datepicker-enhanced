@@ -29,7 +29,7 @@ export default function generateItems(
   }
 
   if (panelType === 'year') { // 年度
-    items = Array.from({ length: 10 }).fill(0).map((_cur, idx): EnhDatePickerPanelItem => {
+    items = Array.from({ length: 10 }, () => 0).map((_cur, idx): EnhDatePickerPanelItem => {
       const year = panelStartYear + idx
       const dateObj = getDate('year', [year, 0], 'array', enhWantEnd)
 
@@ -49,7 +49,7 @@ export default function generateItems(
     })
   }
   else if (panelType === 'halfyear') { // 半年
-    items = Array.from({ length: 2 }).fill(0).map((_cur, idx): EnhDatePickerPanelItem => {
+    items = Array.from({ length: 2 }, () => 0).map((_cur, idx): EnhDatePickerPanelItem => {
       const year = panelValue[0]
       const halfyear = idx + 1
       const dateObj = getDate('halfyear', [year, halfyear], 'array', enhWantEnd)
@@ -72,7 +72,7 @@ export default function generateItems(
     })
   }
   else if (panelType === 'quarteryear') { // 季度
-    items = Array.from({ length: 4 }).fill(0).map((_cur, idx): EnhDatePickerPanelItem => {
+    items = Array.from({ length: 4 }, () => 0).map((_cur, idx): EnhDatePickerPanelItem => {
       const year = panelValue[0]
       const quarteryear = idx + 1
       const dateObj = getDate('quarteryear', [year, quarteryear], 'array', enhWantEnd)

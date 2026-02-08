@@ -54,7 +54,7 @@ const innerModelValue = computed<EnhDatePrimitive[]>(() => {
 
   if (Array.isArray(props.modelValue)) {
     enhancedModelValue = [...props.modelValue]
-    Array.from({ length: 2 - enhancedModelValue.length }).fill(0).forEach(() => {
+    Array.from({ length: 2 - enhancedModelValue.length }, () => 0).forEach(() => {
       enhancedModelValue.push('')
     })
   }
