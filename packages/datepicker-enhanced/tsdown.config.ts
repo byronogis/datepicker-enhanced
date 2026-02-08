@@ -12,6 +12,14 @@ export default defineConfig({
     globals: {
       vue: 'Vue',
     },
+    sourcemap: true,
+    minify: {
+      compress: {
+        dropConsole: true,
+      },
+      mangle: false,
+      codegen: false,
+    },
   },
   format: ['esm', 'umd'],
   platform: 'neutral',
