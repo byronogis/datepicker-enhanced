@@ -22,34 +22,36 @@
 <!-- automd:file src="./src/types/api.ts" code -->
 
 ```ts [api.ts]
-import type { DatePickerProps/* , PopoverProps */ } from 'element-plus'
+import type { DatePickerProps } from 'element-plus'
 import type {
   EnhDate,
   EnhDatePrimitive,
   EnhDateType,
+  EnhDateTypeClear,
 } from './index.ts'
 
 /**
  * TODO support more props
  * @see https://element-plus.org/en-US/component/date-picker#attributes
  */
-export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Pick<DatePickerProps, | 'readonly'
-  | 'disabled'
-  | 'editable'
-  | 'clearable'
-  | 'placeholder'
-  | 'startPlaceholder'
-  | 'endPlaceholder'
-  | 'popperClass'
-  | 'rangeSeparator'
-  | 'valueFormat'
-  | 'prefixIcon'
-  | 'clearIcon'
-  // | 'disabledDate'
-  | 'cellClassName'
-  // | 'teleported'
-  | 'size'
-  // | 'style'
+export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Omit<
+  DatePickerProps,
+  | 'type'
+  | 'modelValue'
+
+  // 以下未支持
+  | 'defaultValue'
+  | 'defaultTimee'
+  | 'unlinkPanels'
+  | 'shortcuts'
+  | 'valueOnClear'
+  | 'showFooter'
+  | 'showConfirm'
+  | 'showWeekNumber'
+
+  // 以下未验证
+  | 'validateEvent'
+  | 'emptyValues'
 >> {
   type: Type
   modelValue: Value
@@ -66,10 +68,6 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
    * @default true
    */
   enhAllowSame?: boolean
-  // enhPopover?: Partial<PopoverProps>
-  // enhStyles?: {
-  //   //
-  // }
 
   /** ep类型优化 */
   teleported?: boolean
@@ -77,28 +75,25 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
 }
 
 /**
- * TODO support more events
  * @see https://element-plus.org/en-US/component/date-picker#events
  */
 export interface EnhDatePickerEmits {
   'update:modelValue': [value: EnhDatePrimitive | EnhDatePrimitive[]]
-  // 'change': [],
-  // 'change': [],
-  // 'blur': [],
-  // 'focus': [],
-  // 'clear': [],
-  // 'calendar-change': [],
-  // 'panel-change': [],
+  'change': [value: EnhDatePrimitive | EnhDatePrimitive[]]
+  'blur': []
+  'focus': []
+  'clear': []
+  'calendar-change': [[Date, Date?]]
+  'panel-change': [[Date, Date?], EnhDateTypeClear, unknown]
   'visibleChange': [visible: boolean]
 }
 
 /**
- * TODO support more exposed methods
  * @see https://element-plus.org/en-US/component/date-picker#exposes
  */
 export interface EnhDatePickerExposed {
   focus: () => void
-  // blur: () => void
+  blur: () => void
   handleOpen: () => void
   handleClose: () => void
 }
