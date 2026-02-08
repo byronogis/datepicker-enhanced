@@ -2,7 +2,8 @@
 import type { EnhDatePickerPanelItem } from '../types'
 import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
 import { ElIcon } from 'element-plus'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
+import { enhPropsInjectionKey } from '../utils/constant.ts'
 
 const props = defineProps<{
   title: string
@@ -16,6 +17,8 @@ const emits = defineEmits<{
   clickItem: [item: EnhDatePickerPanelItem]
   clickTitle: []
 }>()
+
+const enhProps = inject(enhPropsInjectionKey)!
 
 const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
 </script>
@@ -66,14 +69,17 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
           >
             <td
               v-if="item"
-              :class="{
-                /* today: item.isToday, */
-                /* current: item.isCurrent, */
-                'disabled': item.isDisabled,
-                'start-date': item.isStartDate,
-                'end-date': item.isEndDate,
-                'in-range': item.isInRange,
-              }"
+              :class="[
+                {
+                  /* today: item.isToday, */
+                  /* current: item.isCurrent, */
+                  'disabled': item.isDisabled,
+                  'start-date': item.isStartDate,
+                  'end-date': item.isEndDate,
+                  'in-range': item.isInRange,
+                },
+                enhProps.cellClassName ? enhProps.cellClassName(item.date) : '',
+              ]"
             >
               <div>
                 <span

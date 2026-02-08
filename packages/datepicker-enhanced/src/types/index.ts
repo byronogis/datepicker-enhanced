@@ -18,6 +18,7 @@ export type EnhDateTypeClear
     | 'year'
 
 export interface EnhDatePickerPanelItem {
+  date: Date
   type: EnhDateTypeClear
   label: string
   year: number

@@ -48,6 +48,7 @@ const quarteryearProps = reactive({
   // placement: 'top',
   // fallbackPlacements: ['bottom'],
   // automaticDropdown: true,
+  // cellClassName: () => 'custom-cell-class',
 })
 
 const quarteryearProps2 = reactive({

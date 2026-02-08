@@ -34,6 +34,7 @@ export default function generateItems(
       const dateObj = getDate('year', [year, 0], 'array', enhWantEnd)
 
       return {
+        date: dateObj,
         type: 'year',
         label: `${year}`,
         year,
@@ -54,6 +55,7 @@ export default function generateItems(
       const dateObj = getDate('halfyear', [year, halfyear], 'array', enhWantEnd)
 
       return {
+        date: dateObj,
         type: 'halfyear',
         label: `${DATE_ABBR.halfyear}${halfyear}`,
         year,
@@ -76,6 +78,7 @@ export default function generateItems(
       const dateObj = getDate('quarteryear', [year, quarteryear], 'array', enhWantEnd)
 
       return {
+        date: dateObj,
         type: 'quarteryear',
         label: `${DATE_ABBR.quarteryear}${quarteryear}`,
         year,

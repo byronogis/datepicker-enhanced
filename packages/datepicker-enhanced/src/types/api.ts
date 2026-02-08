@@ -20,7 +20,6 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
   | 'defaultTimee'
   | 'unlinkPanels'
   | 'shortcuts'
-  | 'cellClassName'
   | 'valueOnClear'
   | 'showFooter'
   | 'showConfirm'
