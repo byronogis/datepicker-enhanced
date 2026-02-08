@@ -75,6 +75,9 @@ defineExpose<EnhDatePickerExposed>({
   focus() {
     commonPickerRef.value?.focus()
   },
+  blur() {
+    commonPickerRef.value?.blur()
+  },
   handleOpen() {
     commonPickerRef.value?.handleOpen()
   },

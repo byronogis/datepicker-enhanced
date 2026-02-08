@@ -51,12 +51,11 @@ export interface EnhDatePickerEmits {
 }
 
 /**
- * TODO support more exposed methods
  * @see https://element-plus.org/en-US/component/date-picker#exposes
  */
 export interface EnhDatePickerExposed {
   focus: () => void
-  // blur: () => void
+  blur: () => void
   handleOpen: () => void
   handleClose: () => void
 }
