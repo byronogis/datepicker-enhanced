@@ -81,9 +81,9 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
                 enhProps.cellClassName ? enhProps.cellClassName(item.date) : '',
               ]"
             >
-              <div>
+              <div class="el-date-table-cell">
                 <span
-                  class="cell"
+                  class="cell el-date-table-cell__text"
                   @click="emits('clickItem', item)"
                 >{{ item.label }}</span>
               </div>

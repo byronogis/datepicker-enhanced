@@ -5,6 +5,9 @@ import { DatePickerEnhanced } from 'datepicker-enhanced'
 import dayjs from 'dayjs'
 import { reactive, ref } from 'vue'
 
+import 'element-plus/es/components/date-picker/style/css'
+import 'element-plus/es/components/calendar/style/css'
+
 const disabledDateList = ['2020-01-01', '2020-04-01', '2021-10-01']
 const disableDateListButEnd = ['2020-03-31', '2020-06-30', '2021-12-31']
 
