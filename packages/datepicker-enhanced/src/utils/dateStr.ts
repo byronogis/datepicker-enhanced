@@ -131,7 +131,7 @@ export function getDate(
  * '2020-Q3' --> [2020, 3] \
  * Invalid   --> [0, 0]
  */
-function translateDateAbbrStrToArray(type: EnhDateTypeClear, dateAbbrStr: string): DateArray {
+export function translateDateAbbrStrToArray(type: EnhDateTypeClear, dateAbbrStr: string): DateArray {
   const { test, exec } = valiDateAbbrStr(type, dateAbbrStr)
 
   if (!test || !exec) {
@@ -154,6 +154,7 @@ function translateDateAbbrStrToArray(type: EnhDateTypeClear, dateAbbrStr: string
     case 'quarteryear':
       dateArr = [year, quarteryear]
       break
+    /* istanbul ignore next -- defensive fallback for unexpected type */
     default:
       break
   }
@@ -166,7 +167,7 @@ function translateDateAbbrStrToArray(type: EnhDateTypeClear, dateAbbrStr: string
  * [2020, 2] --> '2020-H2' \
  * [2020, 3] --> '2020-Q3'
  */
-function translateArrayToDateAbbrStr(type: EnhDateTypeClear, dateArr: DateArray): string {
+export function translateArrayToDateAbbrStr(type: EnhDateTypeClear, dateArr: DateArray): string {
   // count: halfyear/quarteryear/0
   const [year, count] = dateArr
 
@@ -194,7 +195,7 @@ function translateArrayToDateAbbrStr(type: EnhDateTypeClear, dateArr: DateArray)
  * '2020-H2' --> Date \
  * '2020-Q3' --> Date
  */
-function translateDateAbbrStrToDate(
+export function translateDateAbbrStrToDate(
   type: EnhDateTypeClear,
   dateAbbrStr: string,
   enhWantEnd: boolean = false,
@@ -231,6 +232,7 @@ function translateDateAbbrStrToDate(
           .toDate(),
       )
       break
+    /* istanbul ignore next -- defensive fallback for unexpected type */
     default:
       break
   }
@@ -243,7 +245,7 @@ function translateDateAbbrStrToDate(
  * Date --> '2020-H2' \
  * Date --> '2020-Q3'
  */
-function translateDateToDateAbbrStr(type: EnhDateTypeClear, date: Date): string {
+export function translateDateToDateAbbrStr(type: EnhDateTypeClear, date: Date): string {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const halfyear = Math.ceil(month / 6)
@@ -261,6 +263,7 @@ function translateDateToDateAbbrStr(type: EnhDateTypeClear, date: Date): string 
     case 'quarteryear':
       dateAbbrStr = `${year}-${DATE_ABBR.quarteryear}${quarteryear}`
       break
+    /* istanbul ignore next -- defensive fallback for unexpected type */
     default:
       break
   }

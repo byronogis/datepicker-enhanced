@@ -1,3 +1,4 @@
+import type { ComputedRef, Ref } from 'vue'
 import type {
   EnhDatePickerPanelItem,
   EnhDateTypeClear,
@@ -20,7 +21,16 @@ import {
   getRightPanelMinYear,
 } from '../utils/panel.ts'
 
-export function useDatePickerEnhanced() {
+export function useDatePickerEnhanced(): {
+  panelItems: ComputedRef<EnhDatePickerPanelItem[][]>
+  panelTitles: ComputedRef<string[]>
+  panelDateArrays: Ref<DateArray[]>
+  panelPrevClick: (index: number) => void
+  panelNextClick: (index: number) => void
+  panelItemClick: (index: number, item: EnhDatePickerPanelItem) => void
+  panelTitleClick: (index: number) => void
+  isArrowDisabledForRange: ComputedRef<boolean>
+} {
   const {
     parsedValue,
     // pickerVisible,
@@ -190,6 +200,7 @@ export function useDatePickerEnhanced() {
   return {
     panelItems,
     panelTitles,
+    panelDateArrays,
     panelPrevClick,
     panelNextClick,
     panelItemClick,

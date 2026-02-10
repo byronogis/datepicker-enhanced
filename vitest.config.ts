@@ -10,6 +10,9 @@ export default defineConfig({
   test: {
     root: '.',
     include: ['packages/datepicker-enhanced/tests/**/*.ts'],
+    coverage: {
+      enabled: true,
+    },
     browser: {
       enabled: true,
       provider: playwright(),

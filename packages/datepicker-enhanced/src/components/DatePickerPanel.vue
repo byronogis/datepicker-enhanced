@@ -65,10 +65,9 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
         <tr v-for="row in numberOfRows" :key="row">
           <template
             v-for="item in props.items.slice((row - 1) * 4, (row - 1) * 4 + 4)"
-            :key="item.label"
+            :key="item.type + ':' + item.dateArrays.join('-')"
           >
             <td
-              v-if="item"
               :class="[
                 {
                   'today': item.isToday,

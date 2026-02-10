@@ -22,6 +22,7 @@ const enhFormat: PluginFunc = (_option, dayjsClass) => {
           return String(halfYear)
         case 'QY':
           return String(quarterYear)
+        /* istanbul ignore next -- regex only matches HY/QY or bracketed text */
         default:
           return match
       }
