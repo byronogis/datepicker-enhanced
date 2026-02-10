@@ -1,264 +1,142 @@
 <script setup lang="ts">
 import type { EnhDatePickerProps } from 'datepicker-enhanced'
-import { Minus, Plus } from '@element-plus/icons-vue'
-import { DatePickerEnhanced } from 'datepicker-enhanced'
+import { DatePickerEnhanced, getEnhPropsDefault } from 'datepicker-enhanced'
 import dayjs from 'dayjs'
-import { reactive, ref } from 'vue'
+import { ElButton, ElCard, ElScrollbar } from 'element-plus'
+import { ref } from 'vue'
+import Editor from './component/Editor.vue'
 
-import 'element-plus/es/components/date-picker/style/css'
-import 'element-plus/es/components/calendar/style/css'
+import 'element-plus/dist/index.css'
 
-const disabledDateList = ['2020-01-01', '2020-04-01', '2021-10-01']
-const disableDateListButEnd = ['2020-03-31', '2020-06-30', '2021-12-31']
-
-function disabledDateFn(date: Date) {
-  const target = dayjs(date).format('YYYY-MM-DD')
-  return disabledDateList.includes(target)
+type PlaygroundState = EnhDatePickerProps & {
+  _disabledDateList: string[]
 }
 
-function disabledDateFnBunEnd(date: Date) {
-  const target = dayjs(date).format('YYYY-MM-DD')
-  return disableDateListButEnd.includes(target)
+function getDefaults(): PlaygroundState {
+  const state: PlaygroundState = {
+    ...getEnhPropsDefault(),
+    type: 'quarteryear',
+    modelValue: '2021-05-01',
+    valueFormat: 'YYYY-MM-DD',
+    defaultValue: new Date('2050-01-01'),
+
+    enhWantEnd: false,
+    _disabledDateList: ['2020-01-01', '2020-04-01', '2021-10-01'],
+  }
+
+  // bind to state so edits to disabledDateList take effect without re-registering
+  state.disabledDate = (date: Date) => {
+    const target = dayjs(date).format('YYYY-MM-DD')
+    return state._disabledDateList.includes(target)
+  }
+
+  return state
 }
 
-function handleEvent(type: string, name: string, e: any) {
-  console.log(type, name, e)
-}
+const pickerProps = ref<PlaygroundState>(getDefaults())
 
-const quarteryearProps = reactive({
-  _title: '季度-区间开始值-YYYY-MM-DD',
-  type: 'quarteryear' as const,
-  modelValue: '2021-05-01',
-  disabledDate: disabledDateFn,
-  valueFormat: 'YYYY-MM-DD',
-  enhWantEnd: false,
-  // readonly: true,
-  // disabled: true,
-  // size: 'large' as const,
-  // editable: false,
-  // clearable: false,
-  // placeholder: '请选择季度',
-  // format: 'YYYY-QY[季度]',
-  // popperClass: 'custom-popper-class',
-  // popperStyle: { opacity: '0.9' },
-  // popperOptions: {
-  //   'placement': 'left',
-  //   'offset': 1200,
-  //   'show-arrow': false,
-  // },
-  // id: 'custom-id',
-  // name: 'custom-name',
-  // placement: 'top',
-  // fallbackPlacements: ['bottom'],
-  // automaticDropdown: true,
-  // cellClassName: () => 'custom-cell-class',
-})
-
-const quarteryearProps2 = reactive({
-  _title: '季度-区间结束值-YYYY-MM-DD',
-  type: 'quarteryear' as const,
-  modelValue: '2021-05-01',
-  disabledDate: disabledDateFnBunEnd,
-  valueFormat: 'YYYY-MM-DD',
-  enhWantEnd: true,
-})
-
-const quarteryearProps3 = reactive({
-  _title: '季度-禁止输入',
-  type: 'quarteryear' as const,
-  modelValue: '2021-05-01',
-  disabledDate: disabledDateFnBunEnd,
-  editable: false,
-})
-
-const quarteryearProps4 = reactive({
-  _title: '季度-禁用',
-  type: 'quarteryear' as const,
-  modelValue: '2021-05-01',
-  disabledDate: disabledDateFnBunEnd,
-  disabled: true,
-})
-
-const quarteryearProps5 = reactive({
-  _title: '季度-无清理',
-  type: 'quarteryear' as const,
-  modelValue: '2021-05-01',
-  disabledDate: disabledDateFnBunEnd,
-  clearable: false,
-})
-
-const halfyearProps = reactive({
-  type: 'halfyear' as const,
-  modelValue: '2021-05-01',
-  disabledDate: disabledDateFnBunEnd,
-  enhWantEnd: true,
-})
-
-const halfyearProps2 = reactive({
-  type: 'halfyear' as const,
-  modelValue: '2021-05-01',
-  disabledDate: disabledDateFnBunEnd,
-})
-
-const quarteryearrangeProps = reactive({
-  type: 'quarteryearrange' as const,
-  modelValue: ['2020-05-01', '2023-08-01'],
-  disabledDate: disabledDateFn,
-  valueFormat: 'YYYY-MM-DD',
-  enhWantEnd: true,
-  startPlaceholder: '开始季度',
-  endPlaceholder: '结束季度',
-  prefixIcon: Plus,
-  clearIcon: Minus,
-})
-
-const halfyearrangeProps = reactive({
-  type: 'halfyearrange' as const,
-  modelValue: ['2020-01-01', '2030-07-01'],
-  disabledDate: disabledDateFn,
-})
-
-const halfyearrangeProps2 = reactive({
-  _title: '半年范围-分隔符(至)',
-  type: 'halfyearrange' as const,
-  modelValue: ['2020-01-01', '2030-07-01'],
-  disabledDate: disabledDateFn,
-  rangeSeparator: '至',
-})
-
-const halfyearrangeProps3 = reactive({
-  _title: '半年范围-起止不允许相同',
-  type: 'halfyearrange' as const,
-  modelValue: ['2020-01-01', '2030-07-01'],
-  disabledDate: disabledDateFn,
-  enhAllowSame: false,
-})
-
-const yearrangeProps = reactive({
-  type: 'yearrange' as const,
-  modelValue: ['2020', '2025'],
-  disabledDate: disabledDateFn,
-  valueFormat: 'YYYY',
-  enhWantEnd: true,
-})
-
-const yearrangeProps2 = reactive({
-  _title: 'yearrange-input-small',
-  type: 'yearrange' as const,
-  modelValue: ['2020', '2025'],
-  disabledDate: disabledDateFn,
-  valueFormat: 'YYYY',
-  enhWantEnd: true,
-  size: 'small',
-})
-
-const yearrangeProps3 = reactive({
-  _title: 'yearrange-input-large',
-  type: 'yearrange' as const,
-  modelValue: ['2020-10-10', '2025-10-10'],
-  disabledDate: disabledDateFn,
-  valueFormat: 'YYYY-MM-DD',
-  enhWantEnd: true,
-  size: 'large',
-})
-
-const items: (EnhDatePickerProps & {
-  _title?: string
-})[] = [
-  quarteryearProps,
-  quarteryearProps2,
-  quarteryearProps3,
-  quarteryearProps4,
-  quarteryearProps5,
-  halfyearProps,
-  halfyearProps2,
-  quarteryearrangeProps,
-  halfyearrangeProps,
-  halfyearrangeProps2,
-  halfyearrangeProps3,
-  yearrangeProps,
-  yearrangeProps2,
-  yearrangeProps3,
-]
-
-const DatePickerEnhancedRef = ref<Array<InstanceType<typeof DatePickerEnhanced>>>()
+const DatePickerEnhancedRef = ref<InstanceType<typeof DatePickerEnhanced>>()
 
 const btnList = (['focus', 'blur', 'handleOpen', 'handleClose'] as const).map((value) => {
   return {
     value,
-    fn(index = 0) {
-      DatePickerEnhancedRef.value?.[index][value]()
+    fn() {
+      DatePickerEnhancedRef.value?.[value]()
     },
   }
 })
+
+let timer: number | null = null
+function handleEvent(type: string, name: string, ...e: any[]): void {
+  console.info(type, name, '-->', ...e)
+  // 在防抖超过200ms后打印分割线，方便区分事件触发的先后顺序
+  if (timer) {
+    clearTimeout(timer)
+  }
+  timer = window.setTimeout(() => {
+    console.info('----------------------------------')
+    timer = null
+  }, 800)
+}
+
+function handleUpdateModelValue(value: unknown): void {
+  handleEvent(pickerProps.value.type, 'update:model-value', value)
+  pickerProps.value.modelValue = value as any
+}
+
+function handleReset(): void {
+  pickerProps.value = getDefaults()
+}
 </script>
 
 <template>
-  <ul class="item-wrapper" style="padding-top: 200px">
-    <template v-for="(item, index) in items" :key="index">
-      <li class="item" style="position: relative;">
-        <h4>{{ index + 1 }}: {{ item._title || item.type }}</h4>
-        <DatePickerEnhanced
-          ref="DatePickerEnhancedRef"
-          v-bind="item"
-          @update:model-value="($event) => {
-            console.log(item.type, 'update:model-value', $event)
-            item.modelValue = $event
-          }"
-          @visible-change="handleEvent(item.type, 'visible-change', $event)"
-          @calendar-change="handleEvent(item.type, 'calendar-change', $event)"
-          @panel-change="(...$event) => handleEvent(item.type, 'panel-change', $event)"
-          @change="handleEvent(item.type, 'change', $event)"
-          @clear="handleEvent(item.type, 'clear', $event)"
-          @focus="handleEvent(item.type, 'focus', $event)"
-          @blur="handleEvent(item.type, 'blur', $event)"
-        />
-        <div>props: </div>
-        <pre>{{ item }}</pre>
-        <div class="btn-wrapper" style="position: absolute; bottom: 1em; right: 1em;">
-          <input
-            v-for="(btn) in btnList"
-            :key="btn.value"
-            :value="btn.value"
-            type="button"
-            @click="btn.fn(index)"
-          >
-        </div>
-      </li>
-    </template>
-  </ul>
+  <el-config-provider>
+    <div class="p-4 bg-slate-50 min-h-screen lg:p-6 lg:h-screen">
+      <div class="gap-4 grid grid-cols-1 h-full items-start lg:gap-6 lg:grid-cols-3">
+        <ElCard shadow="never" body-class="" class="h-full">
+          <template #header>
+            <div class="card-title">
+              <span>预览</span>
+            </div>
+          </template>
+          <div class="flex flex-col gap-4 h-full min-h-0">
+            <DatePickerEnhanced
+              ref="DatePickerEnhancedRef"
+              :key="pickerProps.type"
+              class="flex-none!"
+              v-bind="pickerProps"
+              @update:model-value="handleUpdateModelValue"
+              @visible-change="(...$event) => handleEvent(pickerProps.type, 'visible-change', ...$event)"
+              @calendar-change="(...$event) => handleEvent(pickerProps.type, 'calendar-change', ...$event)"
+              @panel-change="(...$event) => handleEvent(pickerProps.type, 'panel-change', ...$event)"
+              @change="(...$event) => handleEvent(pickerProps.type, 'change', ...$event)"
+              @clear="(...$event) => handleEvent(pickerProps.type, 'clear', ...$event)"
+              @focus="(...$event) => handleEvent(pickerProps.type, 'focus', ...$event)"
+              @blur="(...$event) => handleEvent(pickerProps.type, 'blur', ...$event)"
+            />
+
+            <ElScrollbar class="flex-1">
+              <pre
+                class="text-xs leading-5 p-3 border border-slate-200 rounded-lg bg-white h-full overflow-auto"
+              >{{ pickerProps }}</pre>
+            </ElScrollbar>
+
+            <div class="flex flex-wrap gap-2">
+              <ElButton
+                v-for="(btn) in btnList"
+                :key="btn.value"
+                size="small"
+                type="primary"
+                @click="btn.fn"
+              >
+                {{ btn.value }}
+              </ElButton>
+            </div>
+          </div>
+        </ElCard>
+
+        <ElCard shadow="never" body-class="" class="h-full lg:col-span-2">
+          <template #header>
+            <div class="card-title">
+              <span>属性编辑器</span>
+              <ElButton size="small" type="warning" plain @click="handleReset">
+                重置
+              </ElButton>
+            </div>
+          </template>
+          <ElScrollbar class="">
+            <div class="p-2">
+              <Editor v-model="pickerProps" />
+            </div>
+          </ElScrollbar>
+        </ElCard>
+      </div>
+    </div>
+  </el-config-provider>
 </template>
 
-<style scoped>
-.item-wrapper {
-  margin: 0;
-  padding: 2em;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  list-style: none;
-}
-
-.item {
-  padding: 2em;
-  margin-bottom: 2em;
-  display: inline-block;
-  min-width: 400px;
-  min-height: 100px;
-  box-shadow: 1px 1px 5px #333;
-}
-
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  height: 4rem;
-  line-height: 4rem;
-  font-size: 1.5rem;
-  text-align: center;
-  background-color: #f5f5f5;
+<style scoped lang="postcss">
+.card-title {
+  --at-apply: text-base text-slate-800 font-semibold flex gap-2 items-center ;
 }
 </style>

@@ -6,7 +6,6 @@ import type {
   EnhDatePrimitive,
   EnhDateTypeClear,
 } from './types/index.ts'
-import { Calendar, CircleClose } from '@element-plus/icons-vue'
 import { CommonPicker, PICKER_POPPER_OPTIONS_INJECTION_KEY } from 'element-plus'
 import { computed, provide, useTemplateRef } from 'vue'
 import DatePickerQuarterHalfYear from './components/DatePickerQuarterHalfYear.vue'
@@ -15,30 +14,17 @@ import {
   enhEmitsInjectionKey,
   enhInnerInjectionKey,
   enhPropsInjectionKey,
+  getEnhPropsDefault,
 } from './utils/constant.ts'
 
 import 'element-plus/es/components/date-picker/style/css'
 import 'element-plus/es/components/calendar/style/css'
 
-const props = withDefaults(defineProps<EnhDatePickerProps>(), {
-  readonly: false,
-  disabled: false,
-  editable: true,
-  clearable: true,
-  placeholder: '',
-  startPlaceholder: '',
-  endPlaceholder: '',
-  popperClass: '',
-  rangeSeparator: '-',
-  prefixIcon: Calendar,
-  clearIcon: CircleClose,
-  disabledDate: () => false,
-  teleported: true,
-  placement: 'bottom',
-  enhWantEnd: false,
-  enhAllowSame: true,
-  automaticDropdown: true,
-})
+const props = withDefaults(
+  defineProps<EnhDatePickerProps>(),
+  // @ts-expect-error InferDefaults<LooseRequired<__VLS_Props>>”
+  getEnhPropsDefault(),
+)
 
 const emits = defineEmits<EnhDatePickerEmits>()
 

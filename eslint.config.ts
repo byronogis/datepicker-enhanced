@@ -5,6 +5,7 @@ export default antfu(
   {
     type: 'lib',
     vue: true,
+    unocss: true,
     stylistic: true,
   },
   {

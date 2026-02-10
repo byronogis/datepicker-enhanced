@@ -31,3 +31,23 @@ export const DATE_TYPE: EnhDateTypeClear[] = [
 export const enhPropsInjectionKey = Symbol('enhPropsKey') as InjectionKey<EnhDatePickerProps>
 export const enhEmitsInjectionKey = Symbol('enhEmitsKey') as InjectionKey<EmitFn<ShortEmitsToObject<EnhDatePickerEmits>>>
 export const enhInnerInjectionKey = Symbol('enhInnerKey') as InjectionKey<ComputedRef<EnhInner>>
+
+export function getEnhPropsDefault(): Partial<EnhDatePickerProps> {
+  return {
+    readonly: false,
+    disabled: false,
+    editable: true,
+    clearable: true,
+    placeholder: '',
+    startPlaceholder: '',
+    endPlaceholder: '',
+    popperClass: '',
+    rangeSeparator: '-',
+    teleported: true,
+    placement: 'bottom',
+    automaticDropdown: true,
+
+    enhWantEnd: false,
+    enhAllowSame: true,
+  }
+}
