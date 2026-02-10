@@ -49,27 +49,27 @@ provide(PICKER_POPPER_OPTIONS_INJECTION_KEY, props.popperOptions)
 const innerType = computed(() => props.type.replace('range', '') as EnhDateTypeClear)
 const innerFormat = computed(() => props.format ?? DATE_FORMAT[innerType.value])
 const innerIsRange = computed(() => props.type.includes('range'))
+const innerPanelAmount = computed(() => innerIsRange.value ? 2 : 1)
 const innerModelValue = computed<EnhDatePrimitive[]>(() => {
-  let enhancedModelValue: EnhDatePrimitive[]
-
-  if (Array.isArray(props.modelValue)) {
-    enhancedModelValue = [...props.modelValue]
-    Array.from({ length: 2 - enhancedModelValue.length }, () => 0).forEach(() => {
-      enhancedModelValue.push('')
-    })
-  }
-  else {
-    enhancedModelValue = [props.modelValue]
-  }
-
-  return enhancedModelValue
+  const modelValueToArray = [props.modelValue].flat()
+  return Array.from({ length: innerPanelAmount.value }, (_, index) => {
+    return modelValueToArray[index] || ''
+  })
+})
+const innerDefaultValue = computed(() => {
+  const defaultValueToArray = [props.defaultValue].flat()
+  return Array.from({ length: innerPanelAmount.value }, (_, index) => {
+    return defaultValueToArray[index] || new Date()
+  })
 })
 
 provide(enhInnerInjectionKey, computed(() => ({
   innerType: innerType.value,
   innerFormat: innerFormat.value,
   innerIsRange: innerIsRange.value,
+  innerPanelAmount: innerPanelAmount.value,
   innerModelValue: innerModelValue.value,
+  innerDefaultValue: innerDefaultValue.value,
 })))
 
 const commonPickerRef = useTemplateRef('commonPicker')

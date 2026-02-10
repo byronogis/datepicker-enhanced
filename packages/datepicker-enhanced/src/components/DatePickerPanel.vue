@@ -8,7 +8,7 @@ import { enhPropsInjectionKey } from '../utils/constant.ts'
 const props = defineProps<{
   title: string
   items: EnhDatePickerPanelItem[]
-  isArrowDisabledForRange?: boolean | 'left' | 'right'
+  arrowDisabled?: boolean | 'left' | 'right'
 }>()
 
 const emits = defineEmits<{
@@ -35,9 +35,9 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
           aria-label="上一年"
           class="el-picker-panel__icon-btn el-icon-d-arrow-left"
           :class="{
-            'is-disabled': props.isArrowDisabledForRange === 'left',
+            'is-disabled': props.arrowDisabled === 'left',
           }"
-          :disabled="props.isArrowDisabledForRange === 'left'"
+          :disabled="props.arrowDisabled === 'left'"
           @click.prevent="emits('clickPrev')"
         ><ElIcon><DArrowLeft /></ElIcon></button>
       </span>
@@ -52,9 +52,9 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
           aria-label="下一年"
           class="el-picker-panel__icon-btn el-icon-d-arrow-right"
           :class="{
-            'is-disabled': props.isArrowDisabledForRange === 'right',
+            'is-disabled': props.arrowDisabled === 'right',
           }"
-          :disabled="props.isArrowDisabledForRange === 'right'"
+          :disabled="props.arrowDisabled === 'right'"
           @click.prevent="emits('clickNext')"
         ><ElIcon><DArrowRight /></ElIcon></button>
       </span>
@@ -71,8 +71,8 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
               v-if="item"
               :class="[
                 {
-                  /* today: item.isToday, */
-                  /* current: item.isCurrent, */
+                  'today': item.isToday,
+                  'current': item.isCurrent,
                   'disabled': item.isDisabled,
                   'start-date': item.isStartDate,
                   'end-date': item.isEndDate,

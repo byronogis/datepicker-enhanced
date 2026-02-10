@@ -2,7 +2,7 @@
 import type { DayOrDays } from 'element-plus'
 import { ROOT_COMMON_PICKER_INJECTION_KEY } from 'element-plus'
 import { inject } from 'vue'
-import { useDatePickerEnhanced } from '../composables/useDatePickerEnhanced'
+import { useDatePickerEnhanced } from '../composables/useDatePickerEnhanced.ts'
 import { enhInnerInjectionKey, enhPropsInjectionKey } from '../utils/constant.ts'
 import { getDate, valiDateAbbrStr } from '../utils/dateStr.ts'
 import dayjs from '../utils/dayjs.ts'
@@ -21,7 +21,7 @@ const {
 } = inject(ROOT_COMMON_PICKER_INJECTION_KEY)!
 
 const {
-  panelTitle,
+  panelTitles,
   panelItems,
   panelPrevClick,
   panelNextClick,
@@ -59,9 +59,9 @@ onSetPickerOption(['handleClear', () => {
           class="el-date-range-picker__content"
           :class="`is-${pos}`"
           style="padding-top: 0;"
-          :title="panelTitle[idx]"
+          :title="panelTitles[idx]"
           :items="panelItems[idx]"
-          :is-arrow-disabled-for-range="isArrowDisabledForRange ? ({
+          :arrow-disabled="isArrowDisabledForRange ? ({
             left: 'right',
             right: 'left',
           } as const)[pos] : false"
@@ -78,7 +78,7 @@ onSetPickerOption(['handleClear', () => {
     <DatePickerPanelWrapper>
       <template #default>
         <DatePickerPanel
-          :title="panelTitle[0]"
+          :title="panelTitles[0]"
           :items="panelItems[0]"
           @click-prev="panelPrevClick(0)"
           @click-next="panelNextClick(0)"

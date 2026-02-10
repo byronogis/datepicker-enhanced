@@ -1,7 +1,9 @@
 import type { ComputedRef, EmitFn, InjectionKey, ShortEmitsToObject } from 'vue'
-import type { EnhDatePickerEmits, EnhDatePrimitive, EnhDateTypeClear } from '../types'
 import type {
+  EnhDatePickerEmits,
   EnhDatePickerProps,
+  EnhDateTypeClear,
+  EnhInner,
 } from '../types/index.ts'
 
 export const DATE_ABBR: Record<EnhDateTypeClear, string> = {
@@ -28,9 +30,4 @@ export const DATE_TYPE: EnhDateTypeClear[] = [
 
 export const enhPropsInjectionKey = Symbol('enhPropsKey') as InjectionKey<EnhDatePickerProps>
 export const enhEmitsInjectionKey = Symbol('enhEmitsKey') as InjectionKey<EmitFn<ShortEmitsToObject<EnhDatePickerEmits>>>
-export const enhInnerInjectionKey = Symbol('enhInnerKey') as InjectionKey<ComputedRef<{
-  innerType: EnhDateTypeClear
-  innerFormat: string
-  innerIsRange: boolean
-  innerModelValue: EnhDatePrimitive[]
-}>>
+export const enhInnerInjectionKey = Symbol('enhInnerKey') as InjectionKey<ComputedRef<EnhInner>>

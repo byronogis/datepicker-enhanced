@@ -1,6 +1,8 @@
-import type { EnhDatePrimitive, EnhDateTypeClear } from '../types'
-import { DATE_ABBR, DATE_FORMAT } from './constant'
-import dayjs from './dayjs'
+import type { EnhDatePrimitive, EnhDateTypeClear } from '../types/index.ts'
+import { DATE_ABBR, DATE_FORMAT } from './constant.ts'
+import dayjs from './dayjs.ts'
+
+export type DateArray = [number, number]
 
 /** `年度/半年度/季度`日期缩写正则 */
 const DateAbbrRegs: Record<EnhDateTypeClear, RegExp> = {
@@ -10,7 +12,13 @@ const DateAbbrRegs: Record<EnhDateTypeClear, RegExp> = {
 }
 
 /** 验证`年度/半年度/季度`日期缩写字符串是否符合期望的格式 */
-export function valiDateAbbrStr(type: EnhDateTypeClear, date: string) {
+export function valiDateAbbrStr(
+  type: EnhDateTypeClear,
+  date: string,
+): {
+  test: boolean
+  exec: RegExpExecArray | null
+} {
   let test = false
   let exec: RegExpExecArray | null = null
 
@@ -49,15 +57,12 @@ export function valiDateAbbrStr(type: EnhDateTypeClear, date: string) {
  */
 export function getDateAbbrStr(
   type: EnhDateTypeClear,
-  date: EnhDatePrimitive | [number, number],
+  date: EnhDatePrimitive | DateArray,
   origin: 'origin' | 'array' = 'origin',
-) {
-  if (origin === 'array' && Array.isArray(date)) {
-    return translateArrayToDateAbbrStr(type, date as [number, number])
-  }
-  else {
-    return translateDateToDateAbbrStr(type, new Date(date as EnhDatePrimitive))
-  }
+  enhWantEnd = false,
+): string {
+  const date_ = getDate(type, date as EnhDatePrimitive, origin, enhWantEnd)
+  return translateDateToDateAbbrStr(type, date_)
 }
 
 /**
@@ -70,13 +75,10 @@ export function getDateArray(
   type: EnhDateTypeClear,
   date: EnhDatePrimitive | string,
   origin: 'origin' | 'abbr' = 'origin',
-) {
-  if (origin === 'abbr' && typeof date === 'string') {
-    return translateDateAbbrStrToArray(type, date)
-  }
-  else {
-    return translateDateToArray(type, new Date(date))
-  }
+  enhWantEnd = false,
+): DateArray {
+  const date_ = getDate(type, date as EnhDatePrimitive, origin, enhWantEnd)
+  return translateDateToArray(type, date_)
 }
 
 /**
@@ -86,23 +88,13 @@ export function getDateArray(
  */
 export function getDateWithFormat(
   type: EnhDateTypeClear,
-  date: EnhDatePrimitive | number[],
+  date: EnhDatePrimitive | DateArray,
   origin: 'origin' | 'abbr' | 'array' = 'origin',
   enhWantEnd = false,
   valueFormat: string = DATE_FORMAT[type],
-) {
-  if (origin === 'array' && Array.isArray(date)) {
-    const dateObj = translateArrayToDate(type, date as [number, number], enhWantEnd)
-    return dayjs(dateObj).format(valueFormat)
-  }
-  else if (origin === 'abbr' && typeof date === 'string') {
-    const dateObj = translateDateAbbrStrToDate(type, date, enhWantEnd)
-    return dayjs(dateObj).format(valueFormat)
-  }
-  else {
-    const dateObj = translateArrayToDate(type, getDateArray(type, date as EnhDatePrimitive), enhWantEnd)
-    return dayjs(dateObj).format(valueFormat)
-  }
+): string {
+  const date_ = getDate(type, date as EnhDatePrimitive, origin, enhWantEnd)
+  return dayjs(date_).format(valueFormat)
 }
 
 /**
@@ -112,28 +104,35 @@ export function getDateWithFormat(
  */
 export function getDate(
   type: EnhDateTypeClear,
-  date: EnhDatePrimitive | number[],
+  date: EnhDatePrimitive | DateArray,
   origin: 'origin' | 'abbr' | 'array' = 'origin',
   enhWantEnd = false,
-) {
-  if (origin === 'array' && Array.isArray(date)) {
-    return translateArrayToDate(type, date as [number, number], enhWantEnd)
+  fallbackDate: Date = new Date(),
+): Date {
+  if (Array.isArray(date)) {
+    return translateArrayToDate(type, date, enhWantEnd)
   }
-  else if (origin === 'abbr' && typeof date === 'string') {
+
+  if (origin === 'abbr') {
+    if (typeof date !== 'string') {
+      console.warn('When origin is "abbr", date must be a string type.')
+      return fallbackDate
+    }
     return translateDateAbbrStrToDate(type, date, enhWantEnd)
   }
   else {
-    return translateArrayToDate(type, getDateArray(type, date as EnhDatePrimitive), enhWantEnd)
+    return dayjs(date).toDate()
   }
 }
 
 /**
  * '2020'    --> [2020, 0] \
  * '2020-H2' --> [2020, 2] \
- * '2020-Q3' --> [2020, 3]
+ * '2020-Q3' --> [2020, 3] \
+ * Invalid   --> [0, 0]
  */
-function translateDateAbbrStrToArray(type: EnhDateTypeClear, date: string) {
-  const { test, exec } = valiDateAbbrStr(type, date)
+function translateDateAbbrStrToArray(type: EnhDateTypeClear, dateAbbrStr: string): DateArray {
+  const { test, exec } = valiDateAbbrStr(type, dateAbbrStr)
 
   if (!test || !exec) {
     return [0, 0]
@@ -143,7 +142,7 @@ function translateDateAbbrStrToArray(type: EnhDateTypeClear, date: string) {
   const halfyear = Number(exec[2])
   const quarteryear = Number(exec[2])
 
-  let dateArr: [number, number] = [year, 0]
+  let dateArr: DateArray = [year, 0]
 
   switch (type) {
     case 'year':
@@ -167,9 +166,9 @@ function translateDateAbbrStrToArray(type: EnhDateTypeClear, date: string) {
  * [2020, 2] --> '2020-H2' \
  * [2020, 3] --> '2020-Q3'
  */
-function translateArrayToDateAbbrStr(type: EnhDateTypeClear, date: number[]) {
+function translateArrayToDateAbbrStr(type: EnhDateTypeClear, dateArr: DateArray): string {
   // count: halfyear/quarteryear/0
-  const [year, count] = date
+  const [year, count] = dateArr
 
   let dateAbbrStr = ''
 
@@ -195,18 +194,23 @@ function translateArrayToDateAbbrStr(type: EnhDateTypeClear, date: number[]) {
  * '2020-H2' --> Date \
  * '2020-Q3' --> Date
  */
-function translateDateAbbrStrToDate(type: EnhDateTypeClear, date: string, enhWantEnd = false) {
-  const { test, exec } = valiDateAbbrStr(type, date)
+function translateDateAbbrStrToDate(
+  type: EnhDateTypeClear,
+  dateAbbrStr: string,
+  enhWantEnd: boolean = false,
+  /** dateAbbrStr 日期缩写校验失败时返回的默认日期 */
+  fallbackDate: Date = new Date(),
+): Date {
+  let dateObj: Date = fallbackDate
 
+  const { test, exec } = valiDateAbbrStr(type, dateAbbrStr)
   if (!test || !exec) {
-    return new Date(0)
+    return dateObj
   }
 
   const year = Number(exec[1])
   const halfyear = Number(exec[2])
   const quarteryear = Number(exec[2])
-
-  let dateObj: Date = new Date(0)
 
   switch (type) {
     case 'year':
@@ -239,7 +243,7 @@ function translateDateAbbrStrToDate(type: EnhDateTypeClear, date: string, enhWan
  * Date --> '2020-H2' \
  * Date --> '2020-Q3'
  */
-function translateDateToDateAbbrStr(type: EnhDateTypeClear, date: Date) {
+function translateDateToDateAbbrStr(type: EnhDateTypeClear, date: Date): string {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const halfyear = Math.ceil(month / 6)
@@ -269,8 +273,12 @@ function translateDateToDateAbbrStr(type: EnhDateTypeClear, date: Date) {
  * [2020, 2] --> Date \
  * [2020, 3] --> Date
  */
-function translateArrayToDate(type: EnhDateTypeClear, date: number[], enhWantEnd = false) {
-  const dateAbbrStr = translateArrayToDateAbbrStr(type, date)
+function translateArrayToDate(
+  type: EnhDateTypeClear,
+  dateArr: DateArray,
+  enhWantEnd = false,
+): Date {
+  const dateAbbrStr = translateArrayToDateAbbrStr(type, dateArr)
   return translateDateAbbrStrToDate(type, dateAbbrStr, enhWantEnd)
 }
 
@@ -279,7 +287,7 @@ function translateArrayToDate(type: EnhDateTypeClear, date: number[], enhWantEnd
  * Date --> [2020, 2] \
  * Date --> [2020, 3]
  */
-function translateDateToArray(type: EnhDateTypeClear, date: Date) {
+function translateDateToArray(type: EnhDateTypeClear, date: Date): DateArray {
   const dateAbbrStr = translateDateToDateAbbrStr(type, date)
   return translateDateAbbrStrToArray(type, dateAbbrStr)
 }

@@ -16,8 +16,7 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
   | 'modelValue'
 
   // 以下未支持
-  | 'defaultValue'
-  | 'defaultTimee'
+  | 'defaultTime'
   | 'unlinkPanels'
   | 'shortcuts'
   | 'valueOnClear'
