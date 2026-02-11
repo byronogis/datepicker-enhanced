@@ -15,6 +15,7 @@ const emits = defineEmits<{
   clickPrev: []
   clickNext: []
   clickItem: [item: EnhDatePickerPanelItem]
+  hoverItem: [item: EnhDatePickerPanelItem | null]
   clickTitle: []
 }>()
 
@@ -65,7 +66,7 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
         <tr v-for="row in numberOfRows" :key="row">
           <template
             v-for="item in props.items.slice((row - 1) * 4, (row - 1) * 4 + 4)"
-            :key="item.type + ':' + item.dateArrays.join('-')"
+            :key="`${item.type}:${item.dateArrays.join('-')}`"
           >
             <td
               :class="[
@@ -79,6 +80,8 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
                 },
                 enhProps.cellClassName ? enhProps.cellClassName(item.date) : '',
               ]"
+              @mouseenter="emits('hoverItem', item)"
+              @mouseleave="emits('hoverItem', null)"
             >
               <div class="el-date-table-cell">
                 <span

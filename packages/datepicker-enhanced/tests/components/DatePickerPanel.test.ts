@@ -37,6 +37,7 @@ describe('datePickerPanel', () => {
       components: { DatePickerPanel },
       setup() {
         const clicked = ref('false')
+        const hovered = ref('none')
         provide(enhPropsInjectionKey, {
           type: 'quarteryear',
           modelValue: [],
@@ -45,15 +46,20 @@ describe('datePickerPanel', () => {
         return {
           items: [baseItem, activeItem],
           clicked,
+          hovered,
           handleClick(_item: EnhDatePickerPanelItem) {
             clicked.value = 'true'
+          },
+          handleHover(item: EnhDatePickerPanelItem | null) {
+            hovered.value = item?.label ?? 'none'
           },
         }
       },
       template: `
         <div>
-          <DatePickerPanel title="Test" :items="items" @click-item="handleClick" />
+          <DatePickerPanel title="Test" :items="items" @click-item="handleClick" @hover-item="handleHover" />
           <span data-testid="clicked">{{ clicked }}</span>
+          <span data-testid="hovered">{{ hovered }}</span>
         </div>
       `,
     })
@@ -73,5 +79,13 @@ describe('datePickerPanel', () => {
     cells[0]?.querySelector('.cell')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     await nextTick()
     expect(container.querySelector('[data-testid="clicked"]')?.textContent).toBe('true')
+
+    cells[1]?.querySelector('.cell')?.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
+    await nextTick()
+    expect(container.querySelector('[data-testid="hovered"]')?.textContent).toBe('Q2')
+
+    cells[1]?.querySelector('.cell')?.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }))
+    await nextTick()
+    expect(container.querySelector('[data-testid="hovered"]')?.textContent).toBe('none')
   })
 })

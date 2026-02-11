@@ -26,6 +26,7 @@ const {
   panelPrevClick,
   panelNextClick,
   panelItemClick,
+  panelItemHover,
   panelTitleClick,
   isArrowDisabledForRange,
 } = useDatePickerEnhanced()
@@ -68,6 +69,7 @@ onSetPickerOption(['handleClear', () => {
           @click-prev="panelPrevClick(idx)"
           @click-next="panelNextClick(idx)"
           @click-item="panelItemClick(idx, $event)"
+          @hover-item="panelItemHover(idx, $event)"
           @click-title="panelTitleClick(idx)"
         />
       </template>

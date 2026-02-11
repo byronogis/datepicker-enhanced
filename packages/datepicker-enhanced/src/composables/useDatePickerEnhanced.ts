@@ -28,12 +28,13 @@ export function useDatePickerEnhanced(): {
   panelPrevClick: (index: number) => void
   panelNextClick: (index: number) => void
   panelItemClick: (index: number, item: EnhDatePickerPanelItem) => void
+  panelItemHover: (index: number, item: EnhDatePickerPanelItem | null) => void
   panelTitleClick: (index: number) => void
   isArrowDisabledForRange: ComputedRef<boolean>
 } {
   const {
     parsedValue,
-    // pickerVisible,
+    pickerVisible,
     onCalendarChange,
     onPanelChange,
     // onSetPickerOption,
@@ -63,6 +64,7 @@ export function useDatePickerEnhanced(): {
     })
   })
   const preUpdateDateArrays = ref<DateArray[]>([])
+  const hoveredDateArray = ref<DateArray | null>(null)
 
   const panelTypes = ref<EnhDateTypeClear[]>(
     Array.from({ length: innerPanelAmount.value }, () => innerType.value),
@@ -98,9 +100,22 @@ export function useDatePickerEnhanced(): {
 
   const panelItems = computed<EnhDatePickerPanelItem[][]>(() => {
     // 优先使用 preUpdateDateArrays, 其次 dateArrays
-    const targetDateArrays = preUpdateDateArrays.value.length > 0
+    let targetDateArrays: DateArray[] = preUpdateDateArrays.value.length > 0
       ? preUpdateDateArrays.value
       : dateArrays.value
+
+    if (innerIsRange.value && preUpdateDateArrays.value.length === 1 && hoveredDateArray.value) {
+      targetDateArrays = correctPanelDateArrays({
+        dateArrays: [preUpdateDateArrays.value[0], hoveredDateArray.value],
+        types: panelTypes.value,
+        enhProps,
+        enhInner: enhInner.value,
+      }, {
+        sort: true,
+        strict: false,
+        defaultArrays: false,
+      })
+    }
 
     return generatePanelItems({
       dateArrays: targetDateArrays,
@@ -134,6 +149,10 @@ export function useDatePickerEnhanced(): {
     onPanelChange(dates, panelTypes.value[index], undefined)
   }
   function panelPrevClick(index: number): void {
+    if (isArrowDisabledForRange.value && index === 1) {
+      return
+    }
+
     isYearPanel.value[index]
       ? panelDateArrays.value[index][0] -= 10
       : panelDateArrays.value[index][0] -= 1
@@ -141,6 +160,10 @@ export function useDatePickerEnhanced(): {
     handlePanelChange(index)
   }
   function panelNextClick(index: number): void {
+    if (isArrowDisabledForRange.value && index === 0) {
+      return
+    }
+
     isYearPanel.value[index]
       ? panelDateArrays.value[index][0] += 10
       : panelDateArrays.value[index][0] += 1
@@ -156,6 +179,12 @@ export function useDatePickerEnhanced(): {
   }
 
   function panelItemClick(index: number, item: EnhDatePickerPanelItem): void {
+    if (item.isDisabled) {
+      return
+    }
+
+    // 面板类型不匹配时, 先更新面板类型和日期数组年份部分
+    // (如 半年度/季度 clickTitle 后进入 年度面板 再点击年份)
     if (item.type !== innerType.value) {
       panelTypes.value[index] = innerType.value
       panelDateArrays.value[index][0] = item.year
@@ -194,8 +223,30 @@ export function useDatePickerEnhanced(): {
       const v = dates.map(date => dayjs(date))
       onPick(innerIsRange.value ? v : v[0], false)
       preUpdateDateArrays.value = []
+      hoveredDateArray.value = null
     }
   }
+
+  function panelItemHover(_index: number, item: EnhDatePickerPanelItem | null): void {
+    if (item?.isDisabled) {
+      return
+    }
+
+    if (!innerIsRange.value || preUpdateDateArrays.value.length !== 1) {
+      return
+    }
+
+    if (item) {
+      hoveredDateArray.value = item.dateArrays
+    }
+  }
+
+  watch(pickerVisible, (visible) => {
+    if (!visible) {
+      preUpdateDateArrays.value = []
+      hoveredDateArray.value = null
+    }
+  })
 
   return {
     panelItems,
@@ -204,6 +255,7 @@ export function useDatePickerEnhanced(): {
     panelPrevClick,
     panelNextClick,
     panelItemClick,
+    panelItemHover,
     panelTitleClick,
     isArrowDisabledForRange,
   }

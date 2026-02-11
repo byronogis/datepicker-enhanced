@@ -8,7 +8,7 @@ import dayjs from '../../src/utils/dayjs'
 
 describe('useDatePickerEnhanced', () => {
   function mountComposable(options?: { range?: boolean, allowSame?: boolean, parsedValue?: any }) {
-    const pickerVisible = ref(false)
+    const pickerVisible = ref(true)
     const onCalendarChange = vi.fn()
     const onPanelChange = vi.fn()
     const onPick = vi.fn()
@@ -16,8 +16,8 @@ describe('useDatePickerEnhanced', () => {
     const allowSame = options?.allowSame ?? true
     const parsed = options?.parsedValue ?? (
       range
-        ? [dayjs('2024-01-01'), dayjs('2024-10-01')]
-        : dayjs('2024-04-01')
+        ? [dayjs('2024-01-01'), dayjs('2024-10-01')] // index: 0, 3
+        : dayjs('2024-04-01') // index: 1
     )
     let exposedState: ReturnType<typeof useDatePickerEnhanced>
 
@@ -44,7 +44,8 @@ describe('useDatePickerEnhanced', () => {
         provide(enhPropsInjectionKey, {
           enhAllowSame: allowSame,
           enhWantEnd: false,
-          disabledDate: (date: Date) => date.getMonth() < 6,
+          // 禁用第二季度 （index 1）
+          disabledDate: (date: Date) => date.getMonth() < 6 && date.getMonth() >= 3,
         } as any)
 
         provide(enhInnerInjectionKey, computed(() => ({
@@ -65,7 +66,7 @@ describe('useDatePickerEnhanced', () => {
     })
 
     render(Host)
-    return { exposedState: () => exposedState!, onCalendarChange, onPanelChange, onPick }
+    return { exposedState: () => exposedState!, onCalendarChange, onPanelChange, onPick, pickerVisible }
   }
 
   it('generates panel items and handles prev/next/title', async () => {
@@ -96,13 +97,13 @@ describe('useDatePickerEnhanced', () => {
     await nextTick()
     const state = exposedState()
 
-    const item = state.panelItems.value[0][1]
+    const item = state.panelItems.value[0][0]
     const item2 = state.panelItems.value[0][2]
     state.panelItemClick(0, item)
     state.panelItemClick(0, item2)
     await nextTick()
 
-    expect(onCalendarChange).toHaveBeenCalled()
+    expect(onCalendarChange).toHaveBeenCalledTimes(2)
     expect(onPick).toHaveBeenCalledTimes(1)
   })
 
@@ -161,5 +162,71 @@ describe('useDatePickerEnhanced', () => {
     await nextTick()
 
     expect(state.panelItems.value[0][0].dateArrays).toEqual(pickOne.dateArrays)
+  })
+
+  it('previews hovered end date and swaps when hover is earlier', async () => {
+    const { exposedState } = mountComposable({ range: true })
+    await nextTick()
+    const state = exposedState()
+
+    const first = state.panelItems.value[1][2]
+    const earlier = state.panelItems.value[1][0]
+    const later = state.panelItems.value[1][3]
+
+    state.panelItemHover(1, earlier)
+    await nextTick()
+    expect(state.panelItems.value[1][0].isStartDate).toBe(false)
+
+    state.panelItemClick(1, first)
+    await nextTick()
+
+    state.panelItemHover(1, later)
+    await nextTick()
+    expect(state.panelItems.value[1][2].isInRange).toBe(true)
+    expect(state.panelItems.value[1][3].isEndDate).toBe(true)
+
+    state.panelItemHover(1, earlier)
+    await nextTick()
+    expect(state.panelItems.value[1][0].isStartDate).toBe(true)
+    expect(state.panelItems.value[1][2].isEndDate).toBe(true)
+
+    state.panelItemHover(1, null)
+    await nextTick()
+    expect(state.panelItems.value[1][0].isStartDate).toBe(true)
+    expect(state.panelItems.value[1][2].isEndDate).toBe(true)
+  })
+
+  it('clears preUpdate and hover when picker closes', async () => {
+    const { exposedState, pickerVisible } = mountComposable({ range: true })
+    await nextTick()
+    const state = exposedState()
+
+    const first = state.panelItems.value[1][0]
+    const later = state.panelItems.value[1][2]
+    state.panelItemClick(0, first)
+    state.panelItemHover(0, later)
+    await nextTick()
+
+    expect(state.panelItems.value[1][0].isStartDate).toBe(true)
+    expect(state.panelItems.value[1][2].isEndDate).toBe(true)
+
+    pickerVisible.value = false
+    await nextTick()
+
+    expect(state.panelItems.value[1][0].isStartDate).toBe(false)
+    expect(state.panelItems.value[1][2].isEndDate).toBe(false)
+  })
+
+  it('blocks clicks and hovers on disabled items', async () => {
+    const { exposedState, onPick } = mountComposable({ range: false })
+    await nextTick()
+    const state = exposedState()
+
+    const disabledItem = state.panelItems.value[0].find(item => item.isDisabled)!
+    state.panelItemClick(0, disabledItem)
+    await nextTick()
+    expect(onPick).not.toHaveBeenCalled()
+
+    state.panelItemHover(0, disabledItem)
   })
 })

@@ -60,22 +60,35 @@ describe('datePickerQuarterHalfYear', () => {
   it('renders range panels and triggers panel change and pick', async () => {
     const { container, onPanelChange, onPick, onCalendarChange } = mountWithProviders(true)
 
-    const prevButtons = container.querySelectorAll('[aria-label="上一年"]')
-    prevButtons[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
-    expect(onPanelChange).toHaveBeenCalled()
+    expect(onPanelChange).toHaveBeenCalledTimes(0)
 
+    const prevButtons = container.querySelectorAll('[aria-label="上一年"]')
     const nextButtons = container.querySelectorAll('[aria-label="下一年"]')
+
+    prevButtons[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onPanelChange).toHaveBeenCalledTimes(1)
+    prevButtons[1]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onPanelChange).toHaveBeenCalledTimes(2)
+
     nextButtons[1]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onPanelChange).toHaveBeenCalledTimes(3)
+    nextButtons[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onPanelChange).toHaveBeenCalledTimes(4)
 
     const titles = container.querySelectorAll('.el-date-picker__header-label')
     titles[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
 
     const cells = container.querySelectorAll('.cell')
     cells[1]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
-    cells[2]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onCalendarChange).toHaveBeenCalledTimes(1)
 
-    expect(onCalendarChange).toHaveBeenCalled()
-    expect(onPick).toHaveBeenCalled()
+    cells[2]?.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
+    cells[cells.length - 1]?.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
+
+    cells[2]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onCalendarChange).toHaveBeenCalledTimes(2)
+
+    expect(onPick).toHaveBeenCalledTimes(1)
     const pickArgs = onPick.mock.calls[0][0] as any[]
     expect(pickArgs).toHaveLength(2)
   })
@@ -96,13 +109,16 @@ describe('datePickerQuarterHalfYear', () => {
     expect((nextButtons[0] as HTMLButtonElement).disabled).toBe(true)
     expect((prevButtons[1] as HTMLButtonElement).disabled).toBe(true)
 
+    prevButtons[1]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    nextButtons[0]?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+
     const { container: singleContainer, onPanelChange: singlePanelChange } = mountWithProviders(false)
     singleContainer.querySelector('.el-date-picker__header-label')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     singleContainer.querySelector('[aria-label="下一年"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
     singleContainer.querySelector('[aria-label="上一年"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
 
     expect(onPanelChange).not.toHaveBeenCalled()
-    expect(singlePanelChange).toHaveBeenCalled()
+    expect(singlePanelChange).toHaveBeenCalledTimes(2)
   })
 
   it('applies custom cell class names from enhProps', () => {
