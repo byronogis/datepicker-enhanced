@@ -1,7 +1,23 @@
+import { playwright } from '@vitest/browser-playwright'
+import vue from 'unplugin-vue/vite'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
+  plugins: [vue()],
+  define: {
+    'process.env': {},
+  },
   test: {
-    environment: 'happy-dom',
+    root: '.',
+    include: ['packages/datepicker-enhanced/tests/**/*.ts'],
+    coverage: {
+      enabled: true,
+    },
+    browser: {
+      enabled: true,
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }],
+      headless: true,
+    },
   },
 })

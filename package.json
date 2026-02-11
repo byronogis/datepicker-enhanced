@@ -1,75 +1,55 @@
 {
-  "name": "datepicker-enhanced",
+  "name": "@datepicker-enhanced/monorepo",
   "type": "module",
-  "version": "2.2.1",
-  "description": "A date picker enhanced component for element-plus, expand the date type.",
-  "author": "byronogis",
-  "license": "MIT",
-  "homepage": "https://github.com/byronogis/datepicker-enhanced#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/byronogis/datepicker-enhanced.git"
-  },
-  "bugs": "https://github.com/byronogis/datepicker-enhanced/issues",
-  "keywords": [
-    "vue3",
-    "component",
-    "element-plus",
-    "datepicker",
-    "year",
-    "half",
-    "quarter"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.umd.js",
-      "import": "./dist/index.es.js"
-    },
-    "./*": "./*"
-  },
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "private": true,
+  "packageManager": "pnpm@10.29.1",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:demo": "vite build --config demo/vite.config.ts",
-    "deploy:demo": "pnpm build:demo && gh-pages -d docs && rimraf docs",
-    "preview": "vite preview",
-    "lint": "eslint \"**/*.{vue,ts,js}\"",
-    "fix": "eslint --fix \"**/*.{vue,ts,js}\"",
-    "release": "pnpm build && bumpp && npm publish",
+    "dev": "pnpm run -r --parallel dev",
+    "build": "pnpm run -r build",
+    "root:lint": "eslint .",
+    "root:lint:fix": "eslint . --fix",
+    "typecheck": "pnpm run -r typecheck",
     "test": "vitest",
-    "typecheck": "vue-tsc --noEmit",
-    "git-hook-init": "husky install && husky add .husky/pre-commit 'npm run lint && npm run typecheck'"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "dependencies": {
-    "@element-plus/icons-vue": "^2.0.10",
-    "dayjs": "^1.11.7",
-    "element-plus": "^2.2.33",
-    "vue": "3.2.40"
+    "release": "pnpm run automd && bumpp -r",
+    "automd": "pnpm run -r automd",
+    "update": "npx taze -r -I latest",
+    "prepare": "simple-git-hooks && pnpm exec playwright install"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "0.29.4",
-    "@vitejs/plugin-vue": "3.1.2",
-    "@vue/test-utils": "2.1.0",
-    "bumpp": "8.2.1",
-    "eslint": "8.24.0",
-    "gh-pages": "4.0.0",
-    "happy-dom": "6.0.4",
-    "husky": "8.0.1",
-    "rimraf": "3.0.2",
-    "typescript": "4.8.4",
-    "vite": "3.1.4",
-    "vite-plugin-dts": "1.6.4",
-    "vitest": "0.23.4",
-    "vue-tsc": "0.40.13"
+    "@antfu/eslint-config": "^7.3.0",
+    "@element-plus/icons-vue": "^2.3.2",
+    "@types/node": "^25.2.2",
+    "@unocss/eslint-plugin": "^66.6.0",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
+    "automd": "^0.4.3",
+    "bumpp": "^10.4.1",
+    "dayjs": "^1.11.19",
+    "destr": "^2.0.5",
+    "element-plus": "^2.13.2",
+    "eslint": "^10.0.0",
+    "eslint-flat-config-utils": "^3.0.1",
+    "jiti": "^2.6.1",
+    "lint-staged": "^16.2.7",
+    "playwright": "^1.58.2",
+    "rimraf": "^6.1.2",
+    "simple-git-hooks": "^2.13.1",
+    "tsdown": "^0.20.3",
+    "typescript": "^5.9.3",
+    "unocss": "^66.6.0",
+    "unplugin-vue": "^7.1.1",
+    "vite": "^7.3.1",
+    "vite-plugin-vue-devtools": "^8.0.6",
+    "vitest": "^4.0.18",
+    "vitest-browser-vue": "^2.0.2",
+    "vue": "^3.5.27",
+    "vue-component-type-helpers": "^3.2.4",
+    "vue-tsc": "^3.2.4"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }
