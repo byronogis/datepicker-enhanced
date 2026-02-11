@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v3.0.1
+
+[compare changes](https://github.com/byronogis/datepicker-enhanced/compare/v3.0.0...v3.0.1)
+
+### 🩹 Fixes
+
+- Attribute Inheritance broken when comment in template root ([2b0a48f](https://github.com/byronogis/datepicker-enhanced/commit/2b0a48f))
+
+### ❤️ Contributors
+
+- Byronogis ([@byronogis](https://github.com/byronogis))
+
 ## v3.0.0
 
 [compare changes](https://github.com/byronogis/datepicker-enhanced/compare/v2.2.1...v3.0.0)
