@@ -13,7 +13,7 @@
     "release": "pnpm run automd && bumpp -r",
     "automd": "pnpm run -r automd",
     "update": "npx taze -r -I latest",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks && pnpm exec playwright install"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^7.3.0",
