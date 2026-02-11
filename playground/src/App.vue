@@ -3,25 +3,28 @@ import type { EnhDatePickerProps } from 'datepicker-enhanced'
 import { DatePickerEnhanced, getEnhPropsDefault } from 'datepicker-enhanced'
 import dayjs from 'dayjs'
 import { ElButton, ElCard, ElScrollbar } from 'element-plus'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Editor from './component/Editor.vue'
 
 import 'element-plus/dist/index.css'
 
 type PlaygroundState = EnhDatePickerProps & {
   _disabledDateList: string[]
+  _defaultValueList: string[]
 }
 
 function getDefaults(): PlaygroundState {
+  const defaultValueStr = '2000-01-01'
   const state: PlaygroundState = {
     ...getEnhPropsDefault(),
     type: 'quarteryear',
     modelValue: '2021-05-01',
     valueFormat: 'YYYY-MM-DD',
-    defaultValue: new Date('2050-01-01'),
+    defaultValue: new Date(defaultValueStr),
 
     enhWantEnd: false,
     _disabledDateList: ['2020-01-01', '2020-04-01', '2021-10-01'],
+    _defaultValueList: [defaultValueStr],
   }
 
   // bind to state so edits to disabledDateList take effect without re-registering
@@ -34,6 +37,15 @@ function getDefaults(): PlaygroundState {
 }
 
 const pickerProps = ref<PlaygroundState>(getDefaults())
+
+watch(() => pickerProps.value.type, () => {
+  handleUpdateKey()
+})
+
+watch(() => pickerProps.value._defaultValueList, (newVal) => {
+  // @ts-expect-error readonly --- IGNORE ---
+  pickerProps.value.defaultValue = newVal.map(str => new Date(str))
+}, { deep: true })
 
 const DatePickerEnhancedRef = ref<InstanceType<typeof DatePickerEnhanced>>()
 
@@ -67,6 +79,11 @@ function handleUpdateModelValue(value: unknown): void {
 function handleReset(): void {
   pickerProps.value = getDefaults()
 }
+
+const timeKey = ref(new Date().getTime())
+function handleUpdateKey(): void {
+  timeKey.value = new Date().getTime()
+}
 </script>
 
 <template>
@@ -77,12 +94,15 @@ function handleReset(): void {
           <template #header>
             <div class="card-title">
               <span>预览</span>
+              <ElButton size="small" type="warning" plain @click="handleUpdateKey">
+                重载
+              </ElButton>
             </div>
           </template>
           <div class="flex flex-col gap-4 h-full min-h-0">
             <DatePickerEnhanced
               ref="DatePickerEnhancedRef"
-              :key="pickerProps.type"
+              :key="timeKey"
               class="flex-none!"
               v-bind="pickerProps"
               @update:model-value="handleUpdateModelValue"

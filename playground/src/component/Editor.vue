@@ -4,6 +4,7 @@ import { computed, watch } from 'vue'
 
 type EditorModel = EnhDatePickerProps & {
   _disabledDateList: string[]
+  _defaultValueList: string[]
 }
 
 const propsModel = defineModel<EditorModel>({ required: true })
@@ -14,6 +15,18 @@ const disabledDateText = computed({
   },
   set(val: string) {
     propsModel.value._disabledDateList = val
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean)
+  },
+})
+
+const defaultValueText = computed({
+  get() {
+    return (propsModel.value._defaultValueList ?? []).join(',')
+  },
+  set(val: string) {
+    propsModel.value._defaultValueList = val
       .split(',')
       .map(item => item.trim())
       .filter(Boolean)
@@ -87,6 +100,15 @@ watch(() => propsModel.value.type, () => {
       </ElSelect>
     </ElFormItem>
 
+    <!-- size -->
+    <ElFormItem label="size">
+      <ElSelect v-model="propsModel.size">
+        <ElOption label="default" value="" />
+        <ElOption label="large" value="large" />
+        <ElOption label="small" value="small" />
+      </ElSelect>
+    </ElFormItem>
+
     <!-- modelValue -->
     <ElFormItem v-if="!isRange" label="modelValue">
       <ElDatePicker
@@ -116,26 +138,17 @@ watch(() => propsModel.value.type, () => {
       </ElFormItem>
     </template>
 
-    <!-- size -->
-    <ElFormItem label="size">
-      <ElSelect v-model="propsModel.size" placeholder="默认">
-        <ElOption label="default" value="" />
-        <ElOption label="large" value="large" />
-        <ElOption label="small" value="small" />
-      </ElSelect>
-    </ElFormItem>
-
     <!-- placeholder -->
     <ElFormItem v-if="!isRange" label="placeholder">
-      <ElInput v-model="propsModel.placeholder" placeholder="请选择" />
+      <ElInput v-model="propsModel.placeholder" />
     </ElFormItem>
 
     <template v-else>
       <ElFormItem label="startPlaceholder">
-        <ElInput v-model="propsModel.startPlaceholder" placeholder="开始" />
+        <ElInput v-model="propsModel.startPlaceholder" />
       </ElFormItem>
       <ElFormItem label="endPlaceholder">
-        <ElInput v-model="propsModel.endPlaceholder" placeholder="结束" />
+        <ElInput v-model="propsModel.endPlaceholder" />
       </ElFormItem>
     </template>
 
@@ -162,10 +175,9 @@ watch(() => propsModel.value.type, () => {
     </ElFormItem>
 
     <!-- popper-options -->
-    <ElFormItem label="popperOptions">
-      <!-- @vue-expect-error -->
+    <!-- <ElFormItem label="popperOptions">
       <ElInput v-model="propsModel.popperOptions" type="textarea" :rows="3" />
-    </ElFormItem>
+    </ElFormItem> -->
 
     <!-- range-separator -->
     <ElFormItem v-if="isRange" label="rangeSeparator">
@@ -215,42 +227,44 @@ watch(() => propsModel.value.type, () => {
       </ElSelect>
     </ElFormItem>
 
-    <!-- teleported -->
-    <ElFormItem label="teleported">
-      <ElCheckbox v-model="propsModel.teleported" label="teleported" />
-    </ElFormItem>
-
-    <!-- automatic-dropdown  -->
-    <ElFormItem label="automaticDropdown">
-      <ElCheckbox v-model="propsModel.automaticDropdown" label="automaticDropdown" />
-    </ElFormItem>
-
     <ElRow :gutter="10" class="full-row">
-      <ElCol :span="8">
+      <ElCol :span="12" :md="6">
         <ElCheckbox v-model="propsModel.disabled" label="disabled" />
       </ElCol>
-      <ElCol :span="8">
+      <ElCol :span="12" :md="6">
         <ElCheckbox v-model="propsModel.readonly" label="readonly" />
       </ElCol>
-      <ElCol :span="8">
+      <ElCol :span="12" :md="6">
         <ElCheckbox v-model="propsModel.editable" label="editable" />
+      </ElCol>
+      <ElCol :span="12" :md="6">
+        <ElCheckbox v-model="propsModel.clearable" label="clearable" />
       </ElCol>
     </ElRow>
 
     <ElRow :gutter="10" class="full-row">
-      <ElCol :span="8">
-        <ElCheckbox v-model="propsModel.clearable" label="clearable" />
+      <ElCol :span="12" :md="6">
+        <ElCheckbox v-model="propsModel.teleported" label="teleported" />
       </ElCol>
-      <ElCol :span="8">
+      <ElCol :span="12" :md="6">
+        <ElCheckbox v-model="propsModel.automaticDropdown" label="automaticDropdown" />
+      </ElCol>
+    </ElRow>
+
+    <ElRow :gutter="10" class="full-row">
+      <ElCol :span="12" :md="6">
         <ElCheckbox v-model="propsModel.enhWantEnd" label="enhWantEnd" />
       </ElCol>
-      <ElCol :span="8">
+      <ElCol :span="12" :md="6">
         <ElCheckbox v-model="propsModel.enhAllowSame" label="enhAllowSame" />
       </ElCol>
     </ElRow>
 
     <ElFormItem label="_disabledDateList（逗号分隔）" class="full-row">
       <ElInput v-model="disabledDateText" type="textarea" :rows="3" placeholder="2020-01-01,2020-04-01" />
+    </ElFormItem>
+    <ElFormItem label="_defaultValueList（逗号分隔）" class="full-row">
+      <ElInput v-model="defaultValueText" type="textarea" :rows="2" placeholder="2050-01-01" />
     </ElFormItem>
   </ElForm>
 </template>
