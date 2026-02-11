@@ -32,7 +32,7 @@ const {
 } = useDatePickerEnhanced()
 
 onSetPickerOption(['parseUserInput', function parseUserInput(input): DayOrDays {
-  console.log('parseUserInput', input)
+  console.info('[datepicker-enhanced] parseUserInput: ', input)
   if (Array.isArray(input)) {
     // @ts-expect-error ignore
     return input.map(i => parseUserInput(i))

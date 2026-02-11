@@ -56,6 +56,8 @@ export function useDatePickerEnhanced(): {
    * 计算数据对应的日期数组 [[year, halfyear/quarteryear], ...]
    */
   const dateArrays = computed<DateArray[]>(() => {
+    console.info('[datepicker-enhanced] parsedValue: ', parsedValue.value)
+
     const parsedValue_ = [parsedValue.value].flat()
     return Array.from({ length: innerPanelAmount.value }, (_, index) => {
       return parsedValue_[index]
