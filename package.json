@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@10.29.1",
   "scripts": {
-    "dev": "pnpm run -r dev",
+    "dev": "pnpm run -r --parallel dev",
     "build": "pnpm run -r build",
     "root:lint": "eslint .",
     "root:lint:fix": "eslint . --fix",
@@ -24,7 +24,6 @@
     "@vitest/coverage-v8": "^4.0.18",
     "automd": "^0.4.3",
     "bumpp": "^10.4.1",
-    "datepicker-enhanced": "workspace:*",
     "dayjs": "^1.11.19",
     "destr": "^2.0.5",
     "element-plus": "^2.13.2",

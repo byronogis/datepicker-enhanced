@@ -32,9 +32,6 @@ importers:
       bumpp:
         specifier: ^10.4.1
         version: 10.4.1(magicast@0.5.2)
-      datepicker-enhanced:
-        specifier: workspace:*
-        version: link:packages/datepicker-enhanced
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -114,7 +111,11 @@ importers:
         specifier: ^3.0.0
         version: 3.5.27(typescript@5.9.3)
 
-  playground: {}
+  playground:
+    dependencies:
+      datepicker-enhanced:
+        specifier: workspace:*
+        version: link:../packages/datepicker-enhanced
 
 packages:
 
