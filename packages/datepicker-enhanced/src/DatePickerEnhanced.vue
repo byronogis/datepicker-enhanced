@@ -82,6 +82,7 @@ defineExpose<EnhDatePickerExposed>({
     ref="commonPicker"
     v-bind="{
       ...props,
+      ...$attrs,
       format: innerFormat,
     }"
     @update:model-value="emits('update:modelValue', $event)"

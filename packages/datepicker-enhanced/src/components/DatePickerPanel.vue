@@ -25,7 +25,6 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
 </script>
 
 <template>
-  <!-- content -->
   <div class="el-picker-panel__content">
     <!-- header -->
     <div class="el-date-picker__header el-date-picker__header--bordered">
