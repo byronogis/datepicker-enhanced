@@ -1,7 +1,7 @@
 import { ROOT_COMMON_PICKER_INJECTION_KEY } from 'element-plus'
 import { describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-vue'
-import { computed, defineComponent, provide, ref } from 'vue'
+import { defineComponent, provide, ref } from 'vue'
 import DatePickerQuarterHalfYear from '../../src/components/DatePickerQuarterHalfYear.vue'
 import { enhInnerInjectionKey, enhPropsInjectionKey } from '../../src/utils/constant'
 import dayjs from '../../src/utils/dayjs'
@@ -36,7 +36,7 @@ describe('datePickerQuarterHalfYear', () => {
           ...(extraProps ?? {}),
         } as any)
 
-        provide(enhInnerInjectionKey, computed(() => ({
+        provide(enhInnerInjectionKey, ref({
           innerType: 'quarteryear',
           innerFormat: 'YYYY-[Q]QY',
           innerIsRange,
@@ -45,7 +45,8 @@ describe('datePickerQuarterHalfYear', () => {
           innerDefaultValue: innerIsRange
             ? [new Date('2024-01-01'), new Date('2024-10-01')]
             : [new Date('2024-04-01')],
-        })))
+          innerEnhWantEnd: innerIsRange ? [false, false] : [false],
+        }))
 
         return {}
       },

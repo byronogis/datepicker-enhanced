@@ -36,7 +36,7 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
    * value of the range，and you can get the end value by props of 'enhWantEnd'.
    * @default false
    */
-  enhWantEnd?: boolean
+  enhWantEnd?: boolean | boolean[]
   /**
    * By default, the start and end values of the range can be the same, and
    * you can set the value to `false` to not allow the same value.

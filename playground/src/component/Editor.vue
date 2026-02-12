@@ -35,6 +35,42 @@ const defaultValueText = computed({
 
 const isRange = computed(() => propsModel.value.type?.includes('range'))
 
+function setEnhWantEnd(part: 'start' | 'end', val: boolean): void {
+  const current = propsModel.value.enhWantEnd
+
+  if (isRange.value) {
+    const next = Array.isArray(current)
+      ? [...current]
+      : [Boolean(current), Boolean(current)]
+    const index = part === 'start' ? 0 : 1
+    next[index] = val
+    propsModel.value.enhWantEnd = next
+    return
+  }
+
+  propsModel.value.enhWantEnd = val
+}
+
+const enhWantEndStart = computed({
+  get() {
+    const current = propsModel.value.enhWantEnd
+    return Array.isArray(current) ? Boolean(current[0]) : Boolean(current)
+  },
+  set(val: boolean) {
+    setEnhWantEnd('start', val)
+  },
+})
+
+const enhWantEndEnd = computed({
+  get() {
+    const current = propsModel.value.enhWantEnd
+    return Array.isArray(current) ? Boolean(current[1]) : Boolean(current)
+  },
+  set(val: boolean) {
+    setEnhWantEnd('end', val)
+  },
+})
+
 const startValue = computed({
   get() {
     const value = propsModel.value.modelValue
@@ -77,12 +113,19 @@ watch(() => propsModel.value.type, () => {
   if (isRange.value && !Array.isArray(current)) {
     const base = typeof current === 'string' ? current : ''
     propsModel.value.modelValue = [base, '']
+    propsModel.value.enhWantEnd = Array.isArray(propsModel.value.enhWantEnd)
+      ? propsModel.value.enhWantEnd
+      : [Boolean(propsModel.value.enhWantEnd), Boolean(propsModel.value.enhWantEnd)]
     return
   }
 
   if (!isRange.value && Array.isArray(current)) {
     const first = current.find(item => item !== '' && item != null) ?? ''
     propsModel.value.modelValue = first
+  }
+
+  if (!isRange.value && Array.isArray(propsModel.value.enhWantEnd)) {
+    propsModel.value.enhWantEnd = propsModel.value.enhWantEnd[0] ?? false
   }
 }, { flush: 'sync' })
 </script>
@@ -253,8 +296,25 @@ watch(() => propsModel.value.type, () => {
 
     <ElRow :gutter="10" class="full-row">
       <ElCol :span="12" :md="6">
-        <ElCheckbox v-model="propsModel.enhWantEnd" label="enhWantEnd" />
+        <ElCheckbox
+          v-model="enhWantEndStart"
+          :label="isRange ? 'enhWantEnd (start)' : 'enhWantEnd'"
+        />
       </ElCol>
+      <ElCol :span="12" :md="6">
+        <template v-if="isRange">
+          <ElCheckbox
+            v-model="enhWantEndEnd"
+            label="enhWantEnd (end)"
+          />
+        </template>
+        <template v-else>
+          <ElCheckbox v-model="propsModel.enhAllowSame" label="enhAllowSame" />
+        </template>
+      </ElCol>
+    </ElRow>
+
+    <ElRow v-if="isRange" :gutter="10" class="full-row">
       <ElCol :span="12" :md="6">
         <ElCheckbox v-model="propsModel.enhAllowSame" label="enhAllowSame" />
       </ElCol>

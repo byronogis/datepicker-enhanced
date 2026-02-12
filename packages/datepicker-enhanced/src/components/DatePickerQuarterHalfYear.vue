@@ -3,13 +3,12 @@ import type { DayOrDays } from 'element-plus'
 import { ROOT_COMMON_PICKER_INJECTION_KEY } from 'element-plus'
 import { inject } from 'vue'
 import { useDatePickerEnhanced } from '../composables/useDatePickerEnhanced.ts'
-import { enhInnerInjectionKey, enhPropsInjectionKey } from '../utils/constant.ts'
+import { enhInnerInjectionKey } from '../utils/constant.ts'
 import { getDate, valiDateAbbrStr } from '../utils/dateStr.ts'
 import dayjs from '../utils/dayjs.ts'
 import DatePickerPanel from './DatePickerPanel.vue'
 import DatePickerPanelWrapper from './DatePickerPanelWrapper.vue'
 
-const enhProps = inject(enhPropsInjectionKey)!
 const enhInner = inject(enhInnerInjectionKey)!
 
 const {
@@ -40,12 +39,14 @@ onSetPickerOption(['parseUserInput', function parseUserInput(input): DayOrDays {
 
   const { test } = valiDateAbbrStr(enhInner.value.innerType, input ?? '')
   const date = test
-    ? dayjs(getDate(enhInner.value.innerType, input!, 'abbr', enhProps.enhWantEnd))
+    ? dayjs(getDate(enhInner.value.innerType, input!, 'abbr'))
     : dayjs(input)
   return date
 }])
 onSetPickerOption(['isValidValue', (d) => {
-  return [d].flat().every(i => i.isValid())
+  const valid = [d].flat().every(i => i?.isValid())
+  console.info('[datepicker-enhanced] isValidValue: ', d, '=>', valid)
+  return valid
 }])
 onSetPickerOption(['handleClear', () => {
   onPick(null)

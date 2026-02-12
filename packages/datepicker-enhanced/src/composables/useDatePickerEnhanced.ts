@@ -50,6 +50,7 @@ export function useDatePickerEnhanced(): {
     innerPanelAmount,
     // innerModelValue,
     innerDefaultValue,
+    innerEnhWantEnd,
   } = toRefs(enhInner.value)
 
   /**
@@ -61,7 +62,7 @@ export function useDatePickerEnhanced(): {
     const parsedValue_ = [parsedValue.value].flat()
     return Array.from({ length: innerPanelAmount.value }, (_, index) => {
       return parsedValue_[index]
-        ? getDateArray(innerType.value, parsedValue_[index].toDate(), 'origin', enhProps.enhWantEnd)
+        ? getDateArray(innerType.value, parsedValue_[index].toDate(), 'origin')
         : [0, 0]
     })
   })
@@ -95,7 +96,7 @@ export function useDatePickerEnhanced(): {
     }, {
       sort: true,
       strict: true,
-      defaultArrays: innerDefaultValue.value.map(date => getDateArray(innerType.value, date, 'origin', enhProps.enhWantEnd)),
+      defaultArrays: innerDefaultValue.value.map(date => getDateArray(innerType.value, date, 'origin')),
     })
     preUpdateDateArrays.value = []
   }, { immediate: true })
@@ -143,8 +144,8 @@ export function useDatePickerEnhanced(): {
   })
 
   function handlePanelChange(index: number): void {
-    const dates = panelDateArrays.value.map((item, _index) => {
-      return getDate(innerType.value, item, 'array', enhProps.enhWantEnd)
+    const dates = panelDateArrays.value.map((item, index) => {
+      return getDate(innerType.value, item, 'array', innerEnhWantEnd.value[index])
     })
 
     // @ts-expect-error types
@@ -215,8 +216,8 @@ export function useDatePickerEnhanced(): {
       })
     }
 
-    const dates = preUpdateDateArrays.value.map((dateArr) => {
-      return getDate(innerType.value, dateArr, 'array', enhProps.enhWantEnd)
+    const dates = preUpdateDateArrays.value.map((dateArr, index) => {
+      return getDate(innerType.value, dateArr, 'array', innerEnhWantEnd.value[index])
     })
     // @ts-expect-error type
     innerIsRange.value && onCalendarChange(dates)

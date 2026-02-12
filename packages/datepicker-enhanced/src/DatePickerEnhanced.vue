@@ -5,9 +5,10 @@ import type {
   EnhDatePickerProps,
   EnhDatePrimitive,
   EnhDateTypeClear,
+  EnhInner,
 } from './types/index.ts'
 import { CommonPicker, PICKER_POPPER_OPTIONS_INJECTION_KEY } from 'element-plus'
-import { computed, provide, useTemplateRef } from 'vue'
+import { computed, provide, ref, useTemplateRef, watchEffect } from 'vue'
 import DatePickerQuarterHalfYear from './components/DatePickerQuarterHalfYear.vue'
 import {
   DATE_FORMAT,
@@ -16,6 +17,8 @@ import {
   enhPropsInjectionKey,
   getEnhPropsDefault,
 } from './utils/constant.ts'
+import { getDate } from './utils/dateStr.ts'
+import dayjs from './utils/dayjs.ts'
 
 import 'element-plus/es/components/date-picker/style/css'
 import 'element-plus/es/components/calendar/style/css'
@@ -48,15 +51,42 @@ const innerDefaultValue = computed(() => {
     return defaultValueToArray[index] || new Date()
   })
 })
+const innerEnhWantEnd = computed<EnhInner['innerEnhWantEnd']>(() => {
+  const enhWantEndToArray = [props.enhWantEnd].flat()
+  return Array.from({ length: innerPanelAmount.value }, (_, index) => {
+    return !!enhWantEndToArray[index]
+  }) as [boolean, boolean?]
+})
 
-provide(enhInnerInjectionKey, computed(() => ({
-  innerType: innerType.value,
-  innerFormat: innerFormat.value,
-  innerIsRange: innerIsRange.value,
-  innerPanelAmount: innerPanelAmount.value,
-  innerModelValue: innerModelValue.value,
-  innerDefaultValue: innerDefaultValue.value,
-})))
+const enhInner = ref<EnhInner>({} as EnhInner)
+watchEffect(() => {
+  Object.assign(enhInner.value = enhInner.value || {}, {
+    innerType: innerType.value,
+    innerFormat: innerFormat.value,
+    innerIsRange: innerIsRange.value,
+    innerPanelAmount: innerPanelAmount.value,
+    innerModelValue: innerModelValue.value,
+    innerDefaultValue: innerDefaultValue.value,
+    innerEnhWantEnd: innerEnhWantEnd.value,
+  } satisfies EnhInner)
+})
+provide(enhInnerInjectionKey, enhInner)
+
+function handleUpdateModelValue(val: EnhDatePrimitive | EnhDatePrimitive[]) {
+  console.info('[datepicker-enhanced] handleUpdateModelValue: ', val)
+  const value = [val].flat().filter(Boolean).map((date, index) => {
+    const date_ = getDate(
+      innerType.value,
+      dayjs(date, props.valueFormat || undefined).toDate(),
+      'origin',
+      enhInner.value.innerEnhWantEnd[index],
+    )
+    return props.valueFormat
+      ? dayjs(date_).format(props.valueFormat)
+      : date_
+  })
+  emits('update:modelValue', innerIsRange.value ? value : value[0])
+}
 
 const commonPickerRef = useTemplateRef('commonPicker')
 
@@ -85,7 +115,7 @@ defineExpose<EnhDatePickerExposed>({
       ...$attrs,
       format: innerFormat,
     }"
-    @update:model-value="emits('update:modelValue', $event)"
+    @update:model-value="handleUpdateModelValue"
     @change="emits('change', $event)"
     @blur="emits('blur', $event)"
     @focus="emits('focus', $event)"

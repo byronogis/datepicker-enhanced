@@ -27,6 +27,7 @@ export interface EnhInner {
   innerPanelAmount: 1 | 2
   innerModelValue: EnhDatePrimitive[]
   innerDefaultValue: Date[]
+  innerEnhWantEnd: [boolean, boolean?]
 }
 
 export interface EnhDatePickerPanelItem {

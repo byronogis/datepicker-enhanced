@@ -121,7 +121,11 @@ export function getDate(
     return translateDateAbbrStrToDate(type, date, enhWantEnd)
   }
   else {
-    return dayjs(date).toDate()
+    return translateDateAbbrStrToDate(
+      type,
+      translateDateToDateAbbrStr(type, dayjs(date).toDate()),
+      enhWantEnd,
+    )
   }
 }
 

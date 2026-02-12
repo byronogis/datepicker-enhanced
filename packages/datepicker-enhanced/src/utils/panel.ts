@@ -46,7 +46,7 @@ export function generatePanelItems(
 
     return itemValues.map((value) => {
       const currentDateArrays: DateArray = type === 'year' ? [value, 0] : [year, value]
-      const dateObj = getDate(type, currentDateArrays, 'array', enhProps.enhWantEnd)
+      const dateObj = getDate(type, currentDateArrays, 'array')
 
       const isStartDate = enhInner.innerIsRange && dateArrays.length >= 1
         ? dateArrays[0][0] === (type === 'year' ? value : year)
@@ -86,9 +86,9 @@ export function generatePanelItems(
         isInRange: enhInner.innerIsRange && (isStartDate || isEndDate || (
           dateArrays.length === 2
           && dateObj.getTime()
-          > getDate(type, dateArrays[0], 'array', enhProps.enhWantEnd).getTime()
+          > getDate(type, dateArrays[0], 'array').getTime()
           && dateObj.getTime()
-          < getDate(type, dateArrays[1], 'array', enhProps.enhWantEnd).getTime()
+          < getDate(type, dateArrays[1], 'array').getTime()
         )),
       } satisfies EnhDatePickerPanelItem
     })
@@ -99,7 +99,6 @@ export function correctPanelDateArrays(
   {
     dateArrays,
     types,
-    enhProps,
     enhInner,
   }: Omit<PanelContext, 'years'>,
   {
@@ -122,8 +121,8 @@ export function correctPanelDateArrays(
 
   if (arraysCopy.length === 2) {
     sort && arraysCopy.sort((a, b) => {
-      return getDate(enhInner.innerType, a, 'array', enhProps.enhWantEnd).getTime()
-        - getDate(enhInner.innerType, b, 'array', enhProps.enhWantEnd).getTime()
+      return getDate(enhInner.innerType, a, 'array').getTime()
+        - getDate(enhInner.innerType, b, 'array').getTime()
     })
 
     if (strict) {

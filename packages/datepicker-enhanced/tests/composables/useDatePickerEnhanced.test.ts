@@ -1,7 +1,7 @@
 import { ROOT_COMMON_PICKER_INJECTION_KEY } from 'element-plus'
 import { describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-vue'
-import { computed, defineComponent, nextTick, provide, ref } from 'vue'
+import { defineComponent, nextTick, provide, ref } from 'vue'
 import { useDatePickerEnhanced } from '../../src/composables/useDatePickerEnhanced'
 import { enhInnerInjectionKey, enhPropsInjectionKey } from '../../src/utils/constant'
 import dayjs from '../../src/utils/dayjs'
@@ -48,7 +48,7 @@ describe('useDatePickerEnhanced', () => {
           disabledDate: (date: Date) => date.getMonth() < 6 && date.getMonth() >= 3,
         } as any)
 
-        provide(enhInnerInjectionKey, computed(() => ({
+        provide(enhInnerInjectionKey, ref({
           innerType: 'quarteryear',
           innerFormat: 'YYYY-[Q]QY',
           innerIsRange: range,
@@ -57,7 +57,8 @@ describe('useDatePickerEnhanced', () => {
           innerDefaultValue: range
             ? [new Date('2024-01-01'), new Date('2024-10-01')]
             : [new Date('2024-04-01')],
-        })))
+          innerEnhWantEnd: range ? [false, false] : [false],
+        }))
 
         return {}
       },
