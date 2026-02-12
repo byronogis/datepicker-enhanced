@@ -10,7 +10,7 @@
     "root:lint:fix": "eslint . --fix",
     "typecheck": "pnpm run -r typecheck",
     "test": "vitest",
-    "release": "pnpm run automd && bumpp -r",
+    "release": "bumpp -r",
     "automd": "pnpm run -r automd",
     "update": "npx taze -r -I latest",
     "prepare": "simple-git-hooks && pnpm exec playwright install"
