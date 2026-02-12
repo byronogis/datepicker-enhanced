@@ -2,6 +2,7 @@ import type { EmitFn, InjectionKey, Ref, ShortEmitsToObject } from 'vue'
 import type {
   EnhDatePickerEmits,
   EnhDatePickerProps,
+  EnhDatePickerSlots,
   EnhDateTypeClear,
   EnhInner,
 } from '../types/index.ts'
@@ -30,6 +31,7 @@ export const DATE_TYPE: EnhDateTypeClear[] = [
 
 export const enhPropsInjectionKey = Symbol('enhPropsKey') as InjectionKey<EnhDatePickerProps>
 export const enhEmitsInjectionKey = Symbol('enhEmitsKey') as InjectionKey<EmitFn<ShortEmitsToObject<EnhDatePickerEmits>>>
+export const enhSlotsInjectionKey = Symbol('enhSlotsKey') as InjectionKey<EnhDatePickerSlots>
 export const enhInnerInjectionKey = Symbol('enhInnerKey') as InjectionKey<Ref<EnhInner>>
 
 export function getEnhPropsDefault(): Partial<EnhDatePickerProps> {

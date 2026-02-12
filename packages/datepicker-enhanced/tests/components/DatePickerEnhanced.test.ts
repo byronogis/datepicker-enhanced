@@ -1,6 +1,7 @@
 import { DatePickerEnhanced } from 'datepicker-enhanced'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-vue'
+import { defineComponent, nextTick, onMounted, ref } from 'vue'
 
 it('renders single input with placeholder and value', async () => {
   const { getByRole } = render(DatePickerEnhanced, {
@@ -66,4 +67,40 @@ it('fills missing range model value slot with empty string', () => {
 
   const inputs = container.querySelectorAll('input.el-range-input')
   expect((inputs[1] as HTMLInputElement).value).toBe('')
+})
+
+it('renders default slot content inside panel cells', async () => {
+  let pickerExposed: any
+  const Host = defineComponent({
+    components: { DatePickerEnhanced },
+    setup() {
+      const pickerRef = ref()
+      onMounted(() => {
+        pickerExposed = pickerRef.value
+      })
+      return {
+        pickerRef,
+      }
+    },
+    template: `
+      <DatePickerEnhanced
+        ref="pickerRef"
+        type="quarteryear"
+        :model-value="new Date('2024-01-01')"
+        :teleported="false"
+      >
+        <template #default="{ cell }">
+          <span data-testid="slot-cell">{{ cell.label }}-slot</span>
+        </template>
+      </DatePickerEnhanced>
+    `,
+  })
+
+  render(Host)
+  await nextTick()
+  pickerExposed?.handleOpen?.()
+  await nextTick()
+
+  const slotCell = document.querySelector('[data-testid="slot-cell"]')
+  expect(slotCell?.textContent).toBe('Q1-slot')
 })

@@ -111,7 +111,13 @@ function handleUpdateKey(): void {
               @clear="(...$event) => handleEvent(pickerProps.type, 'clear', ...$event)"
               @focus="(...$event) => handleEvent(pickerProps.type, 'focus', ...$event)"
               @blur="(...$event) => handleEvent(pickerProps.type, 'blur', ...$event)"
-            />
+            >
+              <template #default="{ cell }">
+                <div class="el-date-table-cell">
+                  <span class="cell el-date-table-cell__text">{{ cell.label }}</span>
+                </div>
+              </template>
+            </DatePickerEnhanced>
 
             <ElScrollbar class="flex-1">
               <pre

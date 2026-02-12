@@ -3,7 +3,7 @@ import type { EnhDatePickerPanelItem } from '../types'
 import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
 import { ElIcon } from 'element-plus'
 import { computed, inject } from 'vue'
-import { enhPropsInjectionKey } from '../utils/constant.ts'
+import { enhPropsInjectionKey, enhSlotsInjectionKey } from '../utils/constant.ts'
 
 const props = defineProps<{
   title: string
@@ -20,8 +20,24 @@ const emits = defineEmits<{
 }>()
 
 const enhProps = inject(enhPropsInjectionKey)!
+const enhSlots = inject(enhSlotsInjectionKey)!
 
 const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
+
+//  @click="emits('clickItem', item)"
+function handleDelegation(event: MouseEvent): void {
+  const target = event.target as HTMLElement
+  const tdEl = target.closest('td')
+  if (!tdEl) {
+    return
+  }
+  const index = Number(tdEl.dataset.index)
+  if (Number.isNaN(index)) {
+    return
+  }
+  const item = props.items[index]
+  emits('clickItem', item)
+}
 </script>
 
 <template>
@@ -60,11 +76,15 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
       </span>
     </div>
     <!-- table -->
-    <table class="el-month-table" style="">
+    <table
+      class="el-month-table"
+      style=""
+      @click="handleDelegation"
+    >
       <tbody>
         <tr v-for="row in numberOfRows" :key="row">
           <template
-            v-for="item in props.items.slice((row - 1) * 4, (row - 1) * 4 + 4)"
+            v-for="(item, index) in props.items.slice((row - 1) * 4, (row - 1) * 4 + 4)"
             :key="`${item.type}:${item.dateArrays.join('-')}`"
           >
             <td
@@ -79,15 +99,18 @@ const numberOfRows = computed(() => Math.ceil(props.items.length / 4))
                 },
                 enhProps.cellClassName ? enhProps.cellClassName(item.date) : '',
               ]"
+              :data-index="(row - 1) * 4 + index"
               @mouseenter="emits('hoverItem', item)"
               @mouseleave="emits('hoverItem', null)"
             >
-              <div class="el-date-table-cell">
-                <span
-                  class="cell el-date-table-cell__text"
-                  @click="emits('clickItem', item)"
-                >{{ item.label }}</span>
-              </div>
+              <template v-if="enhSlots.default">
+                <component :is="enhSlots.default" :cell="item" />
+              </template>
+              <template v-else>
+                <div class="el-date-table-cell">
+                  <span class="cell el-date-table-cell__text">{{ item.label }}</span>
+                </div>
+              </template>
             </td>
           </template>
         </tr>

@@ -3,6 +3,7 @@ import type {
   EnhDatePickerEmits,
   EnhDatePickerExposed,
   EnhDatePickerProps,
+  EnhDatePickerSlots,
   EnhDatePrimitive,
   EnhDateTypeClear,
   EnhInner,
@@ -15,6 +16,7 @@ import {
   enhEmitsInjectionKey,
   enhInnerInjectionKey,
   enhPropsInjectionKey,
+  enhSlotsInjectionKey,
   getEnhPropsDefault,
 } from './utils/constant.ts'
 import { getDate } from './utils/dateStr.ts'
@@ -30,8 +32,11 @@ const props = withDefaults(
 
 const emits = defineEmits<EnhDatePickerEmits>()
 
+const slots = defineSlots<EnhDatePickerSlots>()
+
 provide(enhPropsInjectionKey, props)
 provide(enhEmitsInjectionKey, emits)
+provide(enhSlotsInjectionKey, slots)
 provide(PICKER_POPPER_OPTIONS_INJECTION_KEY, props.popperOptions)
 
 const innerType = computed(() => props.type.replace('range', '') as EnhDateTypeClear)

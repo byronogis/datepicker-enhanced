@@ -1,6 +1,7 @@
 import type { DatePickerProps } from 'element-plus'
 import type {
   EnhDate,
+  EnhDatePickerPanelItem,
   EnhDatePrimitive,
   EnhDateType,
   EnhDateTypeClear,
@@ -61,6 +62,10 @@ export interface EnhDatePickerEmits {
   'calendar-change': [[Date, Date?]]
   'panel-change': [[Date, Date?], EnhDateTypeClear, unknown]
   'visibleChange': [visible: boolean]
+}
+
+export interface EnhDatePickerSlots {
+  default?: (props: { cell: EnhDatePickerPanelItem }) => any
 }
 
 /**

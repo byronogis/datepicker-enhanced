@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-vue'
 import { defineComponent, provide, ref } from 'vue'
 import DatePickerQuarterHalfYear from '../../src/components/DatePickerQuarterHalfYear.vue'
-import { enhInnerInjectionKey, enhPropsInjectionKey } from '../../src/utils/constant'
+import { enhInnerInjectionKey, enhPropsInjectionKey, enhSlotsInjectionKey } from '../../src/utils/constant'
 import dayjs from '../../src/utils/dayjs'
 
 describe('datePickerQuarterHalfYear', () => {
@@ -35,6 +35,8 @@ describe('datePickerQuarterHalfYear', () => {
           disabledDate: () => false,
           ...(extraProps ?? {}),
         } as any)
+
+        provide(enhSlotsInjectionKey, {})
 
         provide(enhInnerInjectionKey, ref({
           innerType: 'quarteryear',

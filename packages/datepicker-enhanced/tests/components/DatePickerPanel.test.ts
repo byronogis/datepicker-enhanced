@@ -1,9 +1,9 @@
 import type { EnhDatePickerPanelItem } from '../../src/types'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-vue'
 import { defineComponent, nextTick, provide, ref } from 'vue'
 import DatePickerPanel from '../../src/components/DatePickerPanel.vue'
-import { enhPropsInjectionKey } from '../../src/utils/constant'
+import { enhPropsInjectionKey, enhSlotsInjectionKey } from '../../src/utils/constant'
 
 const baseItem: EnhDatePickerPanelItem = {
   date: new Date('2024-01-01'),
@@ -23,6 +23,7 @@ const baseItem: EnhDatePickerPanelItem = {
 
 describe('datePickerPanel', () => {
   it('renders items with custom class and ignores empty slots', async () => {
+    const handleClickSpy = vi.fn()
     const activeItem: EnhDatePickerPanelItem = {
       ...baseItem,
       label: 'Q2',
@@ -43,12 +44,14 @@ describe('datePickerPanel', () => {
           modelValue: [],
           cellClassName: () => 'decorated',
         })
+        provide(enhSlotsInjectionKey, { })
         return {
           items: [baseItem, activeItem],
           clicked,
           hovered,
           handleClick(_item: EnhDatePickerPanelItem) {
             clicked.value = 'true'
+            handleClickSpy()
           },
           handleHover(item: EnhDatePickerPanelItem | null) {
             hovered.value = item?.label ?? 'none'
@@ -87,5 +90,18 @@ describe('datePickerPanel', () => {
     cells[1]?.querySelector('.cell')?.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }))
     await nextTick()
     expect(container.querySelector('[data-testid="hovered"]')?.textContent).toBe('none')
+
+    const clickCount = handleClickSpy.mock.calls.length
+
+    container.querySelector('table')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(handleClickSpy.mock.calls.length).toBe(clickCount)
+
+    const firstTd = container.querySelector('td')
+    if (firstTd) {
+      firstTd.dataset.index = 'NaN'
+      firstTd.querySelector('.cell')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    }
+
+    expect(handleClickSpy.mock.calls.length).toBe(clickCount)
   })
 })
