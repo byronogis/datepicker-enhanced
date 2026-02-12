@@ -6,8 +6,6 @@ import { ElButton, ElCard, ElScrollbar } from 'element-plus'
 import { ref, watch } from 'vue'
 import Editor from './component/Editor.vue'
 
-import 'element-plus/dist/index.css'
-
 type PlaygroundState = EnhDatePickerProps & {
   _disabledDateList: string[]
   _defaultValueList: string[]

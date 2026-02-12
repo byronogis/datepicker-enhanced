@@ -23,5 +23,10 @@ export default defineConfig({
   },
   format: ['esm', 'umd'],
   platform: 'neutral',
-  plugins: [Vue({ isProduction: true })],
+  plugins: [Vue({
+    isProduction: true,
+    features: {
+      prodDevtools: true,
+    },
+  })],
 })
