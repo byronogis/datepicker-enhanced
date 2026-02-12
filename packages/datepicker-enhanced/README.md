@@ -23,34 +23,49 @@
 
 ```ts [api.ts]
 import type { DatePickerProps } from 'element-plus'
+import type { StyleValue } from 'vue'
 import type {
   EnhDate,
+  EnhDatePickerPanelItem,
   EnhDatePrimitive,
   EnhDateType,
   EnhDateTypeClear,
 } from './index.ts'
 
 /**
- * TODO support more props
  * @see https://element-plus.org/en-US/component/date-picker#attributes
  */
-export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Omit<
+export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Pick<
   DatePickerProps,
-  | 'type'
-  | 'modelValue'
+  | 'readonly'
+  | 'disabled'
+  | 'size'
+  | 'editable'
+  | 'clearable'
+  | 'placeholder'
+  | 'startPlaceholder'
+  | 'endPlaceholder'
+  | 'format'
+  | 'popperOptions'
+  | 'rangeSeparator'
+  | 'valueFormat'
+  | 'prefixIcon'
+  | 'clearIcon'
+  | 'cellClassName'
+  | 'automaticDropdown'
 
-  // 以下未支持
-  | 'defaultTime'
-  | 'unlinkPanels'
-  | 'shortcuts'
-  | 'valueOnClear'
-  | 'showFooter'
-  | 'showConfirm'
-  | 'showWeekNumber'
+  // // 以下未支持
+  // | 'defaultTime'
+  // | 'unlinkPanels'
+  // | 'shortcuts'
+  // | 'valueOnClear'
+  // | 'showFooter'
+  // | 'showConfirm'
+  // | 'showWeekNumber'
 
-  // 以下未验证
-  | 'validateEvent'
-  | 'emptyValues'
+  // // 以下未验证
+  // | 'validateEvent'
+  // | 'emptyValues'
 >> {
   type: Type
   modelValue: Value
@@ -69,7 +84,12 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
   enhAllowSame?: boolean
 
   /** ep类型优化 */
+  id?: string | string[]
+  name?: string | string[]
+  popperClass?: string
+  popperStyle?: StyleValue
   teleported?: boolean
+  defaultValue?: Date | Date[]
   disabledDate?: (date: Date) => boolean
 }
 
@@ -85,6 +105,10 @@ export interface EnhDatePickerEmits {
   'calendar-change': [[Date, Date?]]
   'panel-change': [[Date, Date?], EnhDateTypeClear, unknown]
   'visibleChange': [visible: boolean]
+}
+
+export interface EnhDatePickerSlots {
+  default?: (props: { cell: EnhDatePickerPanelItem }) => any
 }
 
 /**
@@ -122,3 +146,22 @@ const type = ref('halfyear')
   </template>
 </template>
 ```
+
+<!-- automd:contributors author="byronogis" license="MIT" -->
+
+Published under the [MIT](https://github.com/byronogis/datepicker-enhanced/blob/main/LICENSE) license.
+Made by [@byronogis](https://github.com/byronogis) and [community](https://github.com/byronogis/datepicker-enhanced/graphs/contributors) 💛
+<br><br>
+<a href="https://github.com/byronogis/datepicker-enhanced/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=byronogis/datepicker-enhanced" />
+</a>
+
+<!-- /automd -->
+
+<!-- automd:with-automd -->
+
+---
+
+_🤖 auto updated with [automd](https://automd.unjs.io)_
+
+<!-- /automd -->
