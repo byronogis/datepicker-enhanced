@@ -1,4 +1,5 @@
 import type { DatePickerProps } from 'element-plus'
+import type { StyleValue } from 'vue'
 import type {
   EnhDate,
   EnhDatePickerPanelItem,
@@ -8,26 +9,39 @@ import type {
 } from './index.ts'
 
 /**
- * TODO support more props
  * @see https://element-plus.org/en-US/component/date-picker#attributes
  */
-export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Omit<
+export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends Partial<Pick<
   DatePickerProps,
-  | 'type'
-  | 'modelValue'
+  | 'readonly'
+  | 'disabled'
+  | 'size'
+  | 'editable'
+  | 'clearable'
+  | 'placeholder'
+  | 'startPlaceholder'
+  | 'endPlaceholder'
+  | 'format'
+  | 'popperOptions'
+  | 'rangeSeparator'
+  | 'valueFormat'
+  | 'prefixIcon'
+  | 'clearIcon'
+  | 'cellClassName'
+  | 'automaticDropdown'
 
-  // 以下未支持
-  | 'defaultTime'
-  | 'unlinkPanels'
-  | 'shortcuts'
-  | 'valueOnClear'
-  | 'showFooter'
-  | 'showConfirm'
-  | 'showWeekNumber'
+  // // 以下未支持
+  // | 'defaultTime'
+  // | 'unlinkPanels'
+  // | 'shortcuts'
+  // | 'valueOnClear'
+  // | 'showFooter'
+  // | 'showConfirm'
+  // | 'showWeekNumber'
 
-  // 以下未验证
-  | 'validateEvent'
-  | 'emptyValues'
+  // // 以下未验证
+  // | 'validateEvent'
+  // | 'emptyValues'
 >> {
   type: Type
   modelValue: Value
@@ -46,7 +60,12 @@ export interface EnhDatePickerProps<Type = EnhDateType, Value = EnhDate> extends
   enhAllowSame?: boolean
 
   /** ep类型优化 */
+  id?: string | string[]
+  name?: string | string[]
+  popperClass?: string
+  popperStyle?: StyleValue
   teleported?: boolean
+  defaultValue?: Date | Date[]
   disabledDate?: (date: Date) => boolean
 }
 

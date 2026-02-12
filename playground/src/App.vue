@@ -41,7 +41,6 @@ watch(() => pickerProps.value.type, () => {
 })
 
 watch(() => pickerProps.value._defaultValueList, (newVal) => {
-  // @ts-expect-error readonly --- IGNORE ---
   pickerProps.value.defaultValue = newVal.map(str => new Date(str))
 }, { deep: true })
 
