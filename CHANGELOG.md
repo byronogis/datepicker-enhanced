@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v3.1.0
+
+[compare changes](https://github.com/byronogis/datepicker-enhanced/compare/v3.0.1...v3.1.0)
+
+### 🚀 Enhancements
+
+- EnhWantEnd can pass an boolean array to set difference value for range ([d30a647](https://github.com/byronogis/datepicker-enhanced/commit/d30a647))
+
+### 📦 Build
+
+- Avaliable prodDevtools ([743be7e](https://github.com/byronogis/datepicker-enhanced/commit/743be7e))
+
+### 🏡 Chore
+
+- Remove unneed css ([7f5a381](https://github.com/byronogis/datepicker-enhanced/commit/7f5a381))
+
+### ❤️ Contributors
+
+- Byronogis ([@byronogis](https://github.com/byronogis))
+
 ## v3.0.1
 
 [compare changes](https://github.com/byronogis/datepicker-enhanced/compare/v3.0.0...v3.0.1)
