@@ -21,7 +21,6 @@ import { getDate } from './utils/dateStr.ts'
 import dayjs from './utils/dayjs.ts'
 
 import 'element-plus/es/components/date-picker/style/css'
-import 'element-plus/es/components/calendar/style/css'
 
 const props = withDefaults(
   defineProps<EnhDatePickerProps>(),
