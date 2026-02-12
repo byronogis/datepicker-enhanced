@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v3.2.0
+
+[compare changes](https://github.com/byronogis/datepicker-enhanced/compare/v3.1.0...v3.2.0)
+
+### 🚀 Enhancements
+
+- Cell custom by default slot ([5707a02](https://github.com/byronogis/datepicker-enhanced/commit/5707a02))
+
+### 🏡 Chore
+
+- Update README ([b73abcc](https://github.com/byronogis/datepicker-enhanced/commit/b73abcc))
+- Type ([e7e2fab](https://github.com/byronogis/datepicker-enhanced/commit/e7e2fab))
+- Update README ([25a7fc7](https://github.com/byronogis/datepicker-enhanced/commit/25a7fc7))
+
+### ❤️ Contributors
+
+- Byronogis ([@byronogis](https://github.com/byronogis))
+
 ## v3.1.0
 
 [compare changes](https://github.com/byronogis/datepicker-enhanced/compare/v3.0.1...v3.1.0)
